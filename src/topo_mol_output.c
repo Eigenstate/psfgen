@@ -79,8 +79,7 @@ int topo_mol_write_pdb(topo_mol *mol, FILE *file, void *v,
 int topo_mol_write_namdbin(topo_mol *mol, FILE *file, FILE *velfile, void *v, 
                                 void (*print_msg)(void *, const char *)) {
 
-  char static_assert_int_is_32_bits[sizeof(int) == 4 ? 1 : -1];
-  int iseg,nseg,ires,nres,atomid,resid;
+  int iseg,nseg,ires,nres;
   int has_void_atoms = 0;
   int numatoms;
   double x,y,z,xyz[3];

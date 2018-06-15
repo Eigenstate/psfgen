@@ -38,7 +38,7 @@ topo_mol * topo_mol_create(topo_defs *defs) {
 void topo_mol_destroy(topo_mol *mol) {
   int i,n;
   topo_mol_segment_t *s;
-  
+
   if ( ! mol ) return;
 
   n = hasharray_count(mol->segment_hash);
@@ -326,7 +326,7 @@ static int topo_mol_add_atom(topo_mol *mol, topo_mol_atom_t **atoms,
     return -3;
   }
   atomtmp = 0;
-  if ( oldatoms ) atomtmp = topo_mol_find_atom(atoms,oldatoms,atomdef->name);
+  if ( oldatoms ) atomtmp = topo_mol_find_atom(atoms, oldatoms, atomdef->name);
   if ( ! atomtmp ) {
     atomtmp = memarena_alloc(mol->arena,sizeof(topo_mol_atom_t));
     if ( ! atomtmp ) return -2;
@@ -473,7 +473,7 @@ static void topo_mol_del_atom(topo_mol_residue_t *res, const char *aname) {
  * has to be more general (and more paranoid) about its input.  Returning
  * nonzero from add_xxx_to_residues is always a serious error.
  */
-static int add_bond_to_residues(topo_mol *mol, 
+static int add_bond_to_residues(topo_mol *mol,
     const topo_mol_residue_t *res1, const char *aname1,
     const topo_mol_residue_t *res2, const char *aname2) {
   topo_mol_bond_t *tuple;
@@ -686,7 +686,7 @@ static void topo_mol_del_dihedral(topo_mol *mol, const topo_mol_ident_t *targets
   }
 }
 
-static int add_improper_to_residues(topo_mol *mol, 
+static int add_improper_to_residues(topo_mol *mol,
     const topo_mol_residue_t *res1, const char *aname1,
     const topo_mol_residue_t *res2, const char *aname2,
     const topo_mol_residue_t *res3, const char *aname3,
@@ -793,7 +793,7 @@ static void topo_mol_del_improper(topo_mol *mol, const topo_mol_ident_t *targets
   }
 }
 
-static int add_cmap_to_residues(topo_mol *mol, 
+static int add_cmap_to_residues(topo_mol *mol,
     const topo_mol_residue_t *resl[8], const char *anamel[8]) {
   int i;
   topo_mol_cmap_t *tuple;
@@ -878,7 +878,7 @@ static void topo_mol_del_cmap(topo_mol *mol, const topo_mol_ident_t *targets,
 }
 
 
-static int add_exclusion_to_residues(topo_mol *mol, 
+static int add_exclusion_to_residues(topo_mol *mol,
     const topo_mol_residue_t *res1, const char *aname1,
     const topo_mol_residue_t *res2, const char *aname2) {
   topo_mol_exclusion_t *tuple;
@@ -950,11 +950,11 @@ static void topo_mol_del_exclusion(topo_mol *mol, const topo_mol_ident_t *target
 }
 
 
-static int add_conformation_to_residues(topo_mol *mol, 
+static int add_conformation_to_residues(topo_mol *mol,
     const topo_mol_residue_t *res1, const char *aname1,
     const topo_mol_residue_t *res2, const char *aname2,
     const topo_mol_residue_t *res3, const char *aname3,
-    const topo_mol_residue_t *res4, const char *aname4, 
+    const topo_mol_residue_t *res4, const char *aname4,
     topo_defs_conformation_t *def) {
 
   topo_mol_conformation_t *tuple;
@@ -1131,7 +1131,7 @@ int topo_mol_end(topo_mol *mol) {
     }
 
     for ( atomdef = resdef->atoms; atomdef; atomdef = atomdef->next ) {
-      if ( topo_mol_add_atom(mol,&(res->atoms),0,atomdef) ) { 
+      if ( topo_mol_add_atom(mol,&(res->atoms),0,atomdef) ) {
         sprintf(errmsg,"add atom failed in residue %s:%s",res->name,res->resid);
         topo_mol_log_error(mol,errmsg);
         return -8;
@@ -1153,9 +1153,9 @@ int topo_mol_end(topo_mol *mol) {
     for ( bonddef = resdef->bonds; bonddef; bonddef = bonddef->next ) {
       int ires1, ires2;
       if (bonddef->res1 != 0 || bonddef->res2 != 0) {
-        /* 
+        /*
          * XXX This should be caught much earlier, like when the topology
-         * file is initially read in. 
+         * file is initially read in.
          */
         sprintf(errmsg, "ERROR: Bad bond definition %s %s-%s; skipping.",
             res->name, bonddef->atom1, bonddef->atom2);
@@ -1165,15 +1165,15 @@ int topo_mol_end(topo_mol *mol) {
       ires1=bonddef->rel1+i;
       ires2=bonddef->rel2+i;
       if (ires1 < 0 || ires2 < 0 || ires1 >= n || ires2 >= n) {
-        sprintf(errmsg, "Info: skipping bond %s-%s at %s of segment.", 
+        sprintf(errmsg, "Info: skipping bond %s-%s at %s of segment.",
             bonddef->atom1, bonddef->atom2, i==0 ? "beginning" : "end");
         topo_mol_log_error(mol, errmsg);
         continue;
       }
-      if (add_bond_to_residues(mol, 
+      if (add_bond_to_residues(mol,
             &(seg->residue_array[ires1]), bonddef->atom1,
             &(seg->residue_array[ires2]), bonddef->atom2)) {
-        sprintf(errmsg, 
+        sprintf(errmsg,
             "ERROR: Missing atoms for bond %s(%d) %s(%d) in residue %s:%s",
             bonddef->atom1,bonddef->rel1,bonddef->atom2,bonddef->rel2,
             res->name,res->resid);
@@ -1205,7 +1205,7 @@ int topo_mol_end(topo_mol *mol) {
       if (imprdef->res1 != 0 || imprdef->res2 != 0 || imprdef->res3 != 0 ||
           imprdef->res4 != 0) {
         sprintf(errmsg, "ERROR: Bad improper definition %s %s-%s-%s-%s; skipping.",
-            res->name, imprdef->atom1, imprdef->atom2, imprdef->atom3, 
+            res->name, imprdef->atom1, imprdef->atom2, imprdef->atom3,
             imprdef->atom4);
         topo_mol_log_error(mol, errmsg);
         continue;
@@ -1216,18 +1216,18 @@ int topo_mol_end(topo_mol *mol) {
       ires4=imprdef->rel4+i;
       if (ires1 < 0 || ires2 < 0 || ires3 < 0 || ires4 < 0 ||
           ires1 >= n || ires2 >= n || ires3 >= n || ires4 >= n) {
-        sprintf(errmsg,"Info: skipping improper %s-%s-%s-%s at %s of segment.", 
+        sprintf(errmsg,"Info: skipping improper %s-%s-%s-%s at %s of segment.",
             imprdef->atom1, imprdef->atom2, imprdef->atom3, imprdef->atom4,
             i==0 ? "beginning" : "end");
         topo_mol_log_error(mol, errmsg);
         continue;
       }
-      if (add_improper_to_residues(mol, 
+      if (add_improper_to_residues(mol,
             &(seg->residue_array[ires1]), imprdef->atom1,
             &(seg->residue_array[ires2]), imprdef->atom2,
             &(seg->residue_array[ires3]), imprdef->atom3,
             &(seg->residue_array[ires4]), imprdef->atom4)) {
-        sprintf(errmsg, 
+        sprintf(errmsg,
             "ERROR: Missing atoms for improper %s(%d) %s(%d) %s(%d) %s(%d)\n\tin residue %s:%s",
             imprdef->atom1,imprdef->rel1,imprdef->atom2,imprdef->rel2,
             imprdef->atom3,imprdef->rel3,imprdef->atom4,imprdef->rel4,
@@ -1253,7 +1253,7 @@ int topo_mol_end(topo_mol *mol) {
       }
       for ( j=0; j<8 && (iresl[j] >= 0) && (iresl[j] < n); ++j );
       if ( j != 8 ) {
-        sprintf(errmsg,"Info: skipping cross-term %s-%s-%s-%s-%s-%s-%s-%s at %s of segment.", 
+        sprintf(errmsg,"Info: skipping cross-term %s-%s-%s-%s-%s-%s-%s-%s at %s of segment.",
             cmapdef->atoml[0], cmapdef->atoml[1],
             cmapdef->atoml[2], cmapdef->atoml[3], cmapdef->atoml[4],
             cmapdef->atoml[5], cmapdef->atoml[6], cmapdef->atoml[7],
@@ -1266,7 +1266,7 @@ int topo_mol_end(topo_mol *mol) {
         atoml[j] = cmapdef->atoml[j];
       }
       if (add_cmap_to_residues(mol, resl, atoml) ) {
-        sprintf(errmsg, 
+        sprintf(errmsg,
             "ERROR: Missing atoms for cross-term  %s(%d) %s(%d) %s(%d) %s(%d) %s(%d) %s(%d) %s(%d) %s(%d)\n\tin residue %s:%s",
             cmapdef->atoml[0],cmapdef->rell[0],
             cmapdef->atoml[1],cmapdef->rell[1],
@@ -1291,15 +1291,15 @@ int topo_mol_end(topo_mol *mol) {
       ires1=excldef->rel1+i;
       ires2=excldef->rel2+i;
       if (ires1 < 0 || ires2 < 0 || ires1 >= n || ires2 >= n) {
-        sprintf(errmsg, "Info: skipping exclusion %s-%s at %s of segment.", 
+        sprintf(errmsg, "Info: skipping exclusion %s-%s at %s of segment.",
             excldef->atom1, excldef->atom2, i==0 ? "beginning" : "end");
         topo_mol_log_error(mol, errmsg);
         continue;
       }
-      if (add_exclusion_to_residues(mol, 
+      if (add_exclusion_to_residues(mol,
             &(seg->residue_array[ires1]), excldef->atom1,
             &(seg->residue_array[ires2]), excldef->atom2)) {
-        sprintf(errmsg, 
+        sprintf(errmsg,
             "ERROR: Missing atoms for exclusion %s(%d) %s(%d) in residue %s:%s",
             excldef->atom1,excldef->rel1,excldef->atom2,excldef->rel2,
             res->name,res->resid);
@@ -1312,7 +1312,7 @@ int topo_mol_end(topo_mol *mol) {
       if (confdef->res1 != 0 || confdef->res2 != 0 || confdef->res3 != 0 ||
           confdef->res4 != 0) {
         sprintf(errmsg, "ERROR: Bad conformation definition %s %s-%s-%s-%s; skipping.",
-            res->name, confdef->atom1, confdef->atom2, confdef->atom3, 
+            res->name, confdef->atom1, confdef->atom2, confdef->atom3,
             confdef->atom4);
         topo_mol_log_error(mol, errmsg);
         continue;
@@ -1323,19 +1323,19 @@ int topo_mol_end(topo_mol *mol) {
       ires4=confdef->rel4+i;
       if (ires1 < 0 || ires2 < 0 || ires3 < 0 || ires4 < 0 ||
           ires1 >= n || ires2 >= n || ires3 >= n || ires4 >= n) {
-        sprintf(errmsg,"Info: skipping conformation %s-%s-%s-%s at %s of segment.", 
+        sprintf(errmsg,"Info: skipping conformation %s-%s-%s-%s at %s of segment.",
             confdef->atom1, confdef->atom2, confdef->atom3, confdef->atom4,
             i==0 ? "beginning" : "end");
         topo_mol_log_error(mol, errmsg);
         continue;
       }
-      if (add_conformation_to_residues(mol, 
+      if (add_conformation_to_residues(mol,
             &(seg->residue_array[ires1]), confdef->atom1,
             &(seg->residue_array[ires2]), confdef->atom2,
             &(seg->residue_array[ires3]), confdef->atom3,
             &(seg->residue_array[ires4]), confdef->atom4, confdef)) {
         sprintf(errmsg, "Warning: missing atoms for conformation %s %s-%s-%s-%s; skipping.",
-            res->name, confdef->atom1, confdef->atom2, confdef->atom3, 
+            res->name, confdef->atom1, confdef->atom2, confdef->atom3,
             confdef->atom4);
         topo_mol_log_error(mol, errmsg);
       }
@@ -1693,7 +1693,7 @@ int topo_mol_patch(topo_mol *mol, const topo_mol_ident_t *targets,
   topo_defs_cmap_t *cmapdef;
   topo_defs_conformation_t *confdef;
   topo_mol_residue_t *res, *oldres;
-  topo_mol_atom_t *oldatoms;
+  topo_mol_atom_t *oldatoms = NULL;
   char errmsg[128];
 
   if ( ! mol ) return -1;
@@ -1728,8 +1728,8 @@ int topo_mol_patch(topo_mol *mol, const topo_mol_ident_t *targets,
       oldatoms = res->atoms;
     }
     if ( atomdef->type[0] == '\0' ) {
-      topo_mol_find_atom(&(res->atoms),oldatoms,atomdef->name);
-    } else if ( topo_mol_add_atom(mol,&(res->atoms),oldatoms,atomdef) ) {
+      topo_mol_find_atom(&(res->atoms), oldatoms, atomdef->name);
+    } else if ( topo_mol_add_atom(mol,&(res->atoms), oldatoms, atomdef) ) {
       sprintf(errmsg,"add atom failed in patch %s",rname);
       topo_mol_log_error(mol,errmsg);
       return -8;
@@ -1816,7 +1816,7 @@ int topo_mol_multiply_atoms(topo_mol *mol, const topo_mol_ident_t *targets,
   if (!mol) return -1;
 
   /* Quiet compiler warnings */
-  natoms = 0; 
+  natoms = 0;
   atoms = NULL;
 
   /* two passes needed to find atoms */
@@ -1827,7 +1827,7 @@ int topo_mol_multiply_atoms(topo_mol *mol, const topo_mol_ident_t *targets,
     /* walk all targets */
     for (itarget=0; itarget<ntargets; ++itarget) {
       target = targets + itarget;
-      
+
       if (!target->resid) { /* whole segment */
         seg = topo_mol_get_seg(mol,target);
         if ( ! seg ) return -2;
@@ -1859,7 +1859,7 @@ int topo_mol_multiply_atoms(topo_mol *mol, const topo_mol_ident_t *targets,
       ++natoms;
     }
   }
-  
+
   /* make one copy on each pass through loop */
   for (icopy=1; icopy<ncopies; ++icopy) {
 
@@ -2091,7 +2091,7 @@ int topo_mol_multiply_atoms(topo_mol *mol, const topo_mol_ident_t *targets,
 
 /* API function */
 void topo_mol_delete_atom(topo_mol *mol, const topo_mol_ident_t *target) {
-  
+
   topo_mol_residue_t *res;
   topo_mol_segment_t *seg;
   int ires, iseg;
@@ -2105,7 +2105,7 @@ void topo_mol_delete_atom(topo_mol *mol, const topo_mol_ident_t *target) {
     return;
   }
   seg = mol->segment_array[iseg];
-  
+
   if (!target->resid) {
     /* Delete this segment */
     int nres = hasharray_count(seg->residue_hash);
@@ -2135,11 +2135,11 @@ void topo_mol_delete_atom(topo_mol *mol, const topo_mol_ident_t *target) {
     topo_mol_log_error(mol,errmsg);
     return;
   }
-  res = seg->residue_array+ires;  
-  
-  if (!target->aname) {  
+  res = seg->residue_array+ires;
+
+  if (!target->aname) {
     /* Must destroy all atoms in residue, since there may be bonds between
-       this residue and other atoms 
+       this residue and other atoms
     */
     topo_mol_atom_t *atom = res->atoms;
     while (atom) {
@@ -2147,7 +2147,7 @@ void topo_mol_delete_atom(topo_mol *mol, const topo_mol_ident_t *target) {
       atom = atom->next;
     }
     res->atoms = 0;
-    hasharray_delete(seg->residue_hash, target->resid); 
+    hasharray_delete(seg->residue_hash, target->resid);
     return;
   }
   /* Just delete one atom */
@@ -2309,7 +2309,7 @@ int topo_mol_set_charge(topo_mol *mol, const topo_mol_ident_t *target,
   return 0;
 }
 
-int topo_mol_set_bfactor(topo_mol *mol, const topo_mol_ident_t *target, 
+int topo_mol_set_bfactor(topo_mol *mol, const topo_mol_ident_t *target,
                          double bfactor) {
   topo_mol_residue_t *res;
   topo_mol_atom_t *atom;
@@ -2458,8 +2458,8 @@ int topo_mol_guess_xyz(topo_mol *mol) {
           dist34 = conf->dist12;
           angle234 = conf->angle123 * (M_PI/180.0);
           dihedral = conf->dihedral * (M_PI/180.0);
-        } 
-      } 
+        }
+      }
       else if ( conf->atom[3] == atom &&
 		conf->atom[2]->xyz_state != TOPO_MOL_XYZ_VOID &&
 		conf->atom[1]->xyz_state != TOPO_MOL_XYZ_VOID &&
@@ -2474,8 +2474,8 @@ int topo_mol_guess_xyz(topo_mol *mol) {
           dist34 = conf->dist34;
           angle234 = conf->angle234 * (M_PI/180.0);
           dihedral = conf->dihedral * (M_PI/180.0);
-        } 
-      } 
+        }
+      }
       else continue;
 
       gwild = 0;
@@ -2522,7 +2522,7 @@ int topo_mol_guess_xyz(topo_mol *mol) {
       atom->x = a3->x + a * ix + b * jx + c * kx;
       atom->y = a3->y + a * iy + b * jy + c * ky;
       atom->z = a3->z + a * iz + b * jz + c * kz;
-      atom->xyz_state = okwild ? TOPO_MOL_XYZ_BADGUESS : TOPO_MOL_XYZ_GUESS; 
+      atom->xyz_state = okwild ? TOPO_MOL_XYZ_BADGUESS : TOPO_MOL_XYZ_GUESS;
       ++gcount;
       break;  /* don't re-guess this atom */
     }
@@ -2567,7 +2567,7 @@ int topo_mol_guess_xyz(topo_mol *mol) {
           if ( atom->mass > 2.5 ) --hcount;
         }
         --gcount;
-        atom->xyz_state = TOPO_MOL_XYZ_VOID; 
+        atom->xyz_state = TOPO_MOL_XYZ_VOID;
         break;
       }
     }
@@ -2605,7 +2605,7 @@ int topo_mol_guess_xyz(topo_mol *mol) {
     }
 
     if ( ipass ) {  /* hydrogens only on second pass */
-      int j;
+      int j = 0;
       for ( j=0; j<nu && ua[j]->mass < 2.5; ++j );
       if ( j != nu ) continue;
     }
@@ -2848,11 +2848,11 @@ int topo_mol_add_patch(topo_mol *mol, const char *pname, int deflt) {
   if ( ! mol ) return -1;
   if ( NAMETOOLONG(pname) ) return -2;
   patches = &(mol->patches);
-  
+
   patchtmp = 0;
   patchtmp = memarena_alloc(mol->arena,sizeof(topo_mol_patch_t));
   if ( ! patchtmp ) return -3;
-  
+
   strcpy(patchtmp->pname,pname);
   patchtmp->patchresids = 0;
 
@@ -2882,7 +2882,7 @@ int topo_mol_add_patchres(topo_mol *mol, const topo_mol_ident_t *target) {
   if ( NAMETOOLONG(target->segid) ) return -2;
   if ( NAMETOOLONG(target->resid) ) return -2;
 
-  patch = mol->curpatch; 
+  patch = mol->curpatch;
   patchres = &(patch->patchresids);
   patchrestmp = 0;
   patchrestmp = memarena_alloc(mol->arena,sizeof(topo_mol_patchres_t));

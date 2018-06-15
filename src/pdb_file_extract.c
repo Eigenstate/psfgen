@@ -63,11 +63,11 @@ int pdb_file_extract_coordinates(topo_mol *mol, FILE *file, FILE *namdbinfile,
   unsigned int utmp;
   char stmp[128];
 
-  int numatoms, pdbnatoms;
+  int numatoms = 0;
+  int pdbnatoms = 0;
   double *atomcoords = 0;
 
   if ( namdbinfile ) {
-    char static_assert_int_is_32_bits[sizeof(int) == 4 ? 1 : -1];
     int filen;
     int wrongendian;
 
