@@ -23,9 +23,12 @@ class Psfgen:
         stringhash_destroy(self.aliases)
 
     def readCharmmTopology(self, filename):
-        with open(filename, 'r') as fd:
-            if charmm_parse_topo_defs(self.defs, fd.fileno(), None, None):
-                raise PsfgenFormatError("Error reading topology file")
+        fd = fopen(filename, 'r')
+        retval = charmm_parse_topo_defs(self.defs, fd,
+                                        1, None, None)
+        fclose(fd)
+        if retval:
+            raise PsfgenFormatError("Error reading topology file")
 
     def aliasResidue(self, topResName, pdbResName):
         if extract_alias_residue_define(self.aliases,
@@ -76,11 +79,13 @@ class Psfgen:
         if isinstance(pdb, str):
             pdb = [pdb]
         for file in pdb:
-            with  open(file, 'r') as fd:
-                if pdb_file_extract_residues(self.mol, fd.fileno(), self.aliases,
-                                             None, None):
-                    raise ValueError("Error reading residues from pdb file %s"
-                                     % file)
+            fd = fopen(file, 'r')
+            retval = pdb_file_extract_residues(self.mol, fd, self.aliases,
+                                               1, None, None)
+            fclose(fd)
+            if retval:
+                raise ValueError("Error reading residues from pdb file %s"
+                                 % file)
 
         # Handle residues
         if residues is not None:
@@ -100,11 +105,13 @@ class Psfgen:
             raise ValueError("failed on end of segment %s" % segID)
 
     def readCoords(self, pdbfile, segID=None):
-        with open(pdbfile, 'r') as fd:
-            if pdb_file_extract_coordinates(self.mol, fd.fileno(), segID,
-                                            self.aliases, None, None):
-                raise ValueError("failed on reading coordinates from pdb file %s"
-                                 % pdbfile)
+        fd = fopen(pdbfile, 'r')
+        retval = pdb_file_extract_coordinates(self.mol, fd, segID,
+                                        self.aliases, None, None)
+        fclose(fd)
+        if retval:
+            raise ValueError("failed on reading coordinates from pdb file %s"
+                             % pdbfile)
 
     def setCoords(self, segID, resID, aName, pos):
         target = {"segid": segID, "resid": resID, "aname": aName }
@@ -117,9 +124,10 @@ class Psfgen:
             raise ValueError("failed on guessing coordinates")
 
     def patch(self, patchName, targets):
-        identlist = [{"segid": str(segid), "resid": str(resid)}
+        identlist = [{"segid": segid.encode(),
+                      "resid": str(resid).encode()}
                      for segid, resid in targets]
-        if topo_mol_patch(self.mol, identlist, patchName, 0,0,0):
+        if topo_mol_patch(self.mol, identlist, patchName, 0, 0, 0, 0):
             raise ValueError("failed to apply patch %s to %s"
                              % (patchName, targets))
 
@@ -147,25 +155,36 @@ class Psfgen:
             ident["aname"] = str(atomName)
         topo_mol_delete_atom(self.mol, ident)
 
+    def regenerateAngles(self):
+        topo_mol_regenerate_angles(self.mol)
+
+    def regenerateDihedrals(self):
+        topo_mol_regenerate_dihedrals(self.mol)
+
     def readPSF(self, filename):
-        with open(filename, 'r') as fd:
-            if psf_file_extract(self.mol, fd.fileno(), None, None):
-                raise PsfgenFormatError("Error reading psf file '%s'"
-                                        % filename)
+        fd = fopen(filename, 'r')
+        retval = psf_file_extract(self.mol, fd, None, None)
+        fclose(fd)
+        if retval:
+            raise PsfgenFormatError("Error reading psf file '%s'"
+                                    % filename)
 
     def writePSF(self, filename, type=XPLOR):
         if not type in [XPLOR, CHARMM]:
             raise ValueError("type must be either '%s' or '%s'"
                              % (CHARMM, XPLOR))
-        with open(filename, 'w') as fd:
-            ischarmm = 0
-            if type == CHARMM:
-                ischarmm = 1
-            topo_mol_write_psf(self.mol, fd.fileno(), ischarmm, None, None)
+        fd = fopen(filename, 'w')
+        ischarmm = 0
+        if type == CHARMM:
+            ischarmm = 1
+        topo_mol_write_psf(self.mol, fd, ischarmm, None, None)
+        fclose(fd)
 
     def writePDB(self, filename):
-        with open(filename, 'w') as fd:
-            if topo_mol_write_pdb(self.mol, fd.fileno(), None, None):
-                raise IOError("failed on writing coordinates to pdb file %s"
-                              % filename)
+        fd = fopen(filename, 'w')
+        retval = topo_mol_write_pdb(self.mol, fd, None, None)
+        fclose(fd)
+        if retval:
+            raise IOError("failed on writing coordinates to pdb file %s"
+                          % filename)
 
