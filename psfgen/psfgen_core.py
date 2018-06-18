@@ -92,145 +92,147 @@ except AttributeError:
 
 
 def pdb_file_extract_residues(mol, file, h, all_caps, arg5, print_msg):
+    """pdb_file_extract_residues(topo_mol * mol, FILE * file, stringhash * h, int all_caps, void * arg5, void (*)(void *,char const *) print_msg) -> int"""
     return _psfgen_core.pdb_file_extract_residues(mol, file, h, all_caps, arg5, print_msg)
-pdb_file_extract_residues = _psfgen_core.pdb_file_extract_residues
 
-def pdb_file_extract_coordinates(mol, file, namdbinfile, segid, h, all_caps, arg7, print_msg):
-    return _psfgen_core.pdb_file_extract_coordinates(mol, file, namdbinfile, segid, h, all_caps, arg7, print_msg)
-pdb_file_extract_coordinates = _psfgen_core.pdb_file_extract_coordinates
+def pdb_file_extract_coordinates(*args, **kwargs):
+    """pdb_file_extract_coordinates(topo_mol * mol, FILE * file, FILE * namdbinfile, char const * segid, stringhash * h, int all_caps, void * arg7, void (*)(void *,char const *) print_msg) -> int"""
+    return _psfgen_core.pdb_file_extract_coordinates(*args, **kwargs)
 
-def psf_file_extract(mol, file, pdbfile, namdbinfile, velnamdbinfile, arg6, print_msg):
-    return _psfgen_core.psf_file_extract(mol, file, pdbfile, namdbinfile, velnamdbinfile, arg6, print_msg)
-psf_file_extract = _psfgen_core.psf_file_extract
+def psf_file_extract(*args, **kwargs):
+    """psf_file_extract(topo_mol * mol, FILE * file, FILE * pdbfile, FILE * namdbinfile, FILE * velnamdbinfile, void * arg6, void (*)(void *,char const *) print_msg) -> int"""
+    return _psfgen_core.psf_file_extract(*args, **kwargs)
 
 def topo_defs_create():
+    """topo_defs_create() -> topo_defs *"""
     return _psfgen_core.topo_defs_create()
-topo_defs_create = _psfgen_core.topo_defs_create
 
 def topo_defs_destroy(defs):
+    """topo_defs_destroy(topo_defs * defs)"""
     return _psfgen_core.topo_defs_destroy(defs)
-topo_defs_destroy = _psfgen_core.topo_defs_destroy
 
 def topo_defs_error_handler(defs, arg2, print_msg):
+    """topo_defs_error_handler(topo_defs * defs, void * arg2, void (*)(void *,char const *) print_msg)"""
     return _psfgen_core.topo_defs_error_handler(defs, arg2, print_msg)
-topo_defs_error_handler = _psfgen_core.topo_defs_error_handler
 
 def topo_defs_auto_angles(defs, autogen):
+    """topo_defs_auto_angles(topo_defs * defs, int autogen)"""
     return _psfgen_core.topo_defs_auto_angles(defs, autogen)
-topo_defs_auto_angles = _psfgen_core.topo_defs_auto_angles
 
 def topo_defs_auto_dihedrals(defs, autogen):
+    """topo_defs_auto_dihedrals(topo_defs * defs, int autogen)"""
     return _psfgen_core.topo_defs_auto_dihedrals(defs, autogen)
-topo_defs_auto_dihedrals = _psfgen_core.topo_defs_auto_dihedrals
 
 def topo_defs_type(defs, atype, element, mass, id):
+    """topo_defs_type(topo_defs * defs, char const * atype, char const * element, double mass, int id) -> int"""
     return _psfgen_core.topo_defs_type(defs, atype, element, mass, id)
-topo_defs_type = _psfgen_core.topo_defs_type
 
 def topo_defs_residue(defs, rname, patch):
+    """topo_defs_residue(topo_defs * defs, char const * rname, int patch) -> int"""
     return _psfgen_core.topo_defs_residue(defs, rname, patch)
-topo_defs_residue = _psfgen_core.topo_defs_residue
 
 def topo_defs_end(defs):
+    """topo_defs_end(topo_defs * defs) -> int"""
     return _psfgen_core.topo_defs_end(defs)
-topo_defs_end = _psfgen_core.topo_defs_end
 
-def topo_defs_atom(defs, rname, arg3, aname, ares, arel, atype, charge):
-    return _psfgen_core.topo_defs_atom(defs, rname, arg3, aname, ares, arel, atype, charge)
-topo_defs_atom = _psfgen_core.topo_defs_atom
+def topo_defs_atom(defs, rname, _del, aname, ares, arel, atype, charge):
+    """topo_defs_atom(topo_defs * defs, char const * rname, int _del, char const * aname, int ares, int arel, char const * atype, double charge) -> int"""
+    return _psfgen_core.topo_defs_atom(defs, rname, _del, aname, ares, arel, atype, charge)
 
-def topo_defs_bond(defs, rname, arg3, a1name, a1res, a1rel, a2name, a2res, a2rel):
-    return _psfgen_core.topo_defs_bond(defs, rname, arg3, a1name, a1res, a1rel, a2name, a2res, a2rel)
-topo_defs_bond = _psfgen_core.topo_defs_bond
+def topo_defs_bond(defs, rname, _del, a1name, a1res, a1rel, a2name, a2res, a2rel):
+    """topo_defs_bond(topo_defs * defs, char const * rname, int _del, char const * a1name, int a1res, int a1rel, char const * a2name, int a2res, int a2rel) -> int"""
+    return _psfgen_core.topo_defs_bond(defs, rname, _del, a1name, a1res, a1rel, a2name, a2res, a2rel)
 
-def topo_defs_angle(defs, rname, arg3, a1name, a1res, a1rel, a2name, a2res, a2rel, a3name, a3res, a3rel):
-    return _psfgen_core.topo_defs_angle(defs, rname, arg3, a1name, a1res, a1rel, a2name, a2res, a2rel, a3name, a3res, a3rel)
-topo_defs_angle = _psfgen_core.topo_defs_angle
+def topo_defs_angle(defs, rname, _del, a1name, a1res, a1rel, a2name, a2res, a2rel, a3name, a3res, a3rel):
+    """topo_defs_angle(topo_defs * defs, char const * rname, int _del, char const * a1name, int a1res, int a1rel, char const * a2name, int a2res, int a2rel, char const * a3name, int a3res, int a3rel) -> int"""
+    return _psfgen_core.topo_defs_angle(defs, rname, _del, a1name, a1res, a1rel, a2name, a2res, a2rel, a3name, a3res, a3rel)
 
-def topo_defs_dihedral(defs, rname, arg3, a1name, a1res, a1rel, a2name, a2res, a2rel, a3name, a3res, a3rel, a4name, a4res, a4rel):
-    return _psfgen_core.topo_defs_dihedral(defs, rname, arg3, a1name, a1res, a1rel, a2name, a2res, a2rel, a3name, a3res, a3rel, a4name, a4res, a4rel)
-topo_defs_dihedral = _psfgen_core.topo_defs_dihedral
+def topo_defs_dihedral(defs, rname, _del, a1name, a1res, a1rel, a2name, a2res, a2rel, a3name, a3res, a3rel, a4name, a4res, a4rel):
+    """topo_defs_dihedral(topo_defs * defs, char const * rname, int _del, char const * a1name, int a1res, int a1rel, char const * a2name, int a2res, int a2rel, char const * a3name, int a3res, int a3rel, char const * a4name, int a4res, int a4rel) -> int"""
+    return _psfgen_core.topo_defs_dihedral(defs, rname, _del, a1name, a1res, a1rel, a2name, a2res, a2rel, a3name, a3res, a3rel, a4name, a4res, a4rel)
 
-def topo_defs_improper(defs, rname, arg3, a1name, a1res, a1rel, a2name, a2res, a2rel, a3name, a3res, a3rel, a4name, a4res, a4rel):
-    return _psfgen_core.topo_defs_improper(defs, rname, arg3, a1name, a1res, a1rel, a2name, a2res, a2rel, a3name, a3res, a3rel, a4name, a4res, a4rel)
-topo_defs_improper = _psfgen_core.topo_defs_improper
+def topo_defs_improper(defs, rname, _del, a1name, a1res, a1rel, a2name, a2res, a2rel, a3name, a3res, a3rel, a4name, a4res, a4rel):
+    """topo_defs_improper(topo_defs * defs, char const * rname, int _del, char const * a1name, int a1res, int a1rel, char const * a2name, int a2res, int a2rel, char const * a3name, int a3res, int a3rel, char const * a4name, int a4res, int a4rel) -> int"""
+    return _psfgen_core.topo_defs_improper(defs, rname, _del, a1name, a1res, a1rel, a2name, a2res, a2rel, a3name, a3res, a3rel, a4name, a4res, a4rel)
 
-def topo_defs_cmap(defs, rname, arg3, anamel, aresl, arell):
-    return _psfgen_core.topo_defs_cmap(defs, rname, arg3, anamel, aresl, arell)
-topo_defs_cmap = _psfgen_core.topo_defs_cmap
+def topo_defs_cmap(defs, rname, _del, anamel, aresl, arell):
+    """topo_defs_cmap(topo_defs * defs, char const * rname, int _del, char const *const [8] anamel, int const [8] aresl, int const [8] arell) -> int"""
+    return _psfgen_core.topo_defs_cmap(defs, rname, _del, anamel, aresl, arell)
 
-def topo_defs_exclusion(defs, rname, arg3, a1name, a1res, a1rel, a2name, a2res, a2rel):
-    return _psfgen_core.topo_defs_exclusion(defs, rname, arg3, a1name, a1res, a1rel, a2name, a2res, a2rel)
-topo_defs_exclusion = _psfgen_core.topo_defs_exclusion
+def topo_defs_exclusion(defs, rname, _del, a1name, a1res, a1rel, a2name, a2res, a2rel):
+    """topo_defs_exclusion(topo_defs * defs, char const * rname, int _del, char const * a1name, int a1res, int a1rel, char const * a2name, int a2res, int a2rel) -> int"""
+    return _psfgen_core.topo_defs_exclusion(defs, rname, _del, a1name, a1res, a1rel, a2name, a2res, a2rel)
 
-def topo_defs_conformation(defs, rname, arg3, a1name, a1res, a1rel, a2name, a2res, a2rel, a3name, a3res, a3rel, a4name, a4res, a4rel, dist12, angle123, dihedral, improper, angle234, dist34):
-    return _psfgen_core.topo_defs_conformation(defs, rname, arg3, a1name, a1res, a1rel, a2name, a2res, a2rel, a3name, a3res, a3rel, a4name, a4res, a4rel, dist12, angle123, dihedral, improper, angle234, dist34)
-topo_defs_conformation = _psfgen_core.topo_defs_conformation
+def topo_defs_conformation(defs, rname, _del, a1name, a1res, a1rel, a2name, a2res, a2rel, a3name, a3res, a3rel, a4name, a4res, a4rel, dist12, angle123, dihedral, improper, angle234, dist34):
+    """topo_defs_conformation(topo_defs * defs, char const * rname, int _del, char const * a1name, int a1res, int a1rel, char const * a2name, int a2res, int a2rel, char const * a3name, int a3res, int a3rel, char const * a4name, int a4res, int a4rel, double dist12, double angle123, double dihedral, int improper, double angle234, double dist34) -> int"""
+    return _psfgen_core.topo_defs_conformation(defs, rname, _del, a1name, a1res, a1rel, a2name, a2res, a2rel, a3name, a3res, a3rel, a4name, a4res, a4rel, dist12, angle123, dihedral, improper, angle234, dist34)
 
 def topo_defs_default_patching_first(defs, pname):
+    """topo_defs_default_patching_first(topo_defs * defs, char const * pname) -> int"""
     return _psfgen_core.topo_defs_default_patching_first(defs, pname)
-topo_defs_default_patching_first = _psfgen_core.topo_defs_default_patching_first
 
 def topo_defs_default_patching_last(defs, pname):
+    """topo_defs_default_patching_last(topo_defs * defs, char const * pname) -> int"""
     return _psfgen_core.topo_defs_default_patching_last(defs, pname)
-topo_defs_default_patching_last = _psfgen_core.topo_defs_default_patching_last
 
 def topo_defs_patching_first(defs, rname, pname):
+    """topo_defs_patching_first(topo_defs * defs, char const * rname, char const * pname) -> int"""
     return _psfgen_core.topo_defs_patching_first(defs, rname, pname)
-topo_defs_patching_first = _psfgen_core.topo_defs_patching_first
 
 def topo_defs_patching_last(defs, rname, pname):
+    """topo_defs_patching_last(topo_defs * defs, char const * rname, char const * pname) -> int"""
     return _psfgen_core.topo_defs_patching_last(defs, rname, pname)
-topo_defs_patching_last = _psfgen_core.topo_defs_patching_last
 
 def topo_defs_add_topofile(defs, filename):
+    """topo_defs_add_topofile(topo_defs * defs, char const * filename) -> int"""
     return _psfgen_core.topo_defs_add_topofile(defs, filename)
-topo_defs_add_topofile = _psfgen_core.topo_defs_add_topofile
 
 def topo_mol_create(defs):
+    """topo_mol_create(topo_defs * defs) -> topo_mol *"""
     return _psfgen_core.topo_mol_create(defs)
-topo_mol_create = _psfgen_core.topo_mol_create
 
 def topo_mol_destroy(mol):
+    """topo_mol_destroy(topo_mol * mol)"""
     return _psfgen_core.topo_mol_destroy(mol)
-topo_mol_destroy = _psfgen_core.topo_mol_destroy
 
 def topo_mol_error_handler(mol, arg2, print_msg):
+    """topo_mol_error_handler(topo_mol * mol, void * arg2, void (*)(void *,char const *) print_msg)"""
     return _psfgen_core.topo_mol_error_handler(mol, arg2, print_msg)
-topo_mol_error_handler = _psfgen_core.topo_mol_error_handler
 
 def topo_mol_segment(mol, segid):
+    """topo_mol_segment(topo_mol * mol, char const * segid) -> int"""
     return _psfgen_core.topo_mol_segment(mol, segid)
-topo_mol_segment = _psfgen_core.topo_mol_segment
 
 def topo_mol_segment_first(mol, rname):
+    """topo_mol_segment_first(topo_mol * mol, char const * rname) -> int"""
     return _psfgen_core.topo_mol_segment_first(mol, rname)
-topo_mol_segment_first = _psfgen_core.topo_mol_segment_first
 
 def topo_mol_segment_last(mol, rname):
+    """topo_mol_segment_last(topo_mol * mol, char const * rname) -> int"""
     return _psfgen_core.topo_mol_segment_last(mol, rname)
-topo_mol_segment_last = _psfgen_core.topo_mol_segment_last
 
 def topo_mol_segment_auto_angles(mol, autogen):
+    """topo_mol_segment_auto_angles(topo_mol * mol, int autogen) -> int"""
     return _psfgen_core.topo_mol_segment_auto_angles(mol, autogen)
-topo_mol_segment_auto_angles = _psfgen_core.topo_mol_segment_auto_angles
 
 def topo_mol_segment_auto_dihedrals(mol, autogen):
+    """topo_mol_segment_auto_dihedrals(topo_mol * mol, int autogen) -> int"""
     return _psfgen_core.topo_mol_segment_auto_dihedrals(mol, autogen)
-topo_mol_segment_auto_dihedrals = _psfgen_core.topo_mol_segment_auto_dihedrals
 
 def topo_mol_residue(mol, resid, rname, chain):
+    """topo_mol_residue(topo_mol * mol, char const * resid, char const * rname, char const * chain) -> int"""
     return _psfgen_core.topo_mol_residue(mol, resid, rname, chain)
-topo_mol_residue = _psfgen_core.topo_mol_residue
 
 def topo_mol_mutate(mol, resid, rname):
+    """topo_mol_mutate(topo_mol * mol, char const * resid, char const * rname) -> int"""
     return _psfgen_core.topo_mol_mutate(mol, resid, rname)
-topo_mol_mutate = _psfgen_core.topo_mol_mutate
 
 def topo_mol_end(mol):
+    """topo_mol_end(topo_mol * mol) -> int"""
     return _psfgen_core.topo_mol_end(mol)
-topo_mol_end = _psfgen_core.topo_mol_end
 class topo_mol_ident_t(_object):
+    """Proxy of C topo_mol_ident_t struct."""
+
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, topo_mol_ident_t, name, value)
     __swig_getmethods__ = {}
@@ -250,6 +252,7 @@ class topo_mol_ident_t(_object):
         aname = _swig_property(_psfgen_core.topo_mol_ident_t_aname_get, _psfgen_core.topo_mol_ident_t_aname_set)
 
     def __init__(self):
+        """__init__(topo_mol_ident_t self) -> topo_mol_ident_t"""
         this = _psfgen_core.new_topo_mol_ident_t()
         try:
             self.this.append(this)
@@ -262,150 +265,150 @@ topo_mol_ident_t_swigregister(topo_mol_ident_t)
 
 
 def topo_mol_patch(mol, targets, rname, prepend, warn_angles, warn_dihedrals, deflt):
+    """topo_mol_patch(topo_mol * mol, topo_mol_ident_t targets, char const * rname, int prepend, int warn_angles, int warn_dihedrals, int deflt) -> int"""
     return _psfgen_core.topo_mol_patch(mol, targets, rname, prepend, warn_angles, warn_dihedrals, deflt)
-topo_mol_patch = _psfgen_core.topo_mol_patch
 
 def topo_mol_regenerate_angles(mol):
+    """topo_mol_regenerate_angles(topo_mol * mol) -> int"""
     return _psfgen_core.topo_mol_regenerate_angles(mol)
-topo_mol_regenerate_angles = _psfgen_core.topo_mol_regenerate_angles
 
 def topo_mol_regenerate_dihedrals(mol):
+    """topo_mol_regenerate_dihedrals(topo_mol * mol) -> int"""
     return _psfgen_core.topo_mol_regenerate_dihedrals(mol)
-topo_mol_regenerate_dihedrals = _psfgen_core.topo_mol_regenerate_dihedrals
 
 def topo_mol_regenerate_resids(mol):
+    """topo_mol_regenerate_resids(topo_mol * mol) -> int"""
     return _psfgen_core.topo_mol_regenerate_resids(mol)
-topo_mol_regenerate_resids = _psfgen_core.topo_mol_regenerate_resids
 
 def topo_mol_delete_atom(mol, target):
+    """topo_mol_delete_atom(topo_mol * mol, topo_mol_ident_t target)"""
     return _psfgen_core.topo_mol_delete_atom(mol, target)
-topo_mol_delete_atom = _psfgen_core.topo_mol_delete_atom
 
 def topo_mol_set_name(mol, target, name):
+    """topo_mol_set_name(topo_mol * mol, topo_mol_ident_t target, char const * name) -> int"""
     return _psfgen_core.topo_mol_set_name(mol, target, name)
-topo_mol_set_name = _psfgen_core.topo_mol_set_name
 
 def topo_mol_set_resname(mol, target, rname):
+    """topo_mol_set_resname(topo_mol * mol, topo_mol_ident_t target, char const * rname) -> int"""
     return _psfgen_core.topo_mol_set_resname(mol, target, rname)
-topo_mol_set_resname = _psfgen_core.topo_mol_set_resname
 
 def topo_mol_set_segid(mol, target, segid):
+    """topo_mol_set_segid(topo_mol * mol, topo_mol_ident_t target, char const * segid) -> int"""
     return _psfgen_core.topo_mol_set_segid(mol, target, segid)
-topo_mol_set_segid = _psfgen_core.topo_mol_set_segid
 
 def topo_mol_multiply_atoms(mol, targets, ncopies):
+    """topo_mol_multiply_atoms(topo_mol * mol, topo_mol_ident_t targets, int ncopies) -> int"""
     return _psfgen_core.topo_mol_multiply_atoms(mol, targets, ncopies)
-topo_mol_multiply_atoms = _psfgen_core.topo_mol_multiply_atoms
 
 def topo_mol_set_element(mol, target, element, replace):
+    """topo_mol_set_element(topo_mol * mol, topo_mol_ident_t target, char const * element, int replace) -> int"""
     return _psfgen_core.topo_mol_set_element(mol, target, element, replace)
-topo_mol_set_element = _psfgen_core.topo_mol_set_element
 
 def topo_mol_set_chain(mol, target, chain, replace):
+    """topo_mol_set_chain(topo_mol * mol, topo_mol_ident_t target, char const * chain, int replace) -> int"""
     return _psfgen_core.topo_mol_set_chain(mol, target, chain, replace)
-topo_mol_set_chain = _psfgen_core.topo_mol_set_chain
 
 def topo_mol_set_xyz(mol, target, x, y, z):
+    """topo_mol_set_xyz(topo_mol * mol, topo_mol_ident_t target, double x, double y, double z) -> int"""
     return _psfgen_core.topo_mol_set_xyz(mol, target, x, y, z)
-topo_mol_set_xyz = _psfgen_core.topo_mol_set_xyz
 
 def topo_mol_set_vel(mol, target, vx, vy, vz):
+    """topo_mol_set_vel(topo_mol * mol, topo_mol_ident_t target, double vx, double vy, double vz) -> int"""
     return _psfgen_core.topo_mol_set_vel(mol, target, vx, vy, vz)
-topo_mol_set_vel = _psfgen_core.topo_mol_set_vel
 
 def topo_mol_set_mass(mol, target, mass):
+    """topo_mol_set_mass(topo_mol * mol, topo_mol_ident_t target, double mass) -> int"""
     return _psfgen_core.topo_mol_set_mass(mol, target, mass)
-topo_mol_set_mass = _psfgen_core.topo_mol_set_mass
 
 def topo_mol_set_charge(mol, target, charge):
+    """topo_mol_set_charge(topo_mol * mol, topo_mol_ident_t target, double charge) -> int"""
     return _psfgen_core.topo_mol_set_charge(mol, target, charge)
-topo_mol_set_charge = _psfgen_core.topo_mol_set_charge
 
 def topo_mol_set_bfactor(mol, target, bfactor):
+    """topo_mol_set_bfactor(topo_mol * mol, topo_mol_ident_t target, double bfactor) -> int"""
     return _psfgen_core.topo_mol_set_bfactor(mol, target, bfactor)
-topo_mol_set_bfactor = _psfgen_core.topo_mol_set_bfactor
 
 def topo_mol_guess_xyz(mol):
+    """topo_mol_guess_xyz(topo_mol * mol) -> int"""
     return _psfgen_core.topo_mol_guess_xyz(mol)
-topo_mol_guess_xyz = _psfgen_core.topo_mol_guess_xyz
 
 def topo_mol_add_patch(mol, pname, deflt):
+    """topo_mol_add_patch(topo_mol * mol, char const * pname, int deflt) -> int"""
     return _psfgen_core.topo_mol_add_patch(mol, pname, deflt)
-topo_mol_add_patch = _psfgen_core.topo_mol_add_patch
 
 def topo_mol_add_patchres(mol, targets):
+    """topo_mol_add_patchres(topo_mol * mol, topo_mol_ident_t targets) -> int"""
     return _psfgen_core.topo_mol_add_patchres(mol, targets)
-topo_mol_add_patchres = _psfgen_core.topo_mol_add_patchres
 
 def topo_mol_validate_patchres(mol, pname, segid, resid):
+    """topo_mol_validate_patchres(topo_mol * mol, char const * pname, char const * segid, char const * resid) -> int"""
     return _psfgen_core.topo_mol_validate_patchres(mol, pname, segid, resid)
-topo_mol_validate_patchres = _psfgen_core.topo_mol_validate_patchres
 
 def topo_mol_write_pdb(mol, file, arg3, print_msg):
+    """topo_mol_write_pdb(topo_mol * mol, FILE * file, void * arg3, void (*)(void *,char const *) print_msg) -> int"""
     return _psfgen_core.topo_mol_write_pdb(mol, file, arg3, print_msg)
-topo_mol_write_pdb = _psfgen_core.topo_mol_write_pdb
 
 def topo_mol_write_namdbin(mol, file, velfile, arg4, print_msg):
+    """topo_mol_write_namdbin(topo_mol * mol, FILE * file, FILE * velfile, void * arg4, void (*)(void *,char const *) print_msg) -> int"""
     return _psfgen_core.topo_mol_write_namdbin(mol, file, velfile, arg4, print_msg)
-topo_mol_write_namdbin = _psfgen_core.topo_mol_write_namdbin
 
 def topo_mol_write_psf(mol, file, charmmfmt, nocmap, nopatches, arg6, print_msg):
+    """topo_mol_write_psf(topo_mol * mol, FILE * file, int charmmfmt, int nocmap, int nopatches, void * arg6, void (*)(void *,char const *) print_msg) -> int"""
     return _psfgen_core.topo_mol_write_psf(mol, file, charmmfmt, nocmap, nopatches, arg6, print_msg)
-topo_mol_write_psf = _psfgen_core.topo_mol_write_psf
 
 def charmm_parse_topo_defs(defs, file, all_caps, v, print_msg):
+    """charmm_parse_topo_defs(topo_defs * defs, FILE * file, int all_caps, void * v, void (*)(void *,char const *) print_msg) -> int"""
     return _psfgen_core.charmm_parse_topo_defs(defs, file, all_caps, v, print_msg)
-charmm_parse_topo_defs = _psfgen_core.charmm_parse_topo_defs
 
 def stringhash_create():
+    """stringhash_create() -> stringhash *"""
     return _psfgen_core.stringhash_create()
-stringhash_create = _psfgen_core.stringhash_create
 
 def stringhash_destroy(h):
+    """stringhash_destroy(stringhash * h)"""
     return _psfgen_core.stringhash_destroy(h)
-stringhash_destroy = _psfgen_core.stringhash_destroy
 
 def stringhash_insert(h, key, data):
+    """stringhash_insert(stringhash * h, char const * key, char const * data) -> char const *"""
     return _psfgen_core.stringhash_insert(h, key, data)
-stringhash_insert = _psfgen_core.stringhash_insert
 
 _psfgen_core.STRINGHASH_FAIL_swigconstant(_psfgen_core)
 STRINGHASH_FAIL = _psfgen_core.STRINGHASH_FAIL
 
 def stringhash_lookup(h, key):
+    """stringhash_lookup(stringhash * h, char const * key) -> char const *"""
     return _psfgen_core.stringhash_lookup(h, key)
-stringhash_lookup = _psfgen_core.stringhash_lookup
 
 def stringhash_delete(h, key):
+    """stringhash_delete(stringhash * h, char const * key) -> char const *"""
     return _psfgen_core.stringhash_delete(h, key)
-stringhash_delete = _psfgen_core.stringhash_delete
 
 _psfgen_core.EXTRACT_ALIAS_FAIL_swigconstant(_psfgen_core)
 EXTRACT_ALIAS_FAIL = _psfgen_core.EXTRACT_ALIAS_FAIL
 
 def extract_alias_residue_define(h, altres, realres):
+    """extract_alias_residue_define(stringhash * h, char const * altres, char const * realres) -> int"""
     return _psfgen_core.extract_alias_residue_define(h, altres, realres)
-extract_alias_residue_define = _psfgen_core.extract_alias_residue_define
 
 def extract_alias_atom_define(h, resname, altatom, realatom):
+    """extract_alias_atom_define(stringhash * h, char const * resname, char const * altatom, char const * realatom) -> int"""
     return _psfgen_core.extract_alias_atom_define(h, resname, altatom, realatom)
-extract_alias_atom_define = _psfgen_core.extract_alias_atom_define
 
 def extract_alias_residue_check(h, resname):
+    """extract_alias_residue_check(stringhash * h, char const * resname) -> char const *"""
     return _psfgen_core.extract_alias_residue_check(h, resname)
-extract_alias_residue_check = _psfgen_core.extract_alias_residue_check
 
 def extract_alias_atom_check(h, resname, atomname):
+    """extract_alias_atom_check(stringhash * h, char const * resname, char const * atomname) -> char const *"""
     return _psfgen_core.extract_alias_atom_check(h, resname, atomname)
-extract_alias_atom_check = _psfgen_core.extract_alias_atom_check
 
 def fopen(arg1, arg2):
+    """fopen(char const * arg1, char const * arg2) -> FILE *"""
     return _psfgen_core.fopen(arg1, arg2)
-fopen = _psfgen_core.fopen
 
 def fclose(arg1):
+    """fclose(FILE * arg1) -> int"""
     return _psfgen_core.fclose(arg1)
-fclose = _psfgen_core.fclose
 # This file is compatible with both classic and new-style classes.
 
 

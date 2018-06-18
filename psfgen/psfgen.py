@@ -41,19 +41,19 @@ class Psfgen:
                                      topAtomName, pdbAtomName):
             raise ValueError("failed on atom alias")
 
-    def addSegment(self, segID, first=None, last=None, auto=None,
+    def addSegment(self, segid, first=None, last=None, auto=None,
                    pdb=None, residues=None, mutate=None):
-        if topo_mol_segment(self.mol, segID):
+        if topo_mol_segment(mol=self.mol, segid=segid):
             raise ValueError("Duplicate segID")
 
         # Handle first
         if first is not None:
-            if topo_mol_segment_first(self.mol, first):
+            if topo_mol_segment_first(mol=self.mol, rname=first):
                 raise ValueError("Failed to set patch for first residue")
 
         # Handle last
         if last is not None:
-            if topo_mol_segment_last(self.mol, last):
+            if topo_mol_segment_last(mol=self.mol, rname=last):
                 raise ValueError("Failed to set patch for last residue")
 
         # Handle auto
@@ -70,9 +70,9 @@ class Psfgen:
                 if arg is AUTO_NONE:
                     angles=0
                     dihedrals=0
-            if topo_mol_segment_auto_angles(self.mol, angles):
+            if topo_mol_segment_auto_angles(mol=self.mol, autogen=angles):
                 raise ValueError("Failed setting angle autogen")
-            if topo_mol_segment_auto_dihedrals(self.mol, dihedrals):
+            if topo_mol_segment_auto_dihedrals(mol=self.mol, autogen=dihedrals):
                 raise ValueError("Failed setting dihedral autogen")
 
         # Handle pdb
@@ -80,8 +80,9 @@ class Psfgen:
             pdb = [pdb]
         for file in pdb:
             fd = fopen(file, 'r')
-            retval = pdb_file_extract_residues(self.mol, fd, self.aliases,
-                                               1, None, None)
+            retval = pdb_file_extract_residues(mol=self.mol, file=fd,
+                                               h=self.aliases, all_caps=1,
+                                               arg5=None, print_msg=None)
             fclose(fd)
             if retval:
                 raise ValueError("Error reading residues from pdb file %s"
@@ -91,33 +92,39 @@ class Psfgen:
         if residues is not None:
             print("doing residues")
             for resid, resname in residues.items():
-                if topo_mol_residue(self.mol, str(resid), str(resname)):
+                # TODO: chain argument not handled here
+                if topo_mol_residue(mol=self.mol, resid=str(resid),
+                                    resname=resname, chain=None):
                     raise ValueError("failed on residue %s:%s"
                                      % (resid,resname))
 
         # Handle mutate
         if mutate is not None:
             for resid, resname in mutate.items():
-                if topo_mol_mutate(self.mol, str(resid), str(resname)):
+                if topo_mol_mutate(mol=self.mol, resid=str(resid),
+                                   rname=resname):
                     raise ValueError("failed on mutate %s:%s" % (resid,resname))
 
         if topo_mol_end(self.mol):
-            raise ValueError("failed on end of segment %s" % segID)
+            raise ValueError("failed on end of segment %s" % segid)
 
-    def readCoords(self, pdbfile, segID=None):
+    def readCoords(self, pdbfile, segid=None):
         fd = fopen(pdbfile, 'r')
-        retval = pdb_file_extract_coordinates(self.mol, fd, segID,
-                                        self.aliases, None, None)
+        retval = pdb_file_extract_coordinates(mol=self.mol,
+                                              file=fd, segid=segid,
+                                              h=self.aliases,
+                                              arg7=None, print_msg=None)
         fclose(fd)
         if retval:
             raise ValueError("failed on reading coordinates from pdb file %s"
                              % pdbfile)
 
-    def setCoords(self, segID, resID, aName, pos):
-        target = {"segid": segID, "resid": resID, "aname": aName }
-        if topo_mol_set_xyz(self.mol, target, pos[0], pos[1], pos[2]):
+    def setCoords(self, segid, resid, aName, pos):
+        target = {"segid": segid, "resid": resid, "aname": aName }
+        if topo_mol_set_xyz(mol=self.mol, target=target,
+                            x=pos[0], y=pos[1], z=pos[2]):
             raise ValueError("failed on coord for segid %d resid %d"
-                             % (segID, resID))
+                             % (segid, resid))
 
     def guessCoords(self):
         if topo_mol_guess_xyz(self.mol):
@@ -127,7 +134,9 @@ class Psfgen:
         identlist = [{"segid": segid.encode(),
                       "resid": str(resid).encode()}
                      for segid, resid in targets]
-        if topo_mol_patch(self.mol, identlist, patchName, 0, 0, 0, 0):
+        if topo_mol_patch(mol=self.mol, targets=identlist, rname=patchName,
+                          prepend=False, warn_angles=False,
+                          warn_dihedrals=False, deflt=0):
             raise ValueError("failed to apply patch %s to %s"
                              % (patchName, targets))
 
@@ -143,17 +152,18 @@ class Psfgen:
                                   "aname":str(group[2])})
             else:
                 raise ValueError("groups must contain lists of 2 or 3 elements")
-        rc = topo_mol_multiply_atoms(self.mol, identlist, ncopies)
+        rc = topo_mol_multiply_atoms(mol=self.mol, targets=identlist,
+                                     ncopies=ncopies)
         if rc:
             raise ValueError("failed to multiply atoms (error=%d)" % rc)
 
-    def delAtom(self, segID, resID=None, atomName=None):
-        ident={"segid": str(segID)}
+    def delAtom(self, segid, resid=None, atomName=None):
+        ident={"segid": str(segid).encode()}
         if resID is not None:
-            ident["resid"] = str(resID)
+            ident["resid"] = str(resid).encode()
         if atomName is not None:
-            ident["aname"] = str(atomName)
-        topo_mol_delete_atom(self.mol, ident)
+            ident["aname"] = str(atomName).encode()
+        topo_mol_delete_atom(mol=self.mol, target=ident)
 
     def regenerateAngles(self):
         topo_mol_regenerate_angles(self.mol)
@@ -177,12 +187,15 @@ class Psfgen:
         ischarmm = 0
         if type == CHARMM:
             ischarmm = 1
-        topo_mol_write_psf(self.mol, fd, ischarmm, None, None)
+        topo_mol_write_psf(mol=self.mol, file=fd, charmmfmt=ischarmm,
+                           nocmap=False, nopatches=False,
+                           arg6=None, print_msg=None)
         fclose(fd)
 
     def writePDB(self, filename):
         fd = fopen(filename, 'w')
-        retval = topo_mol_write_pdb(self.mol, fd, None, None)
+        retval = topo_mol_write_pdb(mol=self.mol, file=fd,
+                                    arg3=None, print_msg=None)
         fclose(fd)
         if retval:
             raise IOError("failed on writing coordinates to pdb file %s"

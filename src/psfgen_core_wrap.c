@@ -3345,7 +3345,7 @@ SWIG_FromCharPtr(const char *cptr)
 #ifdef __cplusplus
 extern "C" {
 #endif
-SWIGINTERN PyObject *_wrap_pdb_file_extract_residues(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_pdb_file_extract_residues(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   FILE *arg2 = (FILE *) 0 ;
@@ -3368,9 +3368,12 @@ SWIGINTERN PyObject *_wrap_pdb_file_extract_residues(PyObject *SWIGUNUSEDPARM(se
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
   PyObject * obj5 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "file",(char *) "h",(char *) "all_caps",(char *) "arg5",(char *) "print_msg", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOO:pdb_file_extract_residues",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOO:pdb_file_extract_residues",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "pdb_file_extract_residues" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -3396,7 +3399,7 @@ SWIGINTERN PyObject *_wrap_pdb_file_extract_residues(PyObject *SWIGUNUSEDPARM(se
     SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "pdb_file_extract_residues" "', argument " "5"" of type '" "void *""'"); 
   }
   {
-    arg6=stdout_msg;
+    arg6 = stdout_msg;
   }
   result = (int)pdb_file_extract_residues(arg1,arg2,arg3,arg4,arg5,arg6);
   resultobj = SWIG_From_int((int)(result));
@@ -3406,7 +3409,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_pdb_file_extract_coordinates(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_pdb_file_extract_coordinates(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   FILE *arg2 = (FILE *) 0 ;
@@ -3438,9 +3441,15 @@ SWIGINTERN PyObject *_wrap_pdb_file_extract_coordinates(PyObject *SWIGUNUSEDPARM
   PyObject * obj5 = 0 ;
   PyObject * obj6 = 0 ;
   PyObject * obj7 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "file",(char *) "namdbinfile",(char *) "segid",(char *) "h",(char *) "all_caps",(char *) "arg7",(char *) "print_msg", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOO:pdb_file_extract_coordinates",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;
+  {
+    arg3 = NULL;
+  }
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOOO:pdb_file_extract_coordinates",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "pdb_file_extract_coordinates" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -3451,32 +3460,44 @@ SWIGINTERN PyObject *_wrap_pdb_file_extract_coordinates(PyObject *SWIGUNUSEDPARM
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "pdb_file_extract_coordinates" "', argument " "2"" of type '" "FILE *""'"); 
   }
   arg2 = (FILE *)(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_FILE, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "pdb_file_extract_coordinates" "', argument " "3"" of type '" "FILE *""'"); 
+  if (obj2) {
+    res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_FILE, 0 |  0 );
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "pdb_file_extract_coordinates" "', argument " "3"" of type '" "FILE *""'"); 
+    }
+    arg3 = (FILE *)(argp3);
   }
-  arg3 = (FILE *)(argp3);
-  res4 = SWIG_AsCharPtrAndSize(obj3, &buf4, NULL, &alloc4);
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "pdb_file_extract_coordinates" "', argument " "4"" of type '" "char const *""'");
+  if (obj3) {
+    res4 = SWIG_AsCharPtrAndSize(obj3, &buf4, NULL, &alloc4);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "pdb_file_extract_coordinates" "', argument " "4"" of type '" "char const *""'");
+    }
+    arg4 = (char *)(buf4);
   }
-  arg4 = (char *)(buf4);
-  res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_stringhash, 0 |  0 );
-  if (!SWIG_IsOK(res5)) {
-    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "pdb_file_extract_coordinates" "', argument " "5"" of type '" "stringhash *""'"); 
+  if (obj4) {
+    res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_stringhash, 0 |  0 );
+    if (!SWIG_IsOK(res5)) {
+      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "pdb_file_extract_coordinates" "', argument " "5"" of type '" "stringhash *""'"); 
+    }
+    arg5 = (stringhash *)(argp5);
   }
-  arg5 = (stringhash *)(argp5);
-  ecode6 = SWIG_AsVal_int(obj5, &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "pdb_file_extract_coordinates" "', argument " "6"" of type '" "int""'");
-  } 
-  arg6 = (int)(val6);
-  res7 = SWIG_ConvertPtr(obj6,SWIG_as_voidptrptr(&arg7), 0, 0);
-  if (!SWIG_IsOK(res7)) {
-    SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "pdb_file_extract_coordinates" "', argument " "7"" of type '" "void *""'"); 
+  if (obj5) {
+    ecode6 = SWIG_AsVal_int(obj5, &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "pdb_file_extract_coordinates" "', argument " "6"" of type '" "int""'");
+    } 
+    arg6 = (int)(val6);
   }
-  {
-    arg8=stdout_msg;
+  if (obj6) {
+    res7 = SWIG_ConvertPtr(obj6,SWIG_as_voidptrptr(&arg7), 0, 0);
+    if (!SWIG_IsOK(res7)) {
+      SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "pdb_file_extract_coordinates" "', argument " "7"" of type '" "void *""'"); 
+    }
+  }
+  if (obj7) {
+    {
+      arg8 = stdout_msg;
+    }
   }
   result = (int)pdb_file_extract_coordinates(arg1,arg2,arg3,(char const *)arg4,arg5,arg6,arg7,arg8);
   resultobj = SWIG_From_int((int)(result));
@@ -3488,7 +3509,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_psf_file_extract(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_psf_file_extract(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   FILE *arg2 = (FILE *) 0 ;
@@ -3515,9 +3536,18 @@ SWIGINTERN PyObject *_wrap_psf_file_extract(PyObject *SWIGUNUSEDPARM(self), PyOb
   PyObject * obj4 = 0 ;
   PyObject * obj5 = 0 ;
   PyObject * obj6 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "file",(char *) "pdbfile",(char *) "namdbinfile",(char *) "velnamdbinfile",(char *) "arg6",(char *) "print_msg", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOO:psf_file_extract",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
+  {
+    arg4 = NULL;
+  }
+  {
+    arg5 = NULL;
+  }
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:psf_file_extract",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "psf_file_extract" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -3533,22 +3563,30 @@ SWIGINTERN PyObject *_wrap_psf_file_extract(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "psf_file_extract" "', argument " "3"" of type '" "FILE *""'"); 
   }
   arg3 = (FILE *)(argp3);
-  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_FILE, 0 |  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "psf_file_extract" "', argument " "4"" of type '" "FILE *""'"); 
+  if (obj3) {
+    res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_FILE, 0 |  0 );
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "psf_file_extract" "', argument " "4"" of type '" "FILE *""'"); 
+    }
+    arg4 = (FILE *)(argp4);
   }
-  arg4 = (FILE *)(argp4);
-  res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_FILE, 0 |  0 );
-  if (!SWIG_IsOK(res5)) {
-    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "psf_file_extract" "', argument " "5"" of type '" "FILE *""'"); 
+  if (obj4) {
+    res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_FILE, 0 |  0 );
+    if (!SWIG_IsOK(res5)) {
+      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "psf_file_extract" "', argument " "5"" of type '" "FILE *""'"); 
+    }
+    arg5 = (FILE *)(argp5);
   }
-  arg5 = (FILE *)(argp5);
-  res6 = SWIG_ConvertPtr(obj5,SWIG_as_voidptrptr(&arg6), 0, 0);
-  if (!SWIG_IsOK(res6)) {
-    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "psf_file_extract" "', argument " "6"" of type '" "void *""'"); 
+  if (obj5) {
+    res6 = SWIG_ConvertPtr(obj5,SWIG_as_voidptrptr(&arg6), 0, 0);
+    if (!SWIG_IsOK(res6)) {
+      SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "psf_file_extract" "', argument " "6"" of type '" "void *""'"); 
+    }
   }
-  {
-    arg7=stdout_msg;
+  if (obj6) {
+    {
+      arg7 = stdout_msg;
+    }
   }
   result = (int)psf_file_extract(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
   resultobj = SWIG_From_int((int)(result));
@@ -3571,14 +3609,17 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_destroy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_destroy(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs", NULL 
+  };
   
-  if (!PyArg_ParseTuple(args,(char *)"O:topo_defs_destroy",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:topo_defs_destroy",kwnames,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_destroy" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -3592,7 +3633,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_error_handler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_error_handler(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   void *arg2 = (void *) 0 ;
@@ -3603,8 +3644,11 @@ SWIGINTERN PyObject *_wrap_topo_defs_error_handler(PyObject *SWIGUNUSEDPARM(self
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "arg2",(char *) "print_msg", NULL 
+  };
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:topo_defs_error_handler",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:topo_defs_error_handler",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_error_handler" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -3615,7 +3659,7 @@ SWIGINTERN PyObject *_wrap_topo_defs_error_handler(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "topo_defs_error_handler" "', argument " "2"" of type '" "void *""'"); 
   }
   {
-    arg3=stdout_msg;
+    arg3 = stdout_msg;
   }
   topo_defs_error_handler(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
@@ -3625,7 +3669,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_auto_angles(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_auto_angles(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   int arg2 ;
@@ -3635,8 +3679,11 @@ SWIGINTERN PyObject *_wrap_topo_defs_auto_angles(PyObject *SWIGUNUSEDPARM(self),
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "autogen", NULL 
+  };
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:topo_defs_auto_angles",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:topo_defs_auto_angles",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_auto_angles" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -3655,7 +3702,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_auto_dihedrals(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_auto_dihedrals(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   int arg2 ;
@@ -3665,8 +3712,11 @@ SWIGINTERN PyObject *_wrap_topo_defs_auto_dihedrals(PyObject *SWIGUNUSEDPARM(sel
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "autogen", NULL 
+  };
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:topo_defs_auto_dihedrals",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:topo_defs_auto_dihedrals",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_auto_dihedrals" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -3685,7 +3735,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_type(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_type(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -3709,9 +3759,12 @@ SWIGINTERN PyObject *_wrap_topo_defs_type(PyObject *SWIGUNUSEDPARM(self), PyObje
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "atype",(char *) "element",(char *) "mass",(char *) "id", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:topo_defs_type",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:topo_defs_type",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_type" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -3749,7 +3802,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_residue(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_residue(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -3764,9 +3817,12 @@ SWIGINTERN PyObject *_wrap_topo_defs_residue(PyObject *SWIGUNUSEDPARM(self), PyO
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "rname",(char *) "patch", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:topo_defs_residue",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:topo_defs_residue",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_residue" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -3792,15 +3848,18 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:topo_defs_end",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:topo_defs_end",kwnames,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_end" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -3814,7 +3873,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_atom(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_atom(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -3851,9 +3910,12 @@ SWIGINTERN PyObject *_wrap_topo_defs_atom(PyObject *SWIGUNUSEDPARM(self), PyObje
   PyObject * obj5 = 0 ;
   PyObject * obj6 = 0 ;
   PyObject * obj7 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "rname",(char *) "_del",(char *) "aname",(char *) "ares",(char *) "arel",(char *) "atype",(char *) "charge", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOO:topo_defs_atom",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOOO:topo_defs_atom",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_atom" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -3908,7 +3970,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_bond(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_bond(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -3949,9 +4011,12 @@ SWIGINTERN PyObject *_wrap_topo_defs_bond(PyObject *SWIGUNUSEDPARM(self), PyObje
   PyObject * obj6 = 0 ;
   PyObject * obj7 = 0 ;
   PyObject * obj8 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "rname",(char *) "_del",(char *) "a1name",(char *) "a1res",(char *) "a1rel",(char *) "a2name",(char *) "a2res",(char *) "a2rel", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOO:topo_defs_bond",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOOOO:topo_defs_bond",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_bond" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -4011,7 +4076,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_angle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_angle(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -4065,9 +4130,12 @@ SWIGINTERN PyObject *_wrap_topo_defs_angle(PyObject *SWIGUNUSEDPARM(self), PyObj
   PyObject * obj9 = 0 ;
   PyObject * obj10 = 0 ;
   PyObject * obj11 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "rname",(char *) "_del",(char *) "a1name",(char *) "a1res",(char *) "a1rel",(char *) "a2name",(char *) "a2res",(char *) "a2rel",(char *) "a3name",(char *) "a3res",(char *) "a3rel", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOOOOO:topo_defs_angle",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOOOOOOO:topo_defs_angle",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_angle" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -4144,7 +4212,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_dihedral(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_dihedral(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -4211,9 +4279,12 @@ SWIGINTERN PyObject *_wrap_topo_defs_dihedral(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject * obj12 = 0 ;
   PyObject * obj13 = 0 ;
   PyObject * obj14 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "rname",(char *) "_del",(char *) "a1name",(char *) "a1res",(char *) "a1rel",(char *) "a2name",(char *) "a2res",(char *) "a2rel",(char *) "a3name",(char *) "a3res",(char *) "a3rel",(char *) "a4name",(char *) "a4res",(char *) "a4rel", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOOOOOOOO:topo_defs_dihedral",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11,&obj12,&obj13,&obj14)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOOOOOOOOOO:topo_defs_dihedral",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11,&obj12,&obj13,&obj14)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_dihedral" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -4307,7 +4378,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_improper(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_improper(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -4374,9 +4445,12 @@ SWIGINTERN PyObject *_wrap_topo_defs_improper(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject * obj12 = 0 ;
   PyObject * obj13 = 0 ;
   PyObject * obj14 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "rname",(char *) "_del",(char *) "a1name",(char *) "a1res",(char *) "a1rel",(char *) "a2name",(char *) "a2res",(char *) "a2rel",(char *) "a3name",(char *) "a3res",(char *) "a3rel",(char *) "a4name",(char *) "a4res",(char *) "a4rel", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOOOOOOOO:topo_defs_improper",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11,&obj12,&obj13,&obj14)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOOOOOOOOOO:topo_defs_improper",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11,&obj12,&obj13,&obj14)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_improper" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -4470,7 +4544,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_cmap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_cmap(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -4497,9 +4571,12 @@ SWIGINTERN PyObject *_wrap_topo_defs_cmap(PyObject *SWIGUNUSEDPARM(self), PyObje
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
   PyObject * obj5 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "rname",(char *) "_del",(char *) "anamel",(char *) "aresl",(char *) "arell", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOO:topo_defs_cmap",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOO:topo_defs_cmap",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_cmap" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -4540,7 +4617,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_exclusion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_exclusion(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -4581,9 +4658,12 @@ SWIGINTERN PyObject *_wrap_topo_defs_exclusion(PyObject *SWIGUNUSEDPARM(self), P
   PyObject * obj6 = 0 ;
   PyObject * obj7 = 0 ;
   PyObject * obj8 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "rname",(char *) "_del",(char *) "a1name",(char *) "a1res",(char *) "a1rel",(char *) "a2name",(char *) "a2res",(char *) "a2rel", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOO:topo_defs_exclusion",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOOOO:topo_defs_exclusion",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_exclusion" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -4643,7 +4723,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_conformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_conformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -4734,9 +4814,12 @@ SWIGINTERN PyObject *_wrap_topo_defs_conformation(PyObject *SWIGUNUSEDPARM(self)
   PyObject * obj18 = 0 ;
   PyObject * obj19 = 0 ;
   PyObject * obj20 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "rname",(char *) "_del",(char *) "a1name",(char *) "a1res",(char *) "a1rel",(char *) "a2name",(char *) "a2res",(char *) "a2rel",(char *) "a3name",(char *) "a3res",(char *) "a3rel",(char *) "a4name",(char *) "a4res",(char *) "a4rel",(char *) "dist12",(char *) "angle123",(char *) "dihedral",(char *) "improper",(char *) "angle234",(char *) "dist34", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOOOOOOOOOOOOOO:topo_defs_conformation",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11,&obj12,&obj13,&obj14,&obj15,&obj16,&obj17,&obj18,&obj19,&obj20)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOOOOOOOOOOOOOOOO:topo_defs_conformation",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11,&obj12,&obj13,&obj14,&obj15,&obj16,&obj17,&obj18,&obj19,&obj20)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_conformation" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -4860,7 +4943,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_default_patching_first(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_default_patching_first(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -4871,9 +4954,12 @@ SWIGINTERN PyObject *_wrap_topo_defs_default_patching_first(PyObject *SWIGUNUSED
   int alloc2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "pname", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:topo_defs_default_patching_first",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:topo_defs_default_patching_first",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_default_patching_first" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -4894,7 +4980,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_default_patching_last(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_default_patching_last(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -4905,9 +4991,12 @@ SWIGINTERN PyObject *_wrap_topo_defs_default_patching_last(PyObject *SWIGUNUSEDP
   int alloc2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "pname", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:topo_defs_default_patching_last",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:topo_defs_default_patching_last",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_default_patching_last" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -4928,7 +5017,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_patching_first(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_patching_first(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -4944,9 +5033,12 @@ SWIGINTERN PyObject *_wrap_topo_defs_patching_first(PyObject *SWIGUNUSEDPARM(sel
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "rname",(char *) "pname", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:topo_defs_patching_first",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:topo_defs_patching_first",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_patching_first" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -4974,7 +5066,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_patching_last(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_patching_last(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -4990,9 +5082,12 @@ SWIGINTERN PyObject *_wrap_topo_defs_patching_last(PyObject *SWIGUNUSEDPARM(self
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "rname",(char *) "pname", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:topo_defs_patching_last",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:topo_defs_patching_last",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_patching_last" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -5020,7 +5115,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_defs_add_topofile(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_defs_add_topofile(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -5031,9 +5126,12 @@ SWIGINTERN PyObject *_wrap_topo_defs_add_topofile(PyObject *SWIGUNUSEDPARM(self)
   int alloc2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "filename", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:topo_defs_add_topofile",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:topo_defs_add_topofile",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_defs_add_topofile" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -5054,15 +5152,18 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_create(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_create(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs", NULL 
+  };
   topo_mol *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:topo_mol_create",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:topo_mol_create",kwnames,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_create" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -5076,14 +5177,17 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_destroy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_destroy(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol", NULL 
+  };
   
-  if (!PyArg_ParseTuple(args,(char *)"O:topo_mol_destroy",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:topo_mol_destroy",kwnames,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_destroy" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -5097,7 +5201,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_error_handler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_error_handler(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   void *arg2 = (void *) 0 ;
@@ -5108,8 +5212,11 @@ SWIGINTERN PyObject *_wrap_topo_mol_error_handler(PyObject *SWIGUNUSEDPARM(self)
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "arg2",(char *) "print_msg", NULL 
+  };
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:topo_mol_error_handler",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:topo_mol_error_handler",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_error_handler" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -5120,7 +5227,7 @@ SWIGINTERN PyObject *_wrap_topo_mol_error_handler(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "topo_mol_error_handler" "', argument " "2"" of type '" "void *""'"); 
   }
   {
-    arg3=stdout_msg;
+    arg3 = stdout_msg;
   }
   topo_mol_error_handler(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
@@ -5130,7 +5237,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_segment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_segment(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -5141,9 +5248,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_segment(PyObject *SWIGUNUSEDPARM(self), PyOb
   int alloc2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "segid", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:topo_mol_segment",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:topo_mol_segment",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_segment" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -5164,7 +5274,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_segment_first(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_segment_first(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -5175,9 +5285,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_segment_first(PyObject *SWIGUNUSEDPARM(self)
   int alloc2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "rname", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:topo_mol_segment_first",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:topo_mol_segment_first",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_segment_first" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -5198,7 +5311,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_segment_last(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_segment_last(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -5209,9 +5322,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_segment_last(PyObject *SWIGUNUSEDPARM(self),
   int alloc2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "rname", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:topo_mol_segment_last",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:topo_mol_segment_last",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_segment_last" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -5232,7 +5348,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_segment_auto_angles(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_segment_auto_angles(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   int arg2 ;
@@ -5242,9 +5358,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_segment_auto_angles(PyObject *SWIGUNUSEDPARM
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "autogen", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:topo_mol_segment_auto_angles",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:topo_mol_segment_auto_angles",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_segment_auto_angles" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -5263,7 +5382,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_segment_auto_dihedrals(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_segment_auto_dihedrals(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   int arg2 ;
@@ -5273,9 +5392,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_segment_auto_dihedrals(PyObject *SWIGUNUSEDP
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "autogen", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:topo_mol_segment_auto_dihedrals",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:topo_mol_segment_auto_dihedrals",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_segment_auto_dihedrals" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -5294,7 +5416,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_residue(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_residue(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -5315,9 +5437,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_residue(PyObject *SWIGUNUSEDPARM(self), PyOb
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "resid",(char *) "rname",(char *) "chain", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:topo_mol_residue",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:topo_mol_residue",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_residue" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -5352,7 +5477,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_mutate(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_mutate(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -5368,9 +5493,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_mutate(PyObject *SWIGUNUSEDPARM(self), PyObj
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "resid",(char *) "rname", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:topo_mol_mutate",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:topo_mol_mutate",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_mutate" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -5398,15 +5526,18 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:topo_mol_end",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:topo_mol_end",kwnames,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_end" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -5641,7 +5772,7 @@ SWIGINTERN PyObject *topo_mol_ident_t_swigregister(PyObject *SWIGUNUSEDPARM(self
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_topo_mol_patch(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_patch(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   topo_mol_ident_t *arg2 = (topo_mol_ident_t *) 0 ;
@@ -5671,9 +5802,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_patch(PyObject *SWIGUNUSEDPARM(self), PyObje
   PyObject * obj4 = 0 ;
   PyObject * obj5 = 0 ;
   PyObject * obj6 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "targets",(char *) "rname",(char *) "prepend",(char *) "warn_angles",(char *) "warn_dihedrals",(char *) "deflt", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOO:topo_mol_patch",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOO:topo_mol_patch",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_patch" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -5745,15 +5879,18 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_regenerate_angles(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_regenerate_angles(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:topo_mol_regenerate_angles",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:topo_mol_regenerate_angles",kwnames,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_regenerate_angles" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -5767,15 +5904,18 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_regenerate_dihedrals(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_regenerate_dihedrals(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:topo_mol_regenerate_dihedrals",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:topo_mol_regenerate_dihedrals",kwnames,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_regenerate_dihedrals" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -5789,15 +5929,18 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_regenerate_resids(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_regenerate_resids(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:topo_mol_regenerate_resids",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:topo_mol_regenerate_resids",kwnames,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_regenerate_resids" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -5811,7 +5954,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_delete_atom(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_delete_atom(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   topo_mol_ident_t *arg2 = (topo_mol_ident_t *) 0 ;
@@ -5819,8 +5962,11 @@ SWIGINTERN PyObject *_wrap_topo_mol_delete_atom(PyObject *SWIGUNUSEDPARM(self), 
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "target", NULL 
+  };
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:topo_mol_delete_atom",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:topo_mol_delete_atom",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_delete_atom" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -5854,7 +6000,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_set_name(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_set_name(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   topo_mol_ident_t *arg2 = (topo_mol_ident_t *) 0 ;
@@ -5867,9 +6013,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_set_name(PyObject *SWIGUNUSEDPARM(self), PyO
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "target",(char *) "name", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:topo_mol_set_name",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:topo_mol_set_name",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_set_name" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -5910,7 +6059,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_set_resname(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_set_resname(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   topo_mol_ident_t *arg2 = (topo_mol_ident_t *) 0 ;
@@ -5923,9 +6072,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_set_resname(PyObject *SWIGUNUSEDPARM(self), 
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "target",(char *) "rname", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:topo_mol_set_resname",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:topo_mol_set_resname",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_set_resname" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -5966,7 +6118,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_set_segid(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_set_segid(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   topo_mol_ident_t *arg2 = (topo_mol_ident_t *) 0 ;
@@ -5979,9 +6131,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_set_segid(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "target",(char *) "segid", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:topo_mol_set_segid",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:topo_mol_set_segid",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_set_segid" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -6022,7 +6177,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_multiply_atoms(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_multiply_atoms(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   topo_mol_ident_t *arg2 = (topo_mol_ident_t *) 0 ;
@@ -6035,9 +6190,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_multiply_atoms(PyObject *SWIGUNUSEDPARM(self
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "targets",(char *) "ncopies", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:topo_mol_multiply_atoms",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:topo_mol_multiply_atoms",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_multiply_atoms" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -6087,7 +6245,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_set_element(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_set_element(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   topo_mol_ident_t *arg2 = (topo_mol_ident_t *) 0 ;
@@ -6104,9 +6262,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_set_element(PyObject *SWIGUNUSEDPARM(self), 
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "target",(char *) "element",(char *) "replace", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:topo_mol_set_element",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:topo_mol_set_element",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_set_element" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -6152,7 +6313,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_set_chain(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_set_chain(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   topo_mol_ident_t *arg2 = (topo_mol_ident_t *) 0 ;
@@ -6169,9 +6330,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_set_chain(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "target",(char *) "chain",(char *) "replace", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:topo_mol_set_chain",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:topo_mol_set_chain",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_set_chain" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -6217,7 +6381,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_set_xyz(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_set_xyz(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   topo_mol_ident_t *arg2 = (topo_mol_ident_t *) 0 ;
@@ -6237,9 +6401,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_set_xyz(PyObject *SWIGUNUSEDPARM(self), PyOb
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "target",(char *) "x",(char *) "y",(char *) "z", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:topo_mol_set_xyz",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:topo_mol_set_xyz",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_set_xyz" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -6288,7 +6455,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_set_vel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_set_vel(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   topo_mol_ident_t *arg2 = (topo_mol_ident_t *) 0 ;
@@ -6308,9 +6475,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_set_vel(PyObject *SWIGUNUSEDPARM(self), PyOb
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "target",(char *) "vx",(char *) "vy",(char *) "vz", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:topo_mol_set_vel",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:topo_mol_set_vel",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_set_vel" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -6359,7 +6529,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_set_mass(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_set_mass(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   topo_mol_ident_t *arg2 = (topo_mol_ident_t *) 0 ;
@@ -6371,9 +6541,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_set_mass(PyObject *SWIGUNUSEDPARM(self), PyO
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "target",(char *) "mass", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:topo_mol_set_mass",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:topo_mol_set_mass",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_set_mass" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -6412,7 +6585,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_set_charge(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_set_charge(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   topo_mol_ident_t *arg2 = (topo_mol_ident_t *) 0 ;
@@ -6424,9 +6597,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_set_charge(PyObject *SWIGUNUSEDPARM(self), P
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "target",(char *) "charge", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:topo_mol_set_charge",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:topo_mol_set_charge",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_set_charge" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -6465,7 +6641,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_set_bfactor(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_set_bfactor(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   topo_mol_ident_t *arg2 = (topo_mol_ident_t *) 0 ;
@@ -6477,9 +6653,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_set_bfactor(PyObject *SWIGUNUSEDPARM(self), 
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "target",(char *) "bfactor", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:topo_mol_set_bfactor",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:topo_mol_set_bfactor",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_set_bfactor" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -6518,15 +6697,18 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_guess_xyz(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_guess_xyz(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:topo_mol_guess_xyz",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:topo_mol_guess_xyz",kwnames,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_guess_xyz" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -6540,7 +6722,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_add_patch(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_add_patch(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -6555,9 +6737,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_add_patch(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "pname",(char *) "deflt", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:topo_mol_add_patch",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:topo_mol_add_patch",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_add_patch" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -6583,7 +6768,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_add_patchres(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_add_patchres(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   topo_mol_ident_t *arg2 = (topo_mol_ident_t *) 0 ;
@@ -6593,9 +6778,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_add_patchres(PyObject *SWIGUNUSEDPARM(self),
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "targets", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:topo_mol_add_patchres",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:topo_mol_add_patchres",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_add_patchres" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -6620,7 +6808,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_validate_patchres(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_validate_patchres(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -6641,9 +6829,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_validate_patchres(PyObject *SWIGUNUSEDPARM(s
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "pname",(char *) "segid",(char *) "resid", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:topo_mol_validate_patchres",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:topo_mol_validate_patchres",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_validate_patchres" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -6678,7 +6869,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_write_pdb(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_write_pdb(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   FILE *arg2 = (FILE *) 0 ;
@@ -6693,9 +6884,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_write_pdb(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "file",(char *) "arg3",(char *) "print_msg", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:topo_mol_write_pdb",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:topo_mol_write_pdb",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_write_pdb" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -6711,7 +6905,7 @@ SWIGINTERN PyObject *_wrap_topo_mol_write_pdb(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "topo_mol_write_pdb" "', argument " "3"" of type '" "void *""'"); 
   }
   {
-    arg4=stdout_msg;
+    arg4 = stdout_msg;
   }
   result = (int)topo_mol_write_pdb(arg1,arg2,arg3,arg4);
   resultobj = SWIG_From_int((int)(result));
@@ -6721,7 +6915,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_write_namdbin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_write_namdbin(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   FILE *arg2 = (FILE *) 0 ;
@@ -6740,9 +6934,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_write_namdbin(PyObject *SWIGUNUSEDPARM(self)
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "file",(char *) "velfile",(char *) "arg4",(char *) "print_msg", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:topo_mol_write_namdbin",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:topo_mol_write_namdbin",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_write_namdbin" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -6763,7 +6960,7 @@ SWIGINTERN PyObject *_wrap_topo_mol_write_namdbin(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "topo_mol_write_namdbin" "', argument " "4"" of type '" "void *""'"); 
   }
   {
-    arg5=stdout_msg;
+    arg5 = stdout_msg;
   }
   result = (int)topo_mol_write_namdbin(arg1,arg2,arg3,arg4,arg5);
   resultobj = SWIG_From_int((int)(result));
@@ -6773,7 +6970,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_topo_mol_write_psf(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_topo_mol_write_psf(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_mol *arg1 = (topo_mol *) 0 ;
   FILE *arg2 = (FILE *) 0 ;
@@ -6800,9 +6997,12 @@ SWIGINTERN PyObject *_wrap_topo_mol_write_psf(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject * obj4 = 0 ;
   PyObject * obj5 = 0 ;
   PyObject * obj6 = 0 ;
+  char *  kwnames[] = {
+    (char *) "mol",(char *) "file",(char *) "charmmfmt",(char *) "nocmap",(char *) "nopatches",(char *) "arg6",(char *) "print_msg", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOO:topo_mol_write_psf",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOO:topo_mol_write_psf",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_mol, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "topo_mol_write_psf" "', argument " "1"" of type '" "topo_mol *""'"); 
@@ -6833,7 +7033,7 @@ SWIGINTERN PyObject *_wrap_topo_mol_write_psf(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "topo_mol_write_psf" "', argument " "6"" of type '" "void *""'"); 
   }
   {
-    arg7=stdout_msg;
+    arg7 = stdout_msg;
   }
   result = (int)topo_mol_write_psf(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
   resultobj = SWIG_From_int((int)(result));
@@ -6843,7 +7043,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_charmm_parse_topo_defs(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_charmm_parse_topo_defs(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   topo_defs *arg1 = (topo_defs *) 0 ;
   FILE *arg2 = (FILE *) 0 ;
@@ -6862,9 +7062,12 @@ SWIGINTERN PyObject *_wrap_charmm_parse_topo_defs(PyObject *SWIGUNUSEDPARM(self)
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
+  char *  kwnames[] = {
+    (char *) "defs",(char *) "file",(char *) "all_caps",(char *) "v",(char *) "print_msg", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:charmm_parse_topo_defs",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:charmm_parse_topo_defs",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_topo_defs, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "charmm_parse_topo_defs" "', argument " "1"" of type '" "topo_defs *""'"); 
@@ -6885,7 +7088,7 @@ SWIGINTERN PyObject *_wrap_charmm_parse_topo_defs(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "charmm_parse_topo_defs" "', argument " "4"" of type '" "void *""'"); 
   }
   {
-    arg5=stdout_msg;
+    arg5 = stdout_msg;
   }
   result = (int)charmm_parse_topo_defs(arg1,arg2,arg3,arg4,arg5);
   resultobj = SWIG_From_int((int)(result));
@@ -6908,14 +7111,17 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_stringhash_destroy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_stringhash_destroy(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   stringhash *arg1 = (stringhash *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "h", NULL 
+  };
   
-  if (!PyArg_ParseTuple(args,(char *)"O:stringhash_destroy",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:stringhash_destroy",kwnames,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_stringhash, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "stringhash_destroy" "', argument " "1"" of type '" "stringhash *""'"); 
@@ -6929,7 +7135,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_stringhash_insert(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_stringhash_insert(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   stringhash *arg1 = (stringhash *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -6945,9 +7151,12 @@ SWIGINTERN PyObject *_wrap_stringhash_insert(PyObject *SWIGUNUSEDPARM(self), PyO
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "h",(char *) "key",(char *) "data", NULL 
+  };
   char *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:stringhash_insert",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:stringhash_insert",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_stringhash, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "stringhash_insert" "', argument " "1"" of type '" "stringhash *""'"); 
@@ -6986,7 +7195,7 @@ SWIGINTERN PyObject *STRINGHASH_FAIL_swigconstant(PyObject *SWIGUNUSEDPARM(self)
 }
 
 
-SWIGINTERN PyObject *_wrap_stringhash_lookup(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_stringhash_lookup(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   stringhash *arg1 = (stringhash *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -6997,9 +7206,12 @@ SWIGINTERN PyObject *_wrap_stringhash_lookup(PyObject *SWIGUNUSEDPARM(self), PyO
   int alloc2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "h",(char *) "key", NULL 
+  };
   char *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:stringhash_lookup",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:stringhash_lookup",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_stringhash, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "stringhash_lookup" "', argument " "1"" of type '" "stringhash *""'"); 
@@ -7020,7 +7232,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_stringhash_delete(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_stringhash_delete(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   stringhash *arg1 = (stringhash *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -7031,9 +7243,12 @@ SWIGINTERN PyObject *_wrap_stringhash_delete(PyObject *SWIGUNUSEDPARM(self), PyO
   int alloc2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "h",(char *) "key", NULL 
+  };
   char *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:stringhash_delete",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:stringhash_delete",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_stringhash, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "stringhash_delete" "', argument " "1"" of type '" "stringhash *""'"); 
@@ -7065,7 +7280,7 @@ SWIGINTERN PyObject *EXTRACT_ALIAS_FAIL_swigconstant(PyObject *SWIGUNUSEDPARM(se
 }
 
 
-SWIGINTERN PyObject *_wrap_extract_alias_residue_define(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_extract_alias_residue_define(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   stringhash *arg1 = (stringhash *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -7081,9 +7296,12 @@ SWIGINTERN PyObject *_wrap_extract_alias_residue_define(PyObject *SWIGUNUSEDPARM
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "h",(char *) "altres",(char *) "realres", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:extract_alias_residue_define",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:extract_alias_residue_define",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_stringhash, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_alias_residue_define" "', argument " "1"" of type '" "stringhash *""'"); 
@@ -7111,7 +7329,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_extract_alias_atom_define(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_extract_alias_atom_define(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   stringhash *arg1 = (stringhash *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -7132,9 +7350,12 @@ SWIGINTERN PyObject *_wrap_extract_alias_atom_define(PyObject *SWIGUNUSEDPARM(se
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "h",(char *) "resname",(char *) "altatom",(char *) "realatom", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:extract_alias_atom_define",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:extract_alias_atom_define",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_stringhash, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_alias_atom_define" "', argument " "1"" of type '" "stringhash *""'"); 
@@ -7169,7 +7390,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_extract_alias_residue_check(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_extract_alias_residue_check(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   stringhash *arg1 = (stringhash *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -7180,9 +7401,12 @@ SWIGINTERN PyObject *_wrap_extract_alias_residue_check(PyObject *SWIGUNUSEDPARM(
   int alloc2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "h",(char *) "resname", NULL 
+  };
   char *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:extract_alias_residue_check",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:extract_alias_residue_check",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_stringhash, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_alias_residue_check" "', argument " "1"" of type '" "stringhash *""'"); 
@@ -7203,7 +7427,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_extract_alias_atom_check(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_extract_alias_atom_check(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   stringhash *arg1 = (stringhash *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -7219,9 +7443,12 @@ SWIGINTERN PyObject *_wrap_extract_alias_atom_check(PyObject *SWIGUNUSEDPARM(sel
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "h",(char *) "resname",(char *) "atomname", NULL 
+  };
   char *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:extract_alias_atom_check",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:extract_alias_atom_check",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_stringhash, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "extract_alias_atom_check" "', argument " "1"" of type '" "stringhash *""'"); 
@@ -7249,7 +7476,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_fopen(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_fopen(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   char *arg1 = (char *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -7261,9 +7488,12 @@ SWIGINTERN PyObject *_wrap_fopen(PyObject *SWIGUNUSEDPARM(self), PyObject *args)
   int alloc2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "arg1",(char *) "arg2", NULL 
+  };
   FILE *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:fopen",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:fopen",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "fopen" "', argument " "1"" of type '" "char const *""'");
@@ -7286,15 +7516,18 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_fclose(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_fclose(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   FILE *arg1 = (FILE *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "arg1", NULL 
+  };
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:fclose",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:fclose",kwnames,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_FILE, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "fclose" "', argument " "1"" of type '" "FILE *""'"); 
@@ -7310,87 +7543,87 @@ fail:
 
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
-	 { (char *)"pdb_file_extract_residues", _wrap_pdb_file_extract_residues, METH_VARARGS, NULL},
-	 { (char *)"pdb_file_extract_coordinates", _wrap_pdb_file_extract_coordinates, METH_VARARGS, NULL},
-	 { (char *)"psf_file_extract", _wrap_psf_file_extract, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_create", _wrap_topo_defs_create, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_destroy", _wrap_topo_defs_destroy, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_error_handler", _wrap_topo_defs_error_handler, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_auto_angles", _wrap_topo_defs_auto_angles, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_auto_dihedrals", _wrap_topo_defs_auto_dihedrals, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_type", _wrap_topo_defs_type, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_residue", _wrap_topo_defs_residue, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_end", _wrap_topo_defs_end, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_atom", _wrap_topo_defs_atom, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_bond", _wrap_topo_defs_bond, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_angle", _wrap_topo_defs_angle, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_dihedral", _wrap_topo_defs_dihedral, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_improper", _wrap_topo_defs_improper, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_cmap", _wrap_topo_defs_cmap, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_exclusion", _wrap_topo_defs_exclusion, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_conformation", _wrap_topo_defs_conformation, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_default_patching_first", _wrap_topo_defs_default_patching_first, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_default_patching_last", _wrap_topo_defs_default_patching_last, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_patching_first", _wrap_topo_defs_patching_first, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_patching_last", _wrap_topo_defs_patching_last, METH_VARARGS, NULL},
-	 { (char *)"topo_defs_add_topofile", _wrap_topo_defs_add_topofile, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_create", _wrap_topo_mol_create, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_destroy", _wrap_topo_mol_destroy, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_error_handler", _wrap_topo_mol_error_handler, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_segment", _wrap_topo_mol_segment, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_segment_first", _wrap_topo_mol_segment_first, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_segment_last", _wrap_topo_mol_segment_last, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_segment_auto_angles", _wrap_topo_mol_segment_auto_angles, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_segment_auto_dihedrals", _wrap_topo_mol_segment_auto_dihedrals, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_residue", _wrap_topo_mol_residue, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_mutate", _wrap_topo_mol_mutate, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_end", _wrap_topo_mol_end, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_ident_t_segid_set", _wrap_topo_mol_ident_t_segid_set, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_ident_t_segid_get", _wrap_topo_mol_ident_t_segid_get, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_ident_t_resid_set", _wrap_topo_mol_ident_t_resid_set, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_ident_t_resid_get", _wrap_topo_mol_ident_t_resid_get, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_ident_t_aname_set", _wrap_topo_mol_ident_t_aname_set, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_ident_t_aname_get", _wrap_topo_mol_ident_t_aname_get, METH_VARARGS, NULL},
-	 { (char *)"new_topo_mol_ident_t", _wrap_new_topo_mol_ident_t, METH_VARARGS, NULL},
-	 { (char *)"delete_topo_mol_ident_t", _wrap_delete_topo_mol_ident_t, METH_VARARGS, NULL},
+	 { (char *)"pdb_file_extract_residues", (PyCFunction) _wrap_pdb_file_extract_residues, METH_VARARGS | METH_KEYWORDS, (char *)"pdb_file_extract_residues(topo_mol * mol, FILE * file, stringhash * h, int all_caps, void * arg5, void (*)(void *,char const *) print_msg) -> int"},
+	 { (char *)"pdb_file_extract_coordinates", (PyCFunction) _wrap_pdb_file_extract_coordinates, METH_VARARGS | METH_KEYWORDS, (char *)"pdb_file_extract_coordinates(topo_mol * mol, FILE * file, FILE * namdbinfile, char const * segid, stringhash * h, int all_caps, void * arg7, void (*)(void *,char const *) print_msg) -> int"},
+	 { (char *)"psf_file_extract", (PyCFunction) _wrap_psf_file_extract, METH_VARARGS | METH_KEYWORDS, (char *)"psf_file_extract(topo_mol * mol, FILE * file, FILE * pdbfile, FILE * namdbinfile, FILE * velnamdbinfile, void * arg6, void (*)(void *,char const *) print_msg) -> int"},
+	 { (char *)"topo_defs_create", _wrap_topo_defs_create, METH_VARARGS, (char *)"topo_defs_create() -> topo_defs *"},
+	 { (char *)"topo_defs_destroy", (PyCFunction) _wrap_topo_defs_destroy, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_destroy(topo_defs * defs)"},
+	 { (char *)"topo_defs_error_handler", (PyCFunction) _wrap_topo_defs_error_handler, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_error_handler(topo_defs * defs, void * arg2, void (*)(void *,char const *) print_msg)"},
+	 { (char *)"topo_defs_auto_angles", (PyCFunction) _wrap_topo_defs_auto_angles, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_auto_angles(topo_defs * defs, int autogen)"},
+	 { (char *)"topo_defs_auto_dihedrals", (PyCFunction) _wrap_topo_defs_auto_dihedrals, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_auto_dihedrals(topo_defs * defs, int autogen)"},
+	 { (char *)"topo_defs_type", (PyCFunction) _wrap_topo_defs_type, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_type(topo_defs * defs, char const * atype, char const * element, double mass, int id) -> int"},
+	 { (char *)"topo_defs_residue", (PyCFunction) _wrap_topo_defs_residue, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_residue(topo_defs * defs, char const * rname, int patch) -> int"},
+	 { (char *)"topo_defs_end", (PyCFunction) _wrap_topo_defs_end, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_end(topo_defs * defs) -> int"},
+	 { (char *)"topo_defs_atom", (PyCFunction) _wrap_topo_defs_atom, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_atom(topo_defs * defs, char const * rname, int _del, char const * aname, int ares, int arel, char const * atype, double charge) -> int"},
+	 { (char *)"topo_defs_bond", (PyCFunction) _wrap_topo_defs_bond, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_bond(topo_defs * defs, char const * rname, int _del, char const * a1name, int a1res, int a1rel, char const * a2name, int a2res, int a2rel) -> int"},
+	 { (char *)"topo_defs_angle", (PyCFunction) _wrap_topo_defs_angle, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_angle(topo_defs * defs, char const * rname, int _del, char const * a1name, int a1res, int a1rel, char const * a2name, int a2res, int a2rel, char const * a3name, int a3res, int a3rel) -> int"},
+	 { (char *)"topo_defs_dihedral", (PyCFunction) _wrap_topo_defs_dihedral, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_dihedral(topo_defs * defs, char const * rname, int _del, char const * a1name, int a1res, int a1rel, char const * a2name, int a2res, int a2rel, char const * a3name, int a3res, int a3rel, char const * a4name, int a4res, int a4rel) -> int"},
+	 { (char *)"topo_defs_improper", (PyCFunction) _wrap_topo_defs_improper, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_improper(topo_defs * defs, char const * rname, int _del, char const * a1name, int a1res, int a1rel, char const * a2name, int a2res, int a2rel, char const * a3name, int a3res, int a3rel, char const * a4name, int a4res, int a4rel) -> int"},
+	 { (char *)"topo_defs_cmap", (PyCFunction) _wrap_topo_defs_cmap, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_cmap(topo_defs * defs, char const * rname, int _del, char const *const [8] anamel, int const [8] aresl, int const [8] arell) -> int"},
+	 { (char *)"topo_defs_exclusion", (PyCFunction) _wrap_topo_defs_exclusion, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_exclusion(topo_defs * defs, char const * rname, int _del, char const * a1name, int a1res, int a1rel, char const * a2name, int a2res, int a2rel) -> int"},
+	 { (char *)"topo_defs_conformation", (PyCFunction) _wrap_topo_defs_conformation, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_conformation(topo_defs * defs, char const * rname, int _del, char const * a1name, int a1res, int a1rel, char const * a2name, int a2res, int a2rel, char const * a3name, int a3res, int a3rel, char const * a4name, int a4res, int a4rel, double dist12, double angle123, double dihedral, int improper, double angle234, double dist34) -> int"},
+	 { (char *)"topo_defs_default_patching_first", (PyCFunction) _wrap_topo_defs_default_patching_first, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_default_patching_first(topo_defs * defs, char const * pname) -> int"},
+	 { (char *)"topo_defs_default_patching_last", (PyCFunction) _wrap_topo_defs_default_patching_last, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_default_patching_last(topo_defs * defs, char const * pname) -> int"},
+	 { (char *)"topo_defs_patching_first", (PyCFunction) _wrap_topo_defs_patching_first, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_patching_first(topo_defs * defs, char const * rname, char const * pname) -> int"},
+	 { (char *)"topo_defs_patching_last", (PyCFunction) _wrap_topo_defs_patching_last, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_patching_last(topo_defs * defs, char const * rname, char const * pname) -> int"},
+	 { (char *)"topo_defs_add_topofile", (PyCFunction) _wrap_topo_defs_add_topofile, METH_VARARGS | METH_KEYWORDS, (char *)"topo_defs_add_topofile(topo_defs * defs, char const * filename) -> int"},
+	 { (char *)"topo_mol_create", (PyCFunction) _wrap_topo_mol_create, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_create(topo_defs * defs) -> topo_mol *"},
+	 { (char *)"topo_mol_destroy", (PyCFunction) _wrap_topo_mol_destroy, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_destroy(topo_mol * mol)"},
+	 { (char *)"topo_mol_error_handler", (PyCFunction) _wrap_topo_mol_error_handler, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_error_handler(topo_mol * mol, void * arg2, void (*)(void *,char const *) print_msg)"},
+	 { (char *)"topo_mol_segment", (PyCFunction) _wrap_topo_mol_segment, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_segment(topo_mol * mol, char const * segid) -> int"},
+	 { (char *)"topo_mol_segment_first", (PyCFunction) _wrap_topo_mol_segment_first, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_segment_first(topo_mol * mol, char const * rname) -> int"},
+	 { (char *)"topo_mol_segment_last", (PyCFunction) _wrap_topo_mol_segment_last, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_segment_last(topo_mol * mol, char const * rname) -> int"},
+	 { (char *)"topo_mol_segment_auto_angles", (PyCFunction) _wrap_topo_mol_segment_auto_angles, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_segment_auto_angles(topo_mol * mol, int autogen) -> int"},
+	 { (char *)"topo_mol_segment_auto_dihedrals", (PyCFunction) _wrap_topo_mol_segment_auto_dihedrals, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_segment_auto_dihedrals(topo_mol * mol, int autogen) -> int"},
+	 { (char *)"topo_mol_residue", (PyCFunction) _wrap_topo_mol_residue, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_residue(topo_mol * mol, char const * resid, char const * rname, char const * chain) -> int"},
+	 { (char *)"topo_mol_mutate", (PyCFunction) _wrap_topo_mol_mutate, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_mutate(topo_mol * mol, char const * resid, char const * rname) -> int"},
+	 { (char *)"topo_mol_end", (PyCFunction) _wrap_topo_mol_end, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_end(topo_mol * mol) -> int"},
+	 { (char *)"topo_mol_ident_t_segid_set", _wrap_topo_mol_ident_t_segid_set, METH_VARARGS, (char *)"topo_mol_ident_t_segid_set(topo_mol_ident_t self, char const * segid)"},
+	 { (char *)"topo_mol_ident_t_segid_get", _wrap_topo_mol_ident_t_segid_get, METH_VARARGS, (char *)"topo_mol_ident_t_segid_get(topo_mol_ident_t self) -> char const *"},
+	 { (char *)"topo_mol_ident_t_resid_set", _wrap_topo_mol_ident_t_resid_set, METH_VARARGS, (char *)"topo_mol_ident_t_resid_set(topo_mol_ident_t self, char const * resid)"},
+	 { (char *)"topo_mol_ident_t_resid_get", _wrap_topo_mol_ident_t_resid_get, METH_VARARGS, (char *)"topo_mol_ident_t_resid_get(topo_mol_ident_t self) -> char const *"},
+	 { (char *)"topo_mol_ident_t_aname_set", _wrap_topo_mol_ident_t_aname_set, METH_VARARGS, (char *)"topo_mol_ident_t_aname_set(topo_mol_ident_t self, char const * aname)"},
+	 { (char *)"topo_mol_ident_t_aname_get", _wrap_topo_mol_ident_t_aname_get, METH_VARARGS, (char *)"topo_mol_ident_t_aname_get(topo_mol_ident_t self) -> char const *"},
+	 { (char *)"new_topo_mol_ident_t", _wrap_new_topo_mol_ident_t, METH_VARARGS, (char *)"new_topo_mol_ident_t() -> topo_mol_ident_t"},
+	 { (char *)"delete_topo_mol_ident_t", _wrap_delete_topo_mol_ident_t, METH_VARARGS, (char *)"delete_topo_mol_ident_t(topo_mol_ident_t self)"},
 	 { (char *)"topo_mol_ident_t_swigregister", topo_mol_ident_t_swigregister, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_patch", _wrap_topo_mol_patch, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_regenerate_angles", _wrap_topo_mol_regenerate_angles, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_regenerate_dihedrals", _wrap_topo_mol_regenerate_dihedrals, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_regenerate_resids", _wrap_topo_mol_regenerate_resids, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_delete_atom", _wrap_topo_mol_delete_atom, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_set_name", _wrap_topo_mol_set_name, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_set_resname", _wrap_topo_mol_set_resname, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_set_segid", _wrap_topo_mol_set_segid, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_multiply_atoms", _wrap_topo_mol_multiply_atoms, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_set_element", _wrap_topo_mol_set_element, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_set_chain", _wrap_topo_mol_set_chain, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_set_xyz", _wrap_topo_mol_set_xyz, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_set_vel", _wrap_topo_mol_set_vel, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_set_mass", _wrap_topo_mol_set_mass, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_set_charge", _wrap_topo_mol_set_charge, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_set_bfactor", _wrap_topo_mol_set_bfactor, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_guess_xyz", _wrap_topo_mol_guess_xyz, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_add_patch", _wrap_topo_mol_add_patch, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_add_patchres", _wrap_topo_mol_add_patchres, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_validate_patchres", _wrap_topo_mol_validate_patchres, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_write_pdb", _wrap_topo_mol_write_pdb, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_write_namdbin", _wrap_topo_mol_write_namdbin, METH_VARARGS, NULL},
-	 { (char *)"topo_mol_write_psf", _wrap_topo_mol_write_psf, METH_VARARGS, NULL},
-	 { (char *)"charmm_parse_topo_defs", _wrap_charmm_parse_topo_defs, METH_VARARGS, NULL},
-	 { (char *)"stringhash_create", _wrap_stringhash_create, METH_VARARGS, NULL},
-	 { (char *)"stringhash_destroy", _wrap_stringhash_destroy, METH_VARARGS, NULL},
-	 { (char *)"stringhash_insert", _wrap_stringhash_insert, METH_VARARGS, NULL},
+	 { (char *)"topo_mol_patch", (PyCFunction) _wrap_topo_mol_patch, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_patch(topo_mol * mol, topo_mol_ident_t targets, char const * rname, int prepend, int warn_angles, int warn_dihedrals, int deflt) -> int"},
+	 { (char *)"topo_mol_regenerate_angles", (PyCFunction) _wrap_topo_mol_regenerate_angles, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_regenerate_angles(topo_mol * mol) -> int"},
+	 { (char *)"topo_mol_regenerate_dihedrals", (PyCFunction) _wrap_topo_mol_regenerate_dihedrals, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_regenerate_dihedrals(topo_mol * mol) -> int"},
+	 { (char *)"topo_mol_regenerate_resids", (PyCFunction) _wrap_topo_mol_regenerate_resids, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_regenerate_resids(topo_mol * mol) -> int"},
+	 { (char *)"topo_mol_delete_atom", (PyCFunction) _wrap_topo_mol_delete_atom, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_delete_atom(topo_mol * mol, topo_mol_ident_t target)"},
+	 { (char *)"topo_mol_set_name", (PyCFunction) _wrap_topo_mol_set_name, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_set_name(topo_mol * mol, topo_mol_ident_t target, char const * name) -> int"},
+	 { (char *)"topo_mol_set_resname", (PyCFunction) _wrap_topo_mol_set_resname, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_set_resname(topo_mol * mol, topo_mol_ident_t target, char const * rname) -> int"},
+	 { (char *)"topo_mol_set_segid", (PyCFunction) _wrap_topo_mol_set_segid, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_set_segid(topo_mol * mol, topo_mol_ident_t target, char const * segid) -> int"},
+	 { (char *)"topo_mol_multiply_atoms", (PyCFunction) _wrap_topo_mol_multiply_atoms, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_multiply_atoms(topo_mol * mol, topo_mol_ident_t targets, int ncopies) -> int"},
+	 { (char *)"topo_mol_set_element", (PyCFunction) _wrap_topo_mol_set_element, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_set_element(topo_mol * mol, topo_mol_ident_t target, char const * element, int replace) -> int"},
+	 { (char *)"topo_mol_set_chain", (PyCFunction) _wrap_topo_mol_set_chain, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_set_chain(topo_mol * mol, topo_mol_ident_t target, char const * chain, int replace) -> int"},
+	 { (char *)"topo_mol_set_xyz", (PyCFunction) _wrap_topo_mol_set_xyz, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_set_xyz(topo_mol * mol, topo_mol_ident_t target, double x, double y, double z) -> int"},
+	 { (char *)"topo_mol_set_vel", (PyCFunction) _wrap_topo_mol_set_vel, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_set_vel(topo_mol * mol, topo_mol_ident_t target, double vx, double vy, double vz) -> int"},
+	 { (char *)"topo_mol_set_mass", (PyCFunction) _wrap_topo_mol_set_mass, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_set_mass(topo_mol * mol, topo_mol_ident_t target, double mass) -> int"},
+	 { (char *)"topo_mol_set_charge", (PyCFunction) _wrap_topo_mol_set_charge, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_set_charge(topo_mol * mol, topo_mol_ident_t target, double charge) -> int"},
+	 { (char *)"topo_mol_set_bfactor", (PyCFunction) _wrap_topo_mol_set_bfactor, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_set_bfactor(topo_mol * mol, topo_mol_ident_t target, double bfactor) -> int"},
+	 { (char *)"topo_mol_guess_xyz", (PyCFunction) _wrap_topo_mol_guess_xyz, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_guess_xyz(topo_mol * mol) -> int"},
+	 { (char *)"topo_mol_add_patch", (PyCFunction) _wrap_topo_mol_add_patch, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_add_patch(topo_mol * mol, char const * pname, int deflt) -> int"},
+	 { (char *)"topo_mol_add_patchres", (PyCFunction) _wrap_topo_mol_add_patchres, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_add_patchres(topo_mol * mol, topo_mol_ident_t targets) -> int"},
+	 { (char *)"topo_mol_validate_patchres", (PyCFunction) _wrap_topo_mol_validate_patchres, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_validate_patchres(topo_mol * mol, char const * pname, char const * segid, char const * resid) -> int"},
+	 { (char *)"topo_mol_write_pdb", (PyCFunction) _wrap_topo_mol_write_pdb, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_write_pdb(topo_mol * mol, FILE * file, void * arg3, void (*)(void *,char const *) print_msg) -> int"},
+	 { (char *)"topo_mol_write_namdbin", (PyCFunction) _wrap_topo_mol_write_namdbin, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_write_namdbin(topo_mol * mol, FILE * file, FILE * velfile, void * arg4, void (*)(void *,char const *) print_msg) -> int"},
+	 { (char *)"topo_mol_write_psf", (PyCFunction) _wrap_topo_mol_write_psf, METH_VARARGS | METH_KEYWORDS, (char *)"topo_mol_write_psf(topo_mol * mol, FILE * file, int charmmfmt, int nocmap, int nopatches, void * arg6, void (*)(void *,char const *) print_msg) -> int"},
+	 { (char *)"charmm_parse_topo_defs", (PyCFunction) _wrap_charmm_parse_topo_defs, METH_VARARGS | METH_KEYWORDS, (char *)"charmm_parse_topo_defs(topo_defs * defs, FILE * file, int all_caps, void * v, void (*)(void *,char const *) print_msg) -> int"},
+	 { (char *)"stringhash_create", _wrap_stringhash_create, METH_VARARGS, (char *)"stringhash_create() -> stringhash *"},
+	 { (char *)"stringhash_destroy", (PyCFunction) _wrap_stringhash_destroy, METH_VARARGS | METH_KEYWORDS, (char *)"stringhash_destroy(stringhash * h)"},
+	 { (char *)"stringhash_insert", (PyCFunction) _wrap_stringhash_insert, METH_VARARGS | METH_KEYWORDS, (char *)"stringhash_insert(stringhash * h, char const * key, char const * data) -> char const *"},
 	 { (char *)"STRINGHASH_FAIL_swigconstant", STRINGHASH_FAIL_swigconstant, METH_VARARGS, NULL},
-	 { (char *)"stringhash_lookup", _wrap_stringhash_lookup, METH_VARARGS, NULL},
-	 { (char *)"stringhash_delete", _wrap_stringhash_delete, METH_VARARGS, NULL},
+	 { (char *)"stringhash_lookup", (PyCFunction) _wrap_stringhash_lookup, METH_VARARGS | METH_KEYWORDS, (char *)"stringhash_lookup(stringhash * h, char const * key) -> char const *"},
+	 { (char *)"stringhash_delete", (PyCFunction) _wrap_stringhash_delete, METH_VARARGS | METH_KEYWORDS, (char *)"stringhash_delete(stringhash * h, char const * key) -> char const *"},
 	 { (char *)"EXTRACT_ALIAS_FAIL_swigconstant", EXTRACT_ALIAS_FAIL_swigconstant, METH_VARARGS, NULL},
-	 { (char *)"extract_alias_residue_define", _wrap_extract_alias_residue_define, METH_VARARGS, NULL},
-	 { (char *)"extract_alias_atom_define", _wrap_extract_alias_atom_define, METH_VARARGS, NULL},
-	 { (char *)"extract_alias_residue_check", _wrap_extract_alias_residue_check, METH_VARARGS, NULL},
-	 { (char *)"extract_alias_atom_check", _wrap_extract_alias_atom_check, METH_VARARGS, NULL},
-	 { (char *)"fopen", _wrap_fopen, METH_VARARGS, NULL},
-	 { (char *)"fclose", _wrap_fclose, METH_VARARGS, NULL},
+	 { (char *)"extract_alias_residue_define", (PyCFunction) _wrap_extract_alias_residue_define, METH_VARARGS | METH_KEYWORDS, (char *)"extract_alias_residue_define(stringhash * h, char const * altres, char const * realres) -> int"},
+	 { (char *)"extract_alias_atom_define", (PyCFunction) _wrap_extract_alias_atom_define, METH_VARARGS | METH_KEYWORDS, (char *)"extract_alias_atom_define(stringhash * h, char const * resname, char const * altatom, char const * realatom) -> int"},
+	 { (char *)"extract_alias_residue_check", (PyCFunction) _wrap_extract_alias_residue_check, METH_VARARGS | METH_KEYWORDS, (char *)"extract_alias_residue_check(stringhash * h, char const * resname) -> char const *"},
+	 { (char *)"extract_alias_atom_check", (PyCFunction) _wrap_extract_alias_atom_check, METH_VARARGS | METH_KEYWORDS, (char *)"extract_alias_atom_check(stringhash * h, char const * resname, char const * atomname) -> char const *"},
+	 { (char *)"fopen", (PyCFunction) _wrap_fopen, METH_VARARGS | METH_KEYWORDS, (char *)"fopen(char const * arg1, char const * arg2) -> FILE *"},
+	 { (char *)"fclose", (PyCFunction) _wrap_fclose, METH_VARARGS | METH_KEYWORDS, (char *)"fclose(FILE * arg1) -> int"},
 	 { NULL, NULL, 0, NULL }
 };
 
