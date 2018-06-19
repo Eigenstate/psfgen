@@ -1,5 +1,6 @@
 
 from psfgen.psfgen_core import *
+import _psfgen
 
 class PsfgenFormatError(IOError):
     pass
@@ -13,37 +14,35 @@ AUTO_ANGLES, AUTO_DIHEDRALS, AUTO_NONE = "angles", "dihedrals", "none"
 
 class Psfgen:
     def __init__(self):
-        self.defs = topo_defs_create()
-        self.aliases = stringhash_create()
-        self.mol = topo_mol_create(self.defs)
+        self.data = _psfgen.init_mol()
 
     def __del__(self):
-        topo_mol_destroy(self.mol)
-        topo_defs_destroy(self.defs)
-        stringhash_destroy(self.aliases)
+        _psfgen.del_mol(self.data);
 
     def readCharmmTopology(self, filename):
-        fd = fopen(filename, 'r')
-        retval = charmm_parse_topo_defs(self.defs, fd,
-                                        1, None, None)
-        fclose(fd)
-        if retval:
-            raise PsfgenFormatError("Error reading topology file")
+        """
+        Parses a charmm format topology file into current library.
+
+        Args:
+            filename (str): File to parse
+
+        Raises:
+            FileNotFoundError: If the file cannot be opened for reading
+            ValueError: If an error occurs during parsing
+        """
+        _psfgen.parse_topology(psfstate=self.data, filename=filename)
 
     def aliasResidue(self, topResName, pdbResName):
-        if extract_alias_residue_define(self.aliases,
-                                        str(topResName),
-                                        str(pdbResName)):
-            raise ValueError("failed on residue alias")
+        _psfgen.alias(psfstate=self.data, type="residue",
+                      name=topResName, newname=pdbResName)
 
     def aliasAtom(self, resName, topAtomName, pdbAtomName):
-        if extract_alias_atom_define(self.aliases, resName,
-                                     topAtomName, pdbAtomName):
-            raise ValueError("failed on atom alias")
+        _psfgen.alias(psfstate=self.data, type="atom",
+                      resname=resName, name=topAtomName, newname=pdbAtomName)
 
     def addSegment(self, segid, first=None, last=None, auto=None,
                    pdb=None, residues=None, mutate=None):
-        if topo_mol_segment(mol=self.mol, segid=segid):
+        if segid in _psfgen.segment(psfstate=self.data, task="segids"):
             raise ValueError("Duplicate segID")
 
         # Handle first
@@ -108,23 +107,29 @@ class Psfgen:
         if topo_mol_end(self.mol):
             raise ValueError("failed on end of segment %s" % segid)
 
-    def readCoords(self, pdbfile, segid=None):
-        fd = fopen(pdbfile, 'r')
-        retval = pdb_file_extract_coordinates(mol=self.mol,
-                                              file=fd, segid=segid,
-                                              h=self.aliases,
-                                              arg7=None, print_msg=None)
-        fclose(fd)
-        if retval:
-            raise ValueError("failed on reading coordinates from pdb file %s"
-                             % pdbfile)
+    def readCoords(self, pdbfile, segid):
+        if segid not in _psfgen.segment(psfstate=self.data, task="segids"):
+            raise ValueError("Can't read coordinates for segment '%s' as "
+                             "it is undefined." % segid)
+        _psfgen.read_coords(psfstate=self.data,
+                            filename=pdbfile,
+                            segid=segid)
 
-    def setCoords(self, segid, resid, aName, pos):
-        target = {"segid": segid, "resid": resid, "aname": aName }
-        if topo_mol_set_xyz(mol=self.mol, target=target,
-                            x=pos[0], y=pos[1], z=pos[2]):
-            raise ValueError("failed on coord for segid %d resid %d"
-                             % (segid, resid))
+    def setCoords(self, segid, resid, atomname, position):
+        """
+        Sets the coordinates of a given atom to new values.
+
+        Args:
+            segid (str): Segment ID of atom
+            resid (str): Residue ID of atom
+            atomname (str): Atom name
+            position (3-tuple of double): New x, y, and z coordinates for atom
+
+        Returns:
+            True if successful
+        """
+        return not _psefgen.set_coords(mol=self.mol, segid=segid, resid=resid,
+                                       aname=atomname, position=position)
 
     def guessCoords(self):
         if topo_mol_guess_xyz(self.mol):
@@ -200,4 +205,21 @@ class Psfgen:
         if retval:
             raise IOError("failed on writing coordinates to pdb file %s"
                           % filename)
+
+    def query_segment(self, task, segid=None, resid=None):
+        """
+        Ask for information about a segment.
+
+        Args:
+            task (str): In [first, last, residue, resids, segids] depending on
+                what information is desired.
+            segid (str): Segment ID to query
+            resid (str): Residue ID to query, if task is "residue"
+
+        Returns:
+            (str or list of str): Requested information
+        """
+        return _psfgen.segment(psfstate=self.data, task=task,
+                               segid=segid, resid=resid)
+
 

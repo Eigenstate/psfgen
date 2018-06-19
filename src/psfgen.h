@@ -17,10 +17,30 @@ struct psfgen_data {
   topo_defs *defs;
   topo_mol *mol;
   stringhash *aliases;
+  FILE* outstream;
 };
 typedef struct psfgen_data psfgen_data;
 
 // Emit a compile error if int is not 32 bits
 (void)sizeof(char[1 - 2*!!(sizeof(int) != 4)]);
+
+// Some utility functions
+char* strtoupper(const char *str, int all_caps) {
+  char *s, *tmp;
+  tmp = strdup(str);
+  if ( all_caps ) {
+    s=tmp;
+    while ( *s ) { *s = toupper(*s); ++s; }
+  }
+  return tmp;
+}
+
+char* splitcolon(char *s) {
+  if ( s ) {
+    while ( *s && *s != ':' ) { ++s; }
+    if ( *s ) *(s++) = 0; else s = 0;
+  }
+  return s;
+}
 
 #endif /* PSFGEN_H */

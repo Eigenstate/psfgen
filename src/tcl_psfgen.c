@@ -305,24 +305,6 @@ int psfgen_static_init(Tcl_Interp *interp) {
   return Tcl_Eval(interp,"package ifneeded psfgen 1.7 {load {} psfgen}");
 }
 
-char *strtoupper(const char *str, int all_caps) {
-  char *s, *tmp;
-  tmp = strdup(str);
-  if ( all_caps ) {
-    s=tmp;
-    while ( *s ) { *s = toupper(*s); ++s; }
-  }
-  return tmp;
-}
-
-char* splitcolon(char *s) {
-  if ( s ) {
-    while ( *s && *s != ':' ) { ++s; }
-    if ( *s ) *(s++) = 0; else s = 0;
-  }
-  return s;
-}
-
 /*
   Old-style calls:
     set n [psfcontext new]   $n is old context (0)
