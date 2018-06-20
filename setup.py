@@ -13,14 +13,13 @@ psfgenfiles=[
    "./src/pdb_file_extract.c",
    "./src/psf_file.c",
    "./src/psf_file_extract.c",
-   "./src/psfgen_core_wrap.c",
    "./src/python_psfgen.c",
    "./src/stringhash.c",
    "./src/topo_defs.c",
    "./src/topo_mol.c",
    "./src/topo_mol_output.c"]
 
-psfext = Extension('_psfgen_core',
+psfext = Extension('_psfgen',
                    define_macros=[('PSFGENTCLDLL_EXPORTS', '1')],
                    include_dirs=["/usr/include", "./src"],
                    libraries=["tcl8.5"],

@@ -14,12 +14,14 @@
 #include "stringhash.h"
 #include "extract_alias.h"
 
-/* Initialization / destruction functions */
-void psfclear(PyObject *data) {
-    // data->aliases stringhash should be freed?
-    free(data);
+/* Helper functions */
+void python_msg(void *v, const char *msg) {
+    v = (FILE*)v; // print to this file
+    fprintf(v, msg);
+    fprintf(v, "\n");
 }
 
+/* Initialization / destruction functions */
 static PyObject* py_init_mol(PyObject *self) {
     psfgen_data * data = malloc(sizeof(psfgen_data));
 
@@ -36,32 +38,33 @@ static PyObject* py_init_mol(PyObject *self) {
     data->in_use = 0;
     data->all_caps = 1;
     data->outstream = stdout; // TODO: does this even work
+    topo_mol_error_handler(data->mol, data->outstream, python_msg);
 
     // Encapsulate psf_data object and return it
-    PyObject * capsule = PyCapsule_New(data, NULL, psfclear); if (!capsule || PyErr_Occurred()) {
+    PyObject * capsule = PyCapsule_New(data, NULL, NULL);
+    if (!capsule || PyErr_Occurred()) {
         return NULL;
     }
     return capsule;
 }
 
 static PyObject* py_del_mol(PyObject *self, PyObject *stateptr) {
-   psfgen_data* data;
+    psfgen_data* data;
 
-   // Unpack molecule capsule
-   data = PyCapsule_GetPointer(stateptr, NULL);
-   if (!data || PyErr_Occurred()) {
+    // Unpack molecule capsule
+    data = PyCapsule_GetPointer(stateptr, NULL);
+    if (!data || PyErr_Occurred()) {
        return NULL;
-   }
+    }
 
-   // Do the work
-   topo_mol_destroy(data->mol);
-   topo_defs_destroy(data->defs);
-   stringhash_destroy(data->aliases);
-   free(data);
+    // Do the work
+    topo_mol_destroy(data->mol);
+    topo_defs_destroy(data->defs);
+    stringhash_destroy(data->aliases);
+    free(data);
 
-   Py_INCREF(Py_None); // Don't mess up reference counts
-   return Py_None;
-
+    Py_INCREF(Py_None); // Don't mess up reference counts
+    return Py_None;
 }
 
 /* Aliases and names and stuff */
@@ -81,9 +84,8 @@ static PyObject* py_alias(PyObject *self, PyObject *args, PyObject *kwargs) {
         return NULL;
     }
     data = PyCapsule_GetPointer(stateptr, NULL);
-    if (!data || PyErr_Occurred()) {
-        return NULL;
-    }
+    if (!data || PyErr_Occurred()) { return NULL; }
+
     name = strtoupper(name, data->all_caps);
     newname = strtoupper(newname, data->all_caps);
 
@@ -117,7 +119,118 @@ static PyObject* py_alias(PyObject *self, PyObject *args, PyObject *kwargs) {
     return Py_None;
 }
 
-/* Segment functions */
+static PyObject* py_regenerate(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *stateptr;
+    char *task;
+    psfgen_data *data;
+    int rc;
+    char *kwnames[] = {(char*) "psfstate", (char*) "task", NULL};
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os:regenerate", kwnames,
+                                     &stateptr, &task)) {
+        return NULL;
+    }
+    data = PyCapsule_GetPointer(stateptr, NULL);
+    if (!data || PyErr_Occurred()) { return NULL; }
+
+    if (!strcasecmp(task, "angles")) {
+        rc = topo_mol_regenerate_angles(data->mol);
+    } else if (!strcasecmp(task, "dihedrals")) {
+        rc = topo_mol_regenerate_dihedrals(data->mol);
+    } else if (!strcasecmp(task, "resids")) {
+        rc = topo_mol_regenerate_resids(data->mol);
+    } else {
+        PyErr_Format(PyExc_ValueError,
+                     "regenerate must be [angles,resids,dihedrals], got '%s'",
+                     task);
+        return NULL;
+    }
+    if (rc) {
+        PyErr_Format(PyExc_ValueError, "%s regeneration failed", task);
+        return NULL;
+    }
+
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
+/* IO functions */
+static PyObject* py_write_pdb(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *stateptr;
+    char *filename;
+    FILE *fd;
+    psfgen_data *data;
+    int rc;
+
+    char *kwnames[] = {(char*) "psfstate", (char*) "filename", NULL};
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os:write_pdb", kwnames,
+                                     &stateptr, &filename)) {
+        return NULL;
+    }
+    data = PyCapsule_GetPointer(stateptr, NULL);
+    if (!data || PyErr_Occurred()) { return NULL; }
+
+    fd = fopen(filename, "w");
+    if (!fd) {
+        PyErr_Format(PyExc_OSError, "cannot open pdb file '%s' for writing",
+                     filename);
+        return NULL;
+    }
+
+    rc = topo_mol_write_pdb(data->mol, fd, data->outstream, python_msg);
+    fclose(fd);
+    if (rc) {
+        PyErr_Format(PyExc_ValueError, "cannot write pdb '%s'", filename);
+        return NULL;
+    }
+
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
+static PyObject* py_write_psf(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *stateptr;
+    char *filename, *type;
+    FILE *fd;
+    psfgen_data *data;
+    int rc, charmmfmt;
+
+    char *kwnames[] = {(char*) "psfstate", (char*) "filename",
+                       (char*) "type", NULL};
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oss:write_psf", kwnames,
+                                     &stateptr, &filename, &type)) {
+        return NULL;
+    }
+    data = PyCapsule_GetPointer(stateptr, NULL);
+    if (!data || PyErr_Occurred()) { return NULL; }
+
+    fd = fopen(filename, "w");
+    if (!fd) {
+        PyErr_Format(PyExc_OSError, "cannot open psf file '%s' for writing",
+                     filename);
+        return NULL;
+    }
+    if (!strcmp(type, "charmm")) {
+        charmmfmt = 1;
+    } else if (!strcmp(type, "x-plor")) {
+        charmmfmt = 0;
+    } else {
+        PyErr_Format(PyExc_ValueError, "psf format '%s' not in [charmm,x-plor]",
+                     type);
+        return NULL;
+    }
+
+    rc = topo_mol_write_psf(data->mol, fd, charmmfmt, 0, 0,
+                            data->outstream, python_msg);
+    fclose(fd);
+    if (rc) {
+        PyErr_Format(PyExc_ValueError, "cannot write psf '%s'", filename);
+        return NULL;
+    }
+
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
 static PyObject* py_read_coords(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *stateptr;
     char *filename, *segid;
@@ -141,9 +254,10 @@ static PyObject* py_read_coords(PyObject *self, PyObject *args, PyObject *kwargs
     }
 
     rc = pdb_file_extract_coordinates(data->mol, fd, NULL, segid, data->aliases,
-                                      data->all_caps, NULL, NULL);
+                                      data->all_caps, data->outstream,
+                                      python_msg);
     fclose(fd);
-    if (!rc) {
+    if (rc) {
         PyErr_Format(PyExc_ValueError,
                      "cannot read coordinates '%s' into segment '%s'", filename,
                      segid);
@@ -153,17 +267,73 @@ static PyObject* py_read_coords(PyObject *self, PyObject *args, PyObject *kwargs
     return Py_None;
 }
 
-// TODO: handle atoms arguments requests
-static PyObject* py_segment(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *stateptr, *result, *objid;
+/* Segment functions */
+static PyObject* py_add_segment(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *stateptr;
+    char *segname;
+    char *filename = NULL;
+    FILE *fd;
+    psfgen_data *data;
+    int rc;
+
+    char *kwnames[] = {(char*) "psfstate", (char*) "segid", (char*) "pdbfile",
+                        NULL};
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|s:add_segment", kwnames,
+                                     &stateptr, &segname, &filename)) {
+        return NULL;
+    }
+    data = PyCapsule_GetPointer(stateptr, NULL);
+    if (!data || PyErr_Occurred()) { return NULL; }
+
+    // Sanity check segment name
+    segname = strtoupper(segname, data->all_caps);
+    if (strlen(segname) > 7) {
+        PyErr_Format(PyExc_ValueError, "segment name '%s' more than 7 characters",
+                     segname);
+        return NULL;
+    }
+    rc = topo_mol_segment(data->mol, segname);
+    if (rc) { return NULL; }
+
+    // If pdb file, do that before finishing the segment
+    if (filename) {
+        fd = fopen(filename, "r");
+        if (!fd) {
+            PyErr_Format(PyExc_FileNotFoundError,
+                         "cannot open coordinate file '%s'", filename);
+            return NULL;
+        }
+        rc = pdb_file_extract_residues(data->mol, fd, data->aliases, data->all_caps,
+                                       data->outstream, python_msg);
+        fclose(fd);
+        if (rc) {
+            PyErr_Format(PyExc_ValueError, "cannot read pdb file '%s'",
+                    filename);
+            return NULL;
+        }
+    }
+
+    // Check result
+    if (topo_mol_end(data->mol)) {
+        PyErr_Format(PyExc_ValueError, "failed building segment '%s'", segname);
+        return NULL;
+    }
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
+static PyObject* py_get_segment(PyObject *self, PyObject *args, PyObject *kwargs) {
+    // TODO: handle atoms arguments requests
+    PyObject *stateptr, *objid;
     char *task;
     char *segid = NULL;
     char *resid = NULL;
+    PyObject *result = NULL;
     psfgen_data *data;
     int rc;
     char *kwnames[] = {(char*) "psfstate", (char*) "task", (char*) "segid",
                        (char*) "resid", NULL};
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|ss:segment", kwnames,
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|ss:get_segment", kwnames,
                                      &stateptr, &task, &segid, &resid)) {
         return NULL;
     }
@@ -285,11 +455,79 @@ static PyObject* py_parse_topology(PyObject *self, PyObject *args, PyObject *kwa
                      filename);
         return NULL;
     }
-    rc = charmm_parse_topo_defs(data->defs, fd, data->all_caps, NULL, NULL);
+    rc = charmm_parse_topo_defs(data->defs, fd, data->all_caps,
+                                data->outstream, python_msg);
     fclose(fd);
     if (rc) {
         PyErr_Format(PyExc_ValueError, "error parsing topology file '%s'",
                     filename);
+        return NULL;
+    }
+
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
+static PyObject* py_patch(PyObject *self, PyObject *args, PyObject *kwargs) {
+    char *patchname;
+    PyObject *stateptr, *targlist, *target;
+    psfgen_data* data = NULL;
+    topo_mol_ident_t *targets;
+    int rc, ntargets;
+    char *kwnames[] = {(char*) "psfstate", (char*) "patchname",
+                       (char*) "targets", NULL};
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OsO:patch", kwnames,
+                                     &stateptr, &patchname, &targlist)) {
+        return NULL;
+    }
+    data = PyCapsule_GetPointer(stateptr, NULL);
+    if (!data || PyErr_Occurred()) {
+        return NULL;
+    }
+    // If targets are lists, just turn them into tuples here
+    if (PyList_Check(targlist)) {
+        targlist = PyList_AsTuple(targlist);
+    }
+
+    if (!PyTuple_Check(targlist)) {
+        PyErr_SetString(PyExc_ValueError,
+                        "patch targets must be a list or tuple!");
+        return NULL;
+    }
+    ntargets = (int)PyTuple_Size(targlist);
+
+    // Construct targets
+        // It's a list/tuple of list/tuples
+    targets = malloc(ntargets*sizeof(topo_mol_ident_t));
+    for (int i=0; i<ntargets; ++i) {
+        target = PyTuple_GetItem(targlist, i);
+        if (PyList_Check(target)) {
+            target = PyList_AsTuple(target);
+        }
+        if (!PyTuple_Check(target) || (int)PyTuple_Size(target) != 2) {
+            PyErr_SetString(PyExc_ValueError,
+                            "patch target must be a list or tuple (segid, resid)");
+            return NULL;
+        }
+#if PY_MAJOR_VERSION >=3
+        targets[i].segid = PyUnicode_AsUTF8(PyTuple_GetItem(target, 0));
+        targets[i].resid = PyUnicode_AsUTF8(PyTuple_GetItem(target, 1));
+#else
+        targets[i].segid = PyString_AsString(PyTuple_GetItem(target, 0));
+        targets[i].resid = PyString_AsString(PyTuple_GetItem(target, 1));
+#endif
+        targets[i].aname = NULL;
+        if (PyErr_Occurred()) {
+            free(targets);
+            return NULL;
+        }
+    }
+
+    // Actually do the work
+    rc = topo_mol_patch(data->mol, targets, ntargets, patchname, 0, 0, 0, 0);
+    free(targets);
+    if (rc) {
+        PyErr_Format(PyExc_ValueError, "Cannot apply patch %s", patchname);
         return NULL;
     }
 
@@ -309,8 +547,8 @@ static PyObject* py_set_coords(PyObject *self, PyObject *args, PyObject *kwargs)
     int rc;
 
     // segid, resid, aname, position (char*, int, char*, tuple)
-    char * kwnames[] = {(char*) "psfstate", (char*) "segid", (char*) "resid",
-                        (char*) "aname", (char*) "position", NULL};
+    char *kwnames[] = {(char*) "psfstate", (char*) "segid", (char*) "resid",
+                       (char*) "aname", (char*) "position", NULL};
     if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OsssO:set_coords", kwnames,
                                      &stateptr, &segid, &resid, &aname,
                                      &position)) {
@@ -341,11 +579,10 @@ static PyObject* py_set_coords(PyObject *self, PyObject *args, PyObject *kwargs)
 
     // Do the work
     rc = topo_mol_set_xyz(data->mol, &target, x, y, z);
-    if (!rc) {
+    if (rc) {
         PyErr_SetString(PyExc_ValueError, "failed to set coordinates");
         return NULL;
     }
-    free(segid); free(resid); free(aname);
 
     // TODO: python 2
     return PyLong_FromLong(rc);
@@ -357,9 +594,14 @@ static PyMethodDef methods[] = {
     {(char *) "init_mol", (PyCFunction)py_init_mol, METH_NOARGS},
     {(char *) "del_mol", (PyCFunction)py_del_mol, METH_O},
     {(char *) "alias_residue", (PyCFunction)py_alias, METH_VARARGS | METH_KEYWORDS},
-    {(char *) "segment", (PyCFunction)py_segment, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "get_segment", (PyCFunction)py_get_segment, METH_VARARGS | METH_KEYWORDS},
     {(char *) "parse_topology", (PyCFunction)py_parse_topology, METH_VARARGS | METH_KEYWORDS},
     {(char *) "read_coords", (PyCFunction)py_read_coords, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "patch", (PyCFunction)py_patch, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "regenerate", (PyCFunction)py_regenerate, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "write_psf", (PyCFunction)py_write_psf, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "write_pdb", (PyCFunction)py_write_pdb, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "add_segment", (PyCFunction)py_add_segment, METH_VARARGS | METH_KEYWORDS},
     {NULL, NULL, 0, NULL}
 };
 
@@ -367,17 +609,18 @@ static PyMethodDef methods[] = {
 #if PY_MAJOR_VERSION >= 3
 static struct PyModuleDef psfgendef = {
     PyModuleDef_HEAD_INIT,
-    "psfgen",
+    "_psfgen",
     NULL,
     -1,
     methods,
 };
 #endif
 
-PyObject* initpsfgen(void) {
 #if PY_MAJOR_VERSION >=3
+PyMODINIT_FUNC PyInit__psfgen(void) {
     PyObject *m = PyModule_Create(&psfgendef);
 #else
+PyObject* init_psfgen(void) {
     PyObject *m = Py_InitModule((char *)"_psfgen", methods);
 #endif
 
