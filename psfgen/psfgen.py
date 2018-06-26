@@ -18,7 +18,7 @@ class Psfgen:
     def __del__(self):
         _psfgen.del_mol(self.data);
 
-    def readCharmmTopology(self, filename):
+    def read_topology(self, filename):
         """
         Parses a charmm format topology file into current library.
 
@@ -31,19 +31,37 @@ class Psfgen:
         """
         _psfgen.parse_topology(psfstate=self.data, filename=filename)
 
-    def aliasResidue(self, topResName, pdbResName):
-        _psfgen.alias(psfstate=self.data, type="residue",
-                      name=topResName, newname=pdbResName)
+    def alias_residue(self, top_resname, pdb_resname):
+        """
+        Provide an alternate name for a residue in the topology file compared
+        to the PDB file.
 
-    def aliasAtom(self, resName, topAtomName, pdbAtomName):
+        Args:
+            top_resname (str): Resname in topology file
+            pdb_resname (str): Equivalent resname in PDB files
+        """
+        _psfgen.alias(psfstate=self.data, type="residue",
+                      name=top_resname, newname=pdb_resname)
+
+    def alias_atom(self, resname, top_atomname, pdb_atomname):
+        """
+        Provide an alternate name for a atom in a residue in the topology file
+        compared to the PDB file.
+
+        Args:
+            resname (str): Residue name in which to make alias
+            top_atomname (str): Atom name in the topology file
+            pdb_atomname (str): Equivalent atom name in PDB file
+        """
         _psfgen.alias(psfstate=self.data, type="atom",
-                      resname=resName, name=topAtomName, newname=pdbAtomName)
+                      resname=resname, name=top_atomname, newname=pdb_atomname)
 
     #def addSegment(self, segid, pdb=None):
     def addSegment(self, segid, first=None, last=None, auto=None,
                    pdb=None, residues=None, mutate=None):
         """
         Adds a new segment to the internal molecule state.
+        TODO: Fully implement
 
         Args:
             segid (str): Name/ID of the new segment
@@ -138,7 +156,6 @@ class Psfgen:
             targets (list of 2 tuple): (segid, resid) to apply patch to
         """
 
-        segids, resids = targets
         _psfgen.patch(psfstate=self.data, patchname=patchName,
                       targets=targets)
 
