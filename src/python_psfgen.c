@@ -42,9 +42,8 @@ static PyObject* py_init_mol(PyObject *self) {
 
     // Encapsulate psf_data object and return it
     PyObject * capsule = PyCapsule_New(data, NULL, NULL);
-    if (!capsule || PyErr_Occurred()) {
+    if (!capsule || PyErr_Occurred())
         return NULL;
-    }
     return capsule;
 }
 
@@ -53,9 +52,8 @@ static PyObject* py_del_mol(PyObject *self, PyObject *stateptr) {
 
     // Unpack molecule capsule
     data = PyCapsule_GetPointer(stateptr, NULL);
-    if (!data || PyErr_Occurred()) {
+    if (!data || PyErr_Occurred())
        return NULL;
-    }
 
     // Do the work
     topo_mol_destroy(data->mol);
@@ -84,15 +82,15 @@ static PyObject* py_alias(PyObject *self, PyObject *args, PyObject *kwargs) {
         return NULL;
     }
     data = PyCapsule_GetPointer(stateptr, NULL);
-    if (!data || PyErr_Occurred()) { return NULL; }
+    if (!data || PyErr_Occurred())
+        return NULL;
 
     name = strtoupper(name, data->all_caps);
     newname = strtoupper(newname, data->all_caps);
 
     if (!strcasecmp(type, "residue")) {
         fprintf(data->outstream, "Aliasing residue %s to %s\n", name, newname);
-        rc = extract_alias_residue_define(data->aliases, name, newname);
-        if (rc) {
+        if(extract_alias_residue_define(data->aliases, name, newname)) {
             PyErr_SetString(PyExc_ValueError, "failed on residue alias");
             return NULL;
         }
@@ -268,22 +266,32 @@ static PyObject* py_read_coords(PyObject *self, PyObject *args, PyObject *kwargs
 }
 
 /* Segment functions */
-static PyObject* py_add_segment(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *stateptr;
-    char *segname;
-    char *filename = NULL;
-    FILE *fd;
+static PyObject* py_add_segment(PyObject *self, PyObject *args, PyObject *kwargs)
+{
+    char *first, *last,*filename, *segname;
+    PyObject *stateptr, *mutate, *residues;
+    int autoang, autodih;
     psfgen_data *data;
+    FILE *fd;
     int rc;
 
+    /* Default values */
+    first = last = filename = NULL;
+    mutate = residues = NULL;
+    autoang = autodih = 1;
+
     char *kwnames[] = {(char*) "psfstate", (char*) "segid", (char*) "pdbfile",
-                        NULL};
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|s:add_segment", kwnames,
-                                     &stateptr, &segname, &filename)) {
+                       (char*) "first", (char*) "last", (char*) "auto_angles",
+                       (char*) "auto_dihedrals", (char*) "residues", (char*)
+                       "mutate", NULL};
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|sssppOO:add_segment",
+                                     kwnames, &stateptr, &segname, &filename,
+                                     &first, &last, &autoang, &autodih,
+                                     &residues, &mutate)) {
         return NULL;
     }
     data = PyCapsule_GetPointer(stateptr, NULL);
-    if (!data || PyErr_Occurred()) { return NULL; }
+    if (!data || PyErr_Occurred()) return NULL;
 
     // Sanity check segment name
     segname = strtoupper(segname, data->all_caps);
@@ -292,8 +300,38 @@ static PyObject* py_add_segment(PyObject *self, PyObject *args, PyObject *kwargs
                      segname);
         return NULL;
     }
-    rc = topo_mol_segment(data->mol, segname);
-    if (rc) { return NULL; }
+    if (topo_mol_segment(data->mol, segname))
+        return NULL;
+
+    // Set first and last, if present
+    if (first) {
+        if (topo_mol_segment_first(data->mol, first)) {
+            PyErr_Format(PyExc_ValueError, "Cannot set first patch in segment "
+                         "'%s' to '%s'", segname, first);
+            return NULL;
+        }
+    }
+
+    if (last) {
+        if (topo_mol_segment_last(data->mol, last)) {
+            PyErr_Format(PyExc_ValueError, "Cannot set last patch in segment "
+                         "'%s' to '%s'", segname, last);
+            return NULL;
+        }
+    }
+
+    // Set auto angles and dihedrals
+    if (topo_mol_segment_auto_angles(data->mol, autoang)) {
+        PyErr_Format(PyExc_ValueError, "Failed setting angle autogen for "
+                     "segment %s", segname);
+        return NULL;
+    }
+
+    if (topo_mol_segment_auto_dihedrals(data->mol, autodih)) {
+        PyErr_Format(PyExc_ValueError, "Failed setting dihedral autogen for "
+                     "segment %s", segname);
+        return NULL;
+    }
 
     // If pdb file, do that before finishing the segment
     if (filename) {
@@ -313,6 +351,87 @@ static PyObject* py_add_segment(PyObject *self, PyObject *args, PyObject *kwargs
         }
     }
 
+    // Add residues to end, if desired
+    if (residues) {
+        PyObject *residue;
+        char *resid, *resname, *chain;
+        int n;
+
+        if (!PyList_Check(residues)) {
+            PyErr_SetString(PyExc_ValueError, "residues must be a list!");
+            return NULL;
+        }
+
+        for (int i=0; i<(int)PyList_Size(residues); i++) {
+            residue = PyList_GetItem(residues, i);
+
+            if (!PyTuple_Check(residue)) {
+                PyErr_SetString(PyExc_ValueError,
+                                "residues must be list of tuple");
+                return NULL;
+            }
+
+            n = (int) PyTuple_Size(residue);
+            if ((n != 2) && (n != 3)) {
+                PyErr_SetString(PyExc_ValueError, "residues must be a list of "
+                                "2 or 3 tuples");
+                return NULL;
+            }
+
+        // Unpack tuple arguments, with chain being optional
+#if PY_MAJOR_VERSION >=3
+            resid = PyUnicode_AsUTF8(PyTuple_GetItem(residue, 0));
+            resname = PyUnicode_AsUTF8(PyTuple_GetItem(residue, 1));
+            chain = (n == 3) ? PyUnicode_AsUTF8(PyTuple_GetItem(residue, 2)) : "";
+#else
+            resid = PyString_AsString(PyTuple_GetItem(residue, 0));
+            resname = PyString_AsString(PyTuple_GetItem(residue, 1));
+            chain = (n == 3) ? PyString_AsString(PyTuple_GetItem(residue, 2)) : "";
+#endif
+
+            if (topo_mol_residue(data->mol, resid, resname, chain)) {
+                    PyErr_Format(PyExc_ValueError, "Failed to add residue '%s:%s'",
+                                   resname, resid);
+                    return NULL;
+            }
+        }
+    }
+
+    // Do mutations, if provided
+    if (mutate) {
+        PyObject *residue;
+        char *resid, *resname;
+
+        if (!PyList_Check(mutate)) {
+            PyErr_SetString(PyExc_ValueError, "mutate must be a list!");
+            return NULL;
+        }
+
+        for (int i=0; i<(int)PyList_Size(mutate); i++) {
+            residue = PyList_GetItem(residues, i);
+            if (!PyTuple_Check(residue) || (int)PyTuple_Size(residue) != 2) {
+                PyErr_SetString(PyExc_ValueError, "mutate must be a list of "
+                                "2 or 3-tuples");
+                return NULL;
+            }
+
+            // Unpack tuple
+#if PY_MAJOR_VERSION >=3
+            resid = PyUnicode_AsUTF8(PyTuple_GetItem(residue, 0));
+            resname = PyUnicode_AsUTF8(PyTuple_GetItem(residue, 1));
+#else
+            resid = PyString_AsString(PyTuple_GetItem(residue, 0));
+            resname = PyString_AsString(PyTuple_GetItem(residue, 1));
+#endif
+
+            if (topo_mol_mutate(data->mol, resid, resname)) {
+                PyErr_Format(PyExc_ValueError, "Failed to mutate residue '%s:%s'",
+                             resname, resid);
+                return NULL;
+            }
+        }
+    }
+
     // Check result
     if (topo_mol_end(data->mol)) {
         PyErr_Format(PyExc_ValueError, "failed building segment '%s'", segname);
@@ -322,72 +441,74 @@ static PyObject* py_add_segment(PyObject *self, PyObject *args, PyObject *kwargs
     return Py_None;
 }
 
-static PyObject* py_get_segment(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject* py_query_segment(PyObject *self, PyObject *args,
+                                  PyObject *kwargs)
+{
     // TODO: handle atoms arguments requests
+    char *kwnames[] = {(char*) "psfstate", (char*) "task", (char*) "segid",
+                       (char*) "resid", NULL};
     PyObject *stateptr, *objid;
-    char *task;
-    char *segid = NULL;
-    char *resid = NULL;
+    char *task, *segid, *resid;
+    topo_mol_segment_t *seg;
     PyObject *result = NULL;
     psfgen_data *data;
     int rc;
-    char *kwnames[] = {(char*) "psfstate", (char*) "task", (char*) "segid",
-                       (char*) "resid", NULL};
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|ss:get_segment", kwnames,
+
+    // Set default arguments
+    segid = resid = NULL;
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|ss:query", kwnames,
                                      &stateptr, &task, &segid, &resid)) {
         return NULL;
     }
     data = PyCapsule_GetPointer(stateptr, NULL);
-    if (!data || PyErr_Occurred()) { return NULL; }
+    if (!data || PyErr_Occurred())
+        return NULL;
 
     // Ensure task argument is valid
     if (strcasecmp(task, "first") && strcasecmp(task, "last") \
      && strcasecmp(task, "resids") && strcasecmp(task, "residue") \
      && strcasecmp(task, "segids")) {
-        PyErr_SetString(PyExc_ValueError,
-                        "segment task must be in [first,last,resids,residue]");
+        PyErr_Format(PyExc_ValueError, "Unknown segment query '%s'", task);
         return NULL;
     }
 
+    // Extract segid argument for non-segid requests
+    if ((!segid) && strcasecmp(task, "segids")) {
+            PyErr_Format(PyExc_ValueError, "segid argument must be passed for "
+                         "segment task '%s'", task);
+            return NULL;
+    } else if (strcasecmp(task, "segids")) {
+        // Identify the segment
+        int segidx = (data->mol ? hasharray_index(data->mol->segment_hash, segid)
+                                : HASHARRAY_FAIL);
+        if (segidx == HASHARRAY_FAIL) {
+            PyErr_Format(PyExc_ValueError,
+                         "segid '%s' doesn't exist", segid);
+            return NULL;
+        }
+        seg = data->mol->segment_array[segidx];
+    }
+
+    // Now build the result, depending on what the query is
     if (!strcasecmp(task, "segids")) {
         result = PyList_New(0);
         if (data->mol) {
            for (int i=0; i<hasharray_count(data->mol->segment_hash); ++i) {
 #if PY_MAJOR_VERSION >=3
-               objid = PyUnicode_FromString(data->mol->segment_array[i]->segid);
+                objid = PyUnicode_FromString(data->mol->segment_array[i]->segid);
 #else
-               objid = PyString_FromString(data->mol->segment_array[i]->segid);
+                objid = PyString_FromString(data->mol->segment_array[i]->segid);
 #endif
-               rc = PyList_Append(result, objid);
-               if (rc) { return NULL; }
+                if (PyList_Append(result, objid))
+                    return NULL;
            }
         }
-        return result;
-    }
-
-    // Require segid argument for non-segid requests
-    if (!segid) {
-            PyErr_Format(PyExc_ValueError,
-                        "segid argument must be passed for segment task '%s'",
-                        task);
-            return NULL;
-    }
-
-    // Identify the segment
-    int segidx = (data->mol ? hasharray_index(data->mol->segment_hash, segid)
-                            : HASHARRAY_FAIL);
-    if (segidx == HASHARRAY_FAIL) {
-        PyErr_Format(PyExc_ValueError,
-                     "segid '%s' doesn't exist", segid);
-        return NULL;
-    }
-    topo_mol_segment_t *seg = data->mol->segment_array[segidx];
-
-    if (!strcasecmp(task, "first")) {
+    } else if (!strcasecmp(task, "first")) {
 #if PY_MAJOR_VERSION >=3
         result = PyUnicode_FromString(seg->pfirst);
 #else
-        result = PyUnicode_FromString(seg->pfirst);
+        result = PyString_FromString(seg->pfirst);
 #endif
     } else if (!strcasecmp(task, "last")) {
 #if PY_MAJOR_VERSION >=3
@@ -405,21 +526,21 @@ static PyObject* py_get_segment(PyObject *self, PyObject *args, PyObject *kwargs
 #else
             objid = PyString_FromString(seg->residue_array[i].resid);
 #endif
-            rc = PyList_Append(result, objid);
-            if (rc) { return NULL; }
+            if(PyList_Append(result, objid))
+                return NULL;
             }
         }
     } else if (!strcasecmp(task, "residue")) {
+        int residx;
         if (!resid) {
-                PyErr_Format(PyExc_ValueError,
-                            "resid argument must be passed for segment task '%s'",
-                            task);
+                PyErr_Format(PyExc_ValueError, "resid argument must be passed "
+                             "for segment task '%s'", task);
                 return NULL;
         }
-        int residx = hasharray_index(seg->residue_hash, resid);
+        residx = hasharray_index(seg->residue_hash, resid);
         if (residx == HASHARRAY_FAIL) {
-            PyErr_Format(PyExc_ValueError,
-                         "invalid resid '%s' for segment '%s'", resid, segid);
+            PyErr_Format(PyExc_ValueError, "invalid resid '%s' for segment "
+                         "'%s'", resid, segid);
             return NULL;
         }
 #if PY_MAJOR_VERSION >=3
@@ -594,7 +715,7 @@ static PyMethodDef methods[] = {
     {(char *) "init_mol", (PyCFunction)py_init_mol, METH_NOARGS},
     {(char *) "del_mol", (PyCFunction)py_del_mol, METH_O},
     {(char *) "alias_residue", (PyCFunction)py_alias, METH_VARARGS | METH_KEYWORDS},
-    {(char *) "get_segment", (PyCFunction)py_get_segment, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "query_segment", (PyCFunction)py_query_segment, METH_VARARGS | METH_KEYWORDS},
     {(char *) "parse_topology", (PyCFunction)py_parse_topology, METH_VARARGS | METH_KEYWORDS},
     {(char *) "read_coords", (PyCFunction)py_read_coords, METH_VARARGS | METH_KEYWORDS},
     {(char *) "patch", (PyCFunction)py_patch, METH_VARARGS | METH_KEYWORDS},
