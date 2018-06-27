@@ -1,1 +1,1 @@
-from psfgen.psfgen import *
+from psfgen.psfgen import PsfGen
