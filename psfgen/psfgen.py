@@ -1,6 +1,6 @@
 
 import _psfgen
-
+import sys
 
 # Definitions for psf file types
 CHARMM="charmm"
@@ -10,11 +10,35 @@ XPLOR="x-plor"
 AUTO_ANGLES, AUTO_DIHEDRALS, AUTO_NONE = "angles", "dihedrals", "none"
 
 class PsfGen:
-    def __init__(self):
-        self.data = _psfgen.init_mol()
+
+    """
+    A Psf generator object. Represents the state of a single molecular system,
+    with its own set of loaded topologies, residue and/or atom aliases, segments,
+    and coordinates.
+    """
+
+    def __init__(self, output=sys.stdout):
+        """
+        Creates a PsfGen object.
+
+        Args:
+            outstream (str or stream object): Where to write output. Defaults
+                to stdout. Must have fileno() attribute, or if a string, file
+                will be opened.
+        """
+        if isinstance(output, str):
+            self.output = open(output, 'wb')
+        elif hasattr(output, "fileno"):
+            self.output = output
+        else:
+            raise ValueError("output argument must be a str or open file")
+
+        self._fileno = self.output.fileno()
+        self._data = _psfgen.init_mol(outfd=self._fileno)
 
     def __del__(self):
-        _psfgen.del_mol(self.data);
+        self.output.close()
+        _psfgen.del_mol(self._data);
 
     #===========================================================================
 
@@ -29,7 +53,7 @@ class PsfGen:
             FileNotFoundError: If the file cannot be opened for reading
             ValueError: If an error occurs during parsing
         """
-        _psfgen.parse_topology(psfstate=self.data, filename=filename)
+        _psfgen.parse_topology(psfstate=self._data, filename=filename)
 
     #===========================================================================
 
@@ -42,7 +66,7 @@ class PsfGen:
             top_resname (str): Resname in topology file
             pdb_resname (str): Equivalent resname in PDB files
         """
-        _psfgen.alias(psfstate=self.data, type="residue",
+        _psfgen.alias(psfstate=self._data, type="residue",
                       name=top_resname, newname=pdb_resname)
 
     #===========================================================================
@@ -57,7 +81,7 @@ class PsfGen:
             top_atomname (str): Atom name in the topology file
             pdb_atomname (str): Equivalent atom name in PDB file
         """
-        _psfgen.alias(psfstate=self.data, type="atom",
+        _psfgen.alias(psfstate=self._data, type="atom",
                       resname=resname, name=top_atomname, newname=pdb_atomname)
 
     #===========================================================================
@@ -69,7 +93,7 @@ class PsfGen:
         Returns:
             (list of str): All defined segids in current molecule
         """
-        return _psfgen.query_segment(psfstate=self.data, task="segids")
+        return _psfgen.query_segment(psfstate=self._data, task="segids")
 
     #===========================================================================
 
@@ -83,7 +107,7 @@ class PsfGen:
         Returns:
             (list of str): All defined resids in given segment
         """
-        return _psfgen.query_segment(psfstate=self.data, task="resids",
+        return _psfgen.query_segment(psfstate=self._data, task="resids",
                                      segid=segid)
 
     #===========================================================================
@@ -103,7 +127,7 @@ class PsfGen:
         if isinstance(resid, int):
             resid = str(resid)
 
-        return _psfgen.query_segment(psfstate=self.data, task="residue",
+        return _psfgen.query_segment(psfstate=self._data, task="residue",
                                      segid=segid, resid=resid)
 
     #===========================================================================
@@ -118,7 +142,7 @@ class PsfGen:
         Returns:
             (str): Patch name
         """
-        return _psfgen.query_segment(psfstate=self.data, task="first",
+        return _psfgen.query_segment(psfstate=self._data, task="first",
                                      segid=segid)
 
     #===========================================================================
@@ -133,12 +157,12 @@ class PsfGen:
         Returns:
             (str): Patch name
         """
-        return _psfgen.query_segment(psfstate=self.data, task="last",
+        return _psfgen.query_segment(psfstate=self._data, task="last",
                                      segid=segid)
 
     #===========================================================================
 
-    def add_segment(self, segid, first=None, last=None, pdbfile=None,
+    def add_segment(self, segid, first="none", last="none", pdbfile=None,
                     auto_angles=True, auto_dihedrals=True,
                     residues=None, mutate=None):
         """
@@ -160,10 +184,10 @@ class PsfGen:
                 mutate (list of 2 tuple): (resid, resname) of residues to alter.
                     The given residue IDs will be set to the given residue name.
         """
-        if segid in _psfgen.get_segment(psfstate=self.data, task="segids"):
+        if segid in self.get_segids():
             raise ValueError("Duplicate segID '%s'" % segid)
 
-        _psfgen.add_segment(psfstate=self.data, segid=segid, pdbfile=pdbfile,
+        _psfgen.add_segment(psfstate=self._data, segid=segid, pdbfile=pdbfile,
                             first=first, last=last, auto_angles=auto_angles,
                             auto_dihedrals=auto_dihedrals, residues=residues,
                             mutate=mutate)
@@ -179,10 +203,10 @@ class PsfGen:
             filename (str): Filename of PDB file to read
             segid (str): Segment ID to assign coordinates to
         """
-        if segid not in _psfgen.get_segment(psfstate=self.data, task="segids"):
+        if segid not in self.get_segids():
             raise ValueError("Can't read coordinates for segment '%s' as "
                              "it is undefined." % segid)
-        _psfgen.read_coords(psfstate=self.data,
+        _psfgen.read_coords(psfstate=self._data,
                             filename=filename,
                             segid=segid)
 
@@ -221,7 +245,7 @@ class PsfGen:
             targets (list of 2 tuple): (segid, resid) to apply patch to
         """
 
-        _psfgen.patch(psfstate=self.data, patchname=patchname,
+        _psfgen.patch(psfstate=self._data, patchname=patchname,
                       targets=targets)
 
     #===========================================================================
@@ -260,7 +284,7 @@ class PsfGen:
         Removes angles and regenerates them from bonds. Can be used after
         patching.
         """
-        _psfgen.regenerate(self.data, task="angles")
+        _psfgen.regenerate(self._data, task="angles")
 
     #===========================================================================
 
@@ -269,7 +293,7 @@ class PsfGen:
         Removes dihedrals and regenerates them from angles. Can be used after
         patching. Usually, you should call `regenerate_angles` first.
         """
-        _psfgen.regenerate(self.data, task="dihedrals")
+        _psfgen.regenerate(self._data, task="dihedrals")
 
     #===========================================================================
 
@@ -278,7 +302,7 @@ class PsfGen:
         Regenerates residue IDs by removing insertion codes and minimially
         modifying them for uniqueness.
         """
-        _psfgen.regenerate(self.data, task="resids")
+        _psfgen.regenerate(self._data, task="resids")
 
     #===========================================================================
 
@@ -300,7 +324,7 @@ class PsfGen:
             filename (str): Filename to write to
             type (str): Type of psf file to write, in ["charmm", "x-plor"]
         """
-        _psfgen.write_psf(psfstate=self.data, filename=filename, type=type)
+        _psfgen.write_psf(psfstate=self._data, filename=filename, type=type)
 
     #===========================================================================
 
@@ -311,7 +335,7 @@ class PsfGen:
         Args:
             filename (str): Filename to write to
         """
-        _psfgen.write_pdb(psfstate=self.data, filename=filename)
+        _psfgen.write_pdb(psfstate=self._data, filename=filename)
 
     #===========================================================================
 
@@ -328,7 +352,7 @@ class PsfGen:
         Returns:
             (str or list of str): Requested information
         """
-        return _psfgen.segment(psfstate=self.data, task=task,
+        return _psfgen.segment(psfstate=self._data, task=task,
                                segid=segid, resid=resid)
 
     #===========================================================================
