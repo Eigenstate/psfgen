@@ -1,6 +1,18 @@
 #!/usr/bin/env python
 
-from distutils.core import setup, Extension
+import sys
+from setuptools import setup
+from setuptools.extension import Extension
+from setuptools.command.test import test as TestCommand
+
+class PyTest(TestCommand):
+    def initialize_options(self):
+        TestCommand.initialize_options(self)
+        self.pytest_args = []
+    def run(self):
+        import pytest
+        errno = pytest.main()
+        sys.exit(errno)
 
 psfgenfiles=[
    "./src/charmm_file.c",
@@ -27,13 +39,15 @@ psfext = Extension('_psfgen',
                    sources=psfgenfiles
                   )
 
-setup(
-  name="psfgen",
-  version="1.7.0",
-  description="Protein structure file generator",
-  author="Robin Betz, Justin Gullingsrud and Jim Phillips",
-  author_email="robin@robinbetz.com",
-  packages=['psfgen'],
-  ext_modules=[psfext],
-  )
+setup(name="psfgen",
+      version="1.7.0",
+      description="Protein structure file generator",
+      author="Robin Betz, Justin Gullingsrud and Jim Phillips",
+      author_email="robin@robinbetz.com",
+      url="https://psfgen.robinbetz.com",
+      packages=['psfgen'],
+      ext_modules=[psfext],
+      tests_require=["pytest", "vmd-python"],
+      cmdclass = {'test': PyTest}
+     )
 
