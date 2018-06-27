@@ -38,7 +38,8 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="psfgen 0.0.0a1 documentation" href="index.html"/>
-        <link rel="prev" title="TCL &lt;=&gt; Python equivalents" href="all_commands.html"/> 
+        <link rel="next" title="API documentation" href="api.html"/>
+        <link rel="prev" title="TCL/Python correspondence" href="all_commands.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -88,14 +89,13 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="all_commands.html">TCL &lt;=&gt; Python equivalents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="all_commands.html">TCL/Python correspondence</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Documentation examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#preparing-separate-pdb-files">Preparing separate PDB files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#deleting-unwanted-atoms">Deleting unwanted atoms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#bpti-example">BPTI example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#building-solvent-around-a-protein">Building solvent around a protein</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#coming-soon">Coming soon</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API documentation</a></li>
 </ul>
 
             
@@ -160,40 +160,58 @@
            <div itemprop="articleBody">
             
   <div class="section" id="documentation-examples">
-<h1>Documentation examples<a class="headerlink" href="#documentation-examples" title="Permalink to this headline">¶</a></h1>
+<span id="examples"></span><h1>Documentation examples<a class="headerlink" href="#documentation-examples" title="Permalink to this headline">¶</a></h1>
 <p>The documentation for TCL-psfgen features a few examples. Here, I have
 implemented the same examples using the Python interface.</p>
 <div class="section" id="preparing-separate-pdb-files">
 <h2>Preparing separate PDB files<a class="headerlink" href="#preparing-separate-pdb-files" title="Permalink to this headline">¶</a></h2>
-<p>This example uses three PDB files, containing water and two protein fragments,
-and composites them into a single PSF file.</p>
+<p>This example uses multiple PDB files, containing water, ions, and two protein
+fragments, and composites them into a single PSF file. Several disulfide bonds
+are added with a patch. All files for this example can be found in
+<cite>test/relaxin</cite> or <cite>test/</cite> in the case of the parameter files.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">psfgen</span> <span class="kn">import</span> <span class="n">Psfgen</span>
 <span class="n">gen</span> <span class="o">=</span> <span class="n">Psfgen</span><span class="p">()</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_topology</span><span class="p">(</span><span class="s2">&quot;top_all36_caps.rtf&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_topology</span><span class="p">(</span><span class="s2">&quot;top_all36_prot.rtf&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_topology</span><span class="p">(</span><span class="s2">&quot;top_water_ions.rtf&quot;</span><span class="p">)</span>
+
+<span class="c1"># Read protein</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;P0&quot;</span><span class="p">,</span> <span class="n">pdbfile</span><span class="o">=</span><span class="s2">&quot;psf_protein_P0.pdb&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_coords</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;P0&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;psf_protein_P0.pdb&quot;</span><span class="p">)</span>
+
+<span class="n">gen</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;P1&quot;</span><span class="p">,</span> <span class="n">pdbfile</span><span class="o">=</span><span class="s2">&quot;psf_protein_P1.pdb&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_coords</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;P1&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;psf_protein_P1.pdb&quot;</span><span class="p">)</span>
+
+<span class="c1"># Read waters, with 10k atoms per file to avoid PDB limitations</span>
+<span class="c1"># (this limitation may be fixed later)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;W0&quot;</span><span class="p">,</span> <span class="n">pdbfile</span><span class="o">=</span><span class="s2">&quot;psf_wat_0.pdb&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_coords</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;W0&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;psf_wat_0.pdb&quot;</span><span class="p">)</span>
+
+<span class="n">gen</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;W1&quot;</span><span class="p">,</span> <span class="n">pdbfile</span><span class="o">=</span><span class="s2">&quot;psf_wat_1.pdb&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_coords</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;W1&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;psf_wat_1.pdb&quot;</span><span class="p">)</span>
+
+<span class="c1"># Read ions</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="n">pdbfile</span><span class="o">=</span><span class="s2">&quot;psf_ions.pdb&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_coords</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;psf_ions.pdb&quot;</span><span class="p">)</span>
+
+<span class="c1"># Add disulfides</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">patchname</span><span class="o">=</span><span class="s2">&quot;DISU&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;P0&quot;</span><span class="p">,</span><span class="s2">&quot;10&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;P0&quot;</span><span class="p">,</span><span class="s2">&quot;15&quot;</span><span class="p">)])</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">patchname</span><span class="o">=</span><span class="s2">&quot;DISU&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;P0&quot;</span><span class="p">,</span><span class="s2">&quot;24&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;P1&quot;</span><span class="p">,</span><span class="s2">&quot;23&quot;</span><span class="p">)])</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">patchname</span><span class="o">=</span><span class="s2">&quot;DISU&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;P0&quot;</span><span class="p">,</span><span class="s2">&quot;11&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;P1&quot;</span><span class="p">,</span><span class="s2">&quot;11&quot;</span><span class="p">)])</span>
+
+<span class="c1"># Regenerate</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">regenerate_angles</span><span class="p">()</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">regenerate_dihedrals</span><span class="p">()</span>
+
+<span class="c1"># Write</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">write_psf</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;relaxin.psf&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">write_pdb</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;relaxin.pdb&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="deleting-unwanted-atoms">
-<h2>Deleting unwanted atoms<a class="headerlink" href="#deleting-unwanted-atoms" title="Permalink to this headline">¶</a></h2>
-<p>This example deletes some water molecues that are too far from the substrate.
-The vmd-python interface is used here to select which waters.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">psfgen</span> <span class="kn">import</span> <span class="n">Psfgen</span>
-<span class="n">gen</span> <span class="o">=</span> <span class="n">Psfgen</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="bpti-example">
-<h2>BPTI example<a class="headerlink" href="#bpti-example" title="Permalink to this headline">¶</a></h2>
-<p>Just like in the psfgen documentation, you need the charmm topology files and
-the PDB file 6PTI.pdb from the Protein Data Bank.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">psfgen</span> <span class="kn">import</span> <span class="n">Psfgen</span>
-<span class="n">gen</span> <span class="o">=</span> <span class="n">Psfgen</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="building-solvent-around-a-protein">
-<h2>Building solvent around a protein<a class="headerlink" href="#building-solvent-around-a-protein" title="Permalink to this headline">¶</a></h2>
-<p>Here we will use psfgen and vmd-python to prepare a system from the command line.
-I would recommend using Dabble instead here.</p>
+<div class="section" id="coming-soon">
+<h2>Coming soon<a class="headerlink" href="#coming-soon" title="Permalink to this headline">¶</a></h2>
+<p>More examples coming soon</p>
 </div>
 </div>
 
@@ -207,8 +225,10 @@ I would recommend using Dabble instead here.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="api.html" class="btn btn-neutral float-right" title="API documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="all_commands.html" class="btn btn-neutral" title="TCL &lt;=&gt; Python equivalents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="all_commands.html" class="btn btn-neutral" title="TCL/Python correspondence" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -37,9 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="psfgen 0.0.0a1 documentation" href="../index.html"/>
-        <link rel="up" title="API documentation" href="../api.html"/>
-        <link rel="prev" title="API documentation" href="../api.html"/> 
+    <link rel="top" title="psfgen 0.0.0a1 documentation" href="../index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -88,13 +86,10 @@
               
             
             
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../all_commands.html">TCL &lt;=&gt; Python equivalents</a></li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../all_commands.html">TCL/Python correspondence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Documentation examples</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API documentation</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">psfgen.PsfGen</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API documentation</a></li>
 </ul>
 
             
@@ -139,8 +134,6 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="../api.html">API documentation</a> &raquo;</li>
-        
       <li>psfgen.PsfGen</li>
     
     
@@ -164,11 +157,24 @@
 <h1>psfgen.PsfGen<a class="headerlink" href="#psfgen-psfgen" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="psfgen.PsfGen">
-<em class="property">class </em><code class="descclassname">psfgen.</code><code class="descname">PsfGen</code><a class="headerlink" href="#psfgen.PsfGen" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<em class="property">class </em><code class="descclassname">psfgen.</code><code class="descname">PsfGen</code><span class="sig-paren">(</span><em>output=&lt;_io.TextIOWrapper name='&lt;stdout&gt;' mode='w' encoding='UTF-8'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Psf generator object. Represents the state of a single molecular system,
+with its own set of loaded topologies, residue and/or atom aliases, segments,
+and coordinates.</p>
+<dl class="method">
 <dt id="psfgen.PsfGen.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>output=&lt;_io.TextIOWrapper name='&lt;stdout&gt;' mode='w' encoding='UTF-8'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a PsfGen object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>outstream</strong> (<em>str</em><em> or </em><em>stream object</em>) – Where to write output. Defaults
+to stdout. Must have fileno() attribute, or if a string, file
+will be opened.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <p class="rubric">Methods</p>
@@ -178,68 +184,68 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#psfgen.PsfGen.__init__" title="psfgen.PsfGen.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</td>
-<td>Initialize self.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#psfgen.PsfGen.__init__" title="psfgen.PsfGen.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([output])</td>
+<td>Creates a PsfGen object.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#psfgen.PsfGen.add_segment" title="psfgen.PsfGen.add_segment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_segment</span></code></a>(segid[,&nbsp;first,&nbsp;last,&nbsp;pdbfile,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.add_segment" title="psfgen.PsfGen.add_segment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_segment</span></code></a>(segid[,&nbsp;first,&nbsp;last,&nbsp;pdbfile,&nbsp;…])</td>
 <td>Adds a new segment to the internal molecule state.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#psfgen.PsfGen.alias_atom" title="psfgen.PsfGen.alias_atom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alias_atom</span></code></a>(resname,&nbsp;top_atomname,&nbsp;pdb_atomname)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.alias_atom" title="psfgen.PsfGen.alias_atom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alias_atom</span></code></a>(resname,&nbsp;top_atomname,&nbsp;pdb_atomname)</td>
 <td>Provide an alternate name for a atom in a residue in the topology file compared to the PDB file.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#psfgen.PsfGen.alias_residue" title="psfgen.PsfGen.alias_residue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alias_residue</span></code></a>(top_resname,&nbsp;pdb_resname)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.alias_residue" title="psfgen.PsfGen.alias_residue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alias_residue</span></code></a>(top_resname,&nbsp;pdb_resname)</td>
 <td>Provide an alternate name for a residue in the topology file compared to the PDB file.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#psfgen.PsfGen.get_first" title="psfgen.PsfGen.get_first"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_first</span></code></a>(segid)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.get_first" title="psfgen.PsfGen.get_first"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_first</span></code></a>(segid)</td>
 <td>Get the name of the patch applied to the beginning of a given segment</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#psfgen.PsfGen.get_last" title="psfgen.PsfGen.get_last"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_last</span></code></a>(segid)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.get_last" title="psfgen.PsfGen.get_last"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_last</span></code></a>(segid)</td>
 <td>Get the name of the patch applied to the end of a given segment</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#psfgen.PsfGen.get_resids" title="psfgen.PsfGen.get_resids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_resids</span></code></a>(segid)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.get_resids" title="psfgen.PsfGen.get_resids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_resids</span></code></a>(segid)</td>
 <td>Obtain all currently defined resids in a given segment</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#psfgen.PsfGen.get_resname" title="psfgen.PsfGen.get_resname"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_resname</span></code></a>(segid,&nbsp;resid)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.get_resname" title="psfgen.PsfGen.get_resname"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_resname</span></code></a>(segid,&nbsp;resid)</td>
 <td>Obtains the residue name given a resid and segment</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#psfgen.PsfGen.get_segids" title="psfgen.PsfGen.get_segids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_segids</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.get_segids" title="psfgen.PsfGen.get_segids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_segids</span></code></a>()</td>
 <td>Obtain all the currently defined segment IDs.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#psfgen.PsfGen.patch" title="psfgen.PsfGen.patch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">patch</span></code></a>(patchname,&nbsp;targets)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.patch" title="psfgen.PsfGen.patch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">patch</span></code></a>(patchname,&nbsp;targets)</td>
 <td>Applies a patch to the molecule.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#psfgen.PsfGen.query_segment" title="psfgen.PsfGen.query_segment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">query_segment</span></code></a>(task[,&nbsp;segid,&nbsp;resid])</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.query_segment" title="psfgen.PsfGen.query_segment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">query_segment</span></code></a>(task[,&nbsp;segid,&nbsp;resid])</td>
 <td>Ask for information about a segment.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#psfgen.PsfGen.read_coords" title="psfgen.PsfGen.read_coords"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_coords</span></code></a>(filename,&nbsp;segid)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.read_coords" title="psfgen.PsfGen.read_coords"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_coords</span></code></a>(filename,&nbsp;segid)</td>
 <td>Reads in coordinates from a PDB file, matching segment, residue, and atom names to the current segment.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#psfgen.PsfGen.read_topology" title="psfgen.PsfGen.read_topology"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_topology</span></code></a>(filename)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.read_topology" title="psfgen.PsfGen.read_topology"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_topology</span></code></a>(filename)</td>
 <td>Parses a charmm format topology file into current library.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#psfgen.PsfGen.regenerate_angles" title="psfgen.PsfGen.regenerate_angles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regenerate_angles</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.regenerate_angles" title="psfgen.PsfGen.regenerate_angles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regenerate_angles</span></code></a>()</td>
 <td>Removes angles and regenerates them from bonds.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#psfgen.PsfGen.regenerate_dihedrals" title="psfgen.PsfGen.regenerate_dihedrals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regenerate_dihedrals</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.regenerate_dihedrals" title="psfgen.PsfGen.regenerate_dihedrals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regenerate_dihedrals</span></code></a>()</td>
 <td>Removes dihedrals and regenerates them from angles.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#psfgen.PsfGen.regenerate_resids" title="psfgen.PsfGen.regenerate_resids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regenerate_resids</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.regenerate_resids" title="psfgen.PsfGen.regenerate_resids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regenerate_resids</span></code></a>()</td>
 <td>Regenerates residue IDs by removing insertion codes and minimially modifying them for uniqueness.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#psfgen.PsfGen.set_coord" title="psfgen.PsfGen.set_coord"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_coord</span></code></a>(segid,&nbsp;resid,&nbsp;atomname,&nbsp;position)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.set_coord" title="psfgen.PsfGen.set_coord"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_coord</span></code></a>(segid,&nbsp;resid,&nbsp;atomname,&nbsp;position)</td>
 <td>Sets the coordinates of a given atom to new values.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#psfgen.PsfGen.write_pdb" title="psfgen.PsfGen.write_pdb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_pdb</span></code></a>(filename)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.write_pdb" title="psfgen.PsfGen.write_pdb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_pdb</span></code></a>(filename)</td>
 <td>Writes the current molecule state out as a pdb file</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#psfgen.PsfGen.write_psf" title="psfgen.PsfGen.write_psf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_psf</span></code></a>(filename[,&nbsp;type])</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api.html#psfgen.PsfGen.write_psf" title="psfgen.PsfGen.write_psf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_psf</span></code></a>(filename[,&nbsp;type])</td>
 <td>Writes the current molecule state out as a psf file</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="psfgen.PsfGen.add_segment">
-<code class="descname">add_segment</code><span class="sig-paren">(</span><em>segid</em>, <em>first=None</em>, <em>last=None</em>, <em>pdbfile=None</em>, <em>auto_angles=True</em>, <em>auto_dihedrals=True</em>, <em>residues=None</em>, <em>mutate=None</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.add_segment" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_segment</code><span class="sig-paren">(</span><em>segid</em>, <em>first='none'</em>, <em>last='none'</em>, <em>pdbfile=None</em>, <em>auto_angles=True</em>, <em>auto_dihedrals=True</em>, <em>residues=None</em>, <em>mutate=None</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.add_segment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a new segment to the internal molecule state.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -559,13 +565,6 @@ modifying them for uniqueness.</p>
            </div>
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-      
-        <a href="../api.html" class="btn btn-neutral" title="API documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>
