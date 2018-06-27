@@ -21,8 +21,26 @@ void python_msg(void *v, const char *msg) {
     fprintf(v, "\n");
 }
 
+/* Wrapper function for getting char* from a python string */
+static char* as_charptr(PyObject *target)
+{
+#if PY_MAJOR_VERSION >=3
+    return PyUnicode_AsUTF8(target);
+#else
+    return PyString_AsString(target);
+#endif
+}
+
 /* Initialization / destruction functions */
-static PyObject* py_init_mol(PyObject *self) {
+static PyObject* py_init_mol(PyObject *self, PyObject *args, PyObject *kwargs)
+{
+    char *kwnames[] = {(char*) "outfd", NULL};
+    int outfd = 0;
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|i:__init__", kwnames,
+                                     &outfd)) {
+        return NULL;
+    }
+
     psfgen_data * data = malloc(sizeof(psfgen_data));
 
     // Initialize topologies
@@ -37,7 +55,13 @@ static PyObject* py_init_mol(PyObject *self) {
     data->id = 0; // Doesn't matter since data is per class instance
     data->in_use = 0;
     data->all_caps = 1;
-    data->outstream = stdout; // TODO: does this even work
+
+    /*
+     * Handle output file argument.. Default to stdout
+     * This doesn't need to be closed in del_mol because the file
+     * descriptor is closed in the Python destructor if it is used
+     */
+    data->outstream = outfd ? fdopen(outfd, "a") : stdout;
     topo_mol_error_handler(data->mol, data->outstream, python_msg);
 
     // Encapsulate psf_data object and return it
@@ -268,7 +292,7 @@ static PyObject* py_read_coords(PyObject *self, PyObject *args, PyObject *kwargs
 /* Segment functions */
 static PyObject* py_add_segment(PyObject *self, PyObject *args, PyObject *kwargs)
 {
-    char *first, *last,*filename, *segname;
+    char *first, *last, *filename, *segname;
     PyObject *stateptr, *mutate, *residues;
     int autoang, autodih;
     psfgen_data *data;
@@ -352,7 +376,7 @@ static PyObject* py_add_segment(PyObject *self, PyObject *args, PyObject *kwargs
     }
 
     // Add residues to end, if desired
-    if (residues) {
+    if (residues && (residues != Py_None)) {
         PyObject *residue;
         char *resid, *resname, *chain;
         int n;
@@ -378,16 +402,10 @@ static PyObject* py_add_segment(PyObject *self, PyObject *args, PyObject *kwargs
                 return NULL;
             }
 
-        // Unpack tuple arguments, with chain being optional
-#if PY_MAJOR_VERSION >=3
-            resid = PyUnicode_AsUTF8(PyTuple_GetItem(residue, 0));
-            resname = PyUnicode_AsUTF8(PyTuple_GetItem(residue, 1));
-            chain = (n == 3) ? PyUnicode_AsUTF8(PyTuple_GetItem(residue, 2)) : "";
-#else
-            resid = PyString_AsString(PyTuple_GetItem(residue, 0));
-            resname = PyString_AsString(PyTuple_GetItem(residue, 1));
-            chain = (n == 3) ? PyString_AsString(PyTuple_GetItem(residue, 2)) : "";
-#endif
+            // Unpack tuple arguments, with chain being optional
+            resid = as_charptr(PyTuple_GetItem(residue, 0));
+            resname = as_charptr(PyTuple_GetItem(residue, 1));
+            chain = (n == 3) ? as_charptr(PyTuple_GetItem(residue, 2)) : "";
 
             if (topo_mol_residue(data->mol, resid, resname, chain)) {
                     PyErr_Format(PyExc_ValueError, "Failed to add residue '%s:%s'",
@@ -398,7 +416,7 @@ static PyObject* py_add_segment(PyObject *self, PyObject *args, PyObject *kwargs
     }
 
     // Do mutations, if provided
-    if (mutate) {
+    if (mutate && (mutate != Py_None)) {
         PyObject *residue;
         char *resid, *resname;
 
@@ -416,13 +434,8 @@ static PyObject* py_add_segment(PyObject *self, PyObject *args, PyObject *kwargs
             }
 
             // Unpack tuple
-#if PY_MAJOR_VERSION >=3
-            resid = PyUnicode_AsUTF8(PyTuple_GetItem(residue, 0));
-            resname = PyUnicode_AsUTF8(PyTuple_GetItem(residue, 1));
-#else
-            resid = PyString_AsString(PyTuple_GetItem(residue, 0));
-            resname = PyString_AsString(PyTuple_GetItem(residue, 1));
-#endif
+            resid = as_charptr(PyTuple_GetItem(residue, 0));
+            resname = as_charptr(PyTuple_GetItem(residue, 1));
 
             if (topo_mol_mutate(data->mol, resid, resname)) {
                 PyErr_Format(PyExc_ValueError, "Failed to mutate residue '%s:%s'",
@@ -452,7 +465,6 @@ static PyObject* py_query_segment(PyObject *self, PyObject *args,
     topo_mol_segment_t *seg;
     PyObject *result = NULL;
     psfgen_data *data;
-    int rc;
 
     // Set default arguments
     segid = resid = NULL;
@@ -630,13 +642,8 @@ static PyObject* py_patch(PyObject *self, PyObject *args, PyObject *kwargs) {
                             "patch target must be a list or tuple (segid, resid)");
             return NULL;
         }
-#if PY_MAJOR_VERSION >=3
-        targets[i].segid = PyUnicode_AsUTF8(PyTuple_GetItem(target, 0));
-        targets[i].resid = PyUnicode_AsUTF8(PyTuple_GetItem(target, 1));
-#else
-        targets[i].segid = PyString_AsString(PyTuple_GetItem(target, 0));
-        targets[i].resid = PyString_AsString(PyTuple_GetItem(target, 1));
-#endif
+        targets[i].segid = as_charptr(PyTuple_GetItem(target, 0));
+        targets[i].resid = as_charptr(PyTuple_GetItem(target, 1));
         targets[i].aname = NULL;
         if (PyErr_Occurred()) {
             free(targets);
@@ -712,7 +719,7 @@ static PyObject* py_set_coords(PyObject *self, PyObject *args, PyObject *kwargs)
 /* Method definitions */
 static PyMethodDef methods[] = {
     {(char *) "set_coords", (PyCFunction)py_set_coords, METH_VARARGS | METH_KEYWORDS},
-    {(char *) "init_mol", (PyCFunction)py_init_mol, METH_NOARGS},
+    {(char *) "init_mol", (PyCFunction)py_init_mol, METH_VARARGS | METH_KEYWORDS},
     {(char *) "del_mol", (PyCFunction)py_del_mol, METH_O},
     {(char *) "alias_residue", (PyCFunction)py_alias, METH_VARARGS | METH_KEYWORDS},
     {(char *) "query_segment", (PyCFunction)py_query_segment, METH_VARARGS | METH_KEYWORDS},
@@ -726,7 +733,9 @@ static PyMethodDef methods[] = {
     {NULL, NULL, 0, NULL}
 };
 
-/* Module initialization functions */
+/* Module initialization functions
+ * Python 2 and 3 are totally separate here for clarity
+ */
 #if PY_MAJOR_VERSION >= 3
 static struct PyModuleDef psfgendef = {
     PyModuleDef_HEAD_INIT,
@@ -735,15 +744,16 @@ static struct PyModuleDef psfgendef = {
     -1,
     methods,
 };
-#endif
 
-#if PY_MAJOR_VERSION >=3
-PyMODINIT_FUNC PyInit__psfgen(void) {
+PyMODINIT_FUNC PyInit__psfgen(void)
+{
     PyObject *m = PyModule_Create(&psfgendef);
-#else
-PyObject* init_psfgen(void) {
-    PyObject *m = Py_InitModule((char *)"_psfgen", methods);
-#endif
-
     return m;
 }
+#else
+PyMODINIT_FUNC init_psfgen(void)
+{
+    PyObject *m = Py_InitModule("_psfgen", methods);
+}
+#endif
+
