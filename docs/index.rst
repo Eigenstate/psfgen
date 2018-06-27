@@ -26,6 +26,7 @@ Usage
 
     all_commands
     examples
+    api
 
 
 Indices and tables

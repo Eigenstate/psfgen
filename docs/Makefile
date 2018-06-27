@@ -1,5 +1,8 @@
 # Minimal makefile for Sphinx documentation
 #
+#
+# Subtree works like this
+# git subtree push --prefix docs/_build/html origin gh-pages
 
 # You can set these variables from the command line.
 SPHINXOPTS    =

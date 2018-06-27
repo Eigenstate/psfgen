@@ -14,7 +14,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath("../psfgen"))
+sys.path.insert(0, os.path.abspath("../psfgen/"))
 
 
 # -- Project information -----------------------------------------------------
@@ -40,6 +40,7 @@ release = '0.0.0a1'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
     'sphinx.ext.githubpages',
     'sphinxcontrib.napoleon',
 ]
