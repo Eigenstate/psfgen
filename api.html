@@ -88,7 +88,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="all_commands.html">TCL &lt;=&gt; Python equivalents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="all_commands.html">TCL/Python correspondence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Documentation examples</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API documentation</a></li>
 </ul>
@@ -158,10 +158,13 @@
 <h1>API documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="psfgen.PsfGen">
-<em class="property">class </em><code class="descclassname">psfgen.</code><code class="descname">PsfGen</code><a class="headerlink" href="#psfgen.PsfGen" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<em class="property">class </em><code class="descclassname">psfgen.</code><code class="descname">PsfGen</code><span class="sig-paren">(</span><em>output=&lt;_io.TextIOWrapper name='&lt;stdout&gt;' mode='w' encoding='UTF-8'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Psf generator object. Represents the state of a single molecular system,
+with its own set of loaded topologies, residue and/or atom aliases, segments,
+and coordinates.</p>
+<dl class="method">
 <dt id="psfgen.PsfGen.add_segment">
-<code class="descname">add_segment</code><span class="sig-paren">(</span><em>segid</em>, <em>first=None</em>, <em>last=None</em>, <em>pdbfile=None</em>, <em>auto_angles=True</em>, <em>auto_dihedrals=True</em>, <em>residues=None</em>, <em>mutate=None</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.add_segment" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_segment</code><span class="sig-paren">(</span><em>segid</em>, <em>first='none'</em>, <em>last='none'</em>, <em>pdbfile=None</em>, <em>auto_angles=True</em>, <em>auto_dihedrals=True</em>, <em>residues=None</em>, <em>mutate=None</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.add_segment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a new segment to the internal molecule state.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

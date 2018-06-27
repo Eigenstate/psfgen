@@ -38,7 +38,7 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="psfgen 0.0.0a1 documentation" href="#"/>
-        <link rel="next" title="TCL &lt;=&gt; Python equivalents" href="all_commands.html"/> 
+        <link rel="next" title="TCL/Python correspondence" href="all_commands.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -88,7 +88,7 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="all_commands.html">TCL &lt;=&gt; Python equivalents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="all_commands.html">TCL/Python correspondence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Documentation examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API documentation</a></li>
 </ul>
@@ -156,48 +156,46 @@
             
   <div class="section" id="psfgen-python">
 <h1>psfgen - python<a class="headerlink" href="#psfgen-python" title="Permalink to this headline">¶</a></h1>
-<p>No one should have to learn TCL to do molecular dynamics simulation setup
-or analysis. Psfgen is written entirely in C and has TCL bindings, so I’ve
-added Python bindings too.</p>
+<p><a class="reference external" href="http://www.ks.uiuc.edu/Research/vmd/plugins/psfgen/">Psfgen</a> is a structure
+building tool with a TCL interface commonly used as a VMD plugin to set up
+simulations using NAMD or other molecular dynamics software. This package
+provides Python bindings for psfgen.</p>
+<div class="section" id="why-a-python-interface">
+<h2>Why a Python interface?<a class="headerlink" href="#why-a-python-interface" title="Permalink to this headline">¶</a></h2>
+<p>The usual way of interfacing with psfgen is through a series of TCL commands.
+The only reason many researchers learn TCL is for using psfgen and VMD, but now
+that VMD can be built with an <a class="reference external" href="http://www.ks.uiuc.edu/Research/vmd/current/ug/node161.html">internal Python interpreter</a> or used as a
+<a class="reference external" href="https://github.com/Eigenstate/vmd-python">standalone Python module</a>, it makes
+sense to also allow psfgen to listen to commands in Python.</p>
+<p>As the internals of psfgen are all written in C, it wasn’t too hard to write
+a Python interface using Python’s C API. I also think this kind of thing is fun
+for some reason. I also have some selfish motivations, as having a Python
+interface greatly simplifies how my system building software <a class="reference external" href="https://dabble.robinbetz.com">Dabble</a> interfaces with psfgen.</p>
+</div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p>You need a working C compiler. Either Python 2 or 3 will work, but I’d recommend
-switching to Python 3 as soon as possible.</p>
-<blockquote>
-<div>python setup.py install</div></blockquote>
+switching to Python 3 as soon as possible. Building is easy:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py install
+</pre></div>
+</div>
 </div>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>All interactions with psfgen are done by creating a PsfGen object that
+represents an individual molecular system. A very truncated example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">psfgen</span> <span class="kn">import</span> <span class="n">PsfGen</span>
+<span class="n">gen</span> <span class="o">=</span> <span class="n">PsfGen</span><span class="p">()</span>
+<span class="c1"># system building commands...</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">write_psf</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;system.psf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You may want to jump to some <a class="reference internal" href="examples.html"><span class="doc">examples</span></a>, or if you’re familiar with the
+TCL interface, view <a class="reference internal" href="all_commands.html"><span class="doc">equivalent function calls in Python</span></a>,
+or read the whole <a class="reference internal" href="api.html"><span class="doc">API spec</span></a>.</p>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="all_commands.html">TCL &lt;=&gt; Python equivalents</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="all_commands.html#topology-and-naming-functions">Topology and naming functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="all_commands.html#query-functions">Query functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="all_commands.html#system-building-functions">System building functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="all_commands.html#adding-a-new-segment">Adding a new segment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="all_commands.html#i-o-functions">I/O functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="all_commands.html#context-functions">Context functions</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Documentation examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#preparing-separate-pdb-files">Preparing separate PDB files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#deleting-unwanted-atoms">Deleting unwanted atoms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#bpti-example">BPTI example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#building-solvent-around-a-protein">Building solvent around a protein</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API documentation</a></li>
-</ul>
 </div>
 </div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
-</ul>
 </div>
 
 
@@ -210,7 +208,7 @@ switching to Python 3 as soon as possible.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="all_commands.html" class="btn btn-neutral float-right" title="TCL &lt;=&gt; Python equivalents" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="all_commands.html" class="btn btn-neutral float-right" title="TCL/Python correspondence" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>

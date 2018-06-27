@@ -1,9 +1,9 @@
 .. _all_commands:
 .. currentmodule:: all_commands
-.. highlight:: bash
+.. highlight:: python
 
-TCL <=> Python equivalents
-==========================
+TCL/Python correspondence
+=========================
 
 Unlike TCL, Python is much more naturally object-oriented. This means that all
 psfgen functionality is performed on a PsfGen object that holds the state of
@@ -137,8 +137,9 @@ following Python code:
     }
 
 
-All of this block is equivalent to the following function call in Python,
-with the `segid` argument being mandatory, and all others optional.
+All of this block is equivalent to the :meth:`psfgen.Psfgen.add_segment`
+function call in Python, with the `segid` argument being mandatory, and all
+others optional:
 
 .. code-block:: python
 
@@ -153,7 +154,7 @@ with the `segid` argument being mandatory, and all others optional.
 
 I/O functions
 -------------
-.. list-table:: I/O functions
+.. list-table::
    :header-rows: 1
 
    * - Task
