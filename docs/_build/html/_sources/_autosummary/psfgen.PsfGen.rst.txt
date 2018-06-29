@@ -1,0 +1,40 @@
+psfgen.PsfGen
+=============
+
+.. currentmodule:: psfgen
+
+.. autoclass:: PsfGen
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~PsfGen.__init__
+      ~PsfGen.add_segment
+      ~PsfGen.alias_atom
+      ~PsfGen.alias_residue
+      ~PsfGen.get_first
+      ~PsfGen.get_last
+      ~PsfGen.get_resids
+      ~PsfGen.get_resname
+      ~PsfGen.get_segids
+      ~PsfGen.patch
+      ~PsfGen.query_segment
+      ~PsfGen.read_coords
+      ~PsfGen.read_topology
+      ~PsfGen.regenerate_angles
+      ~PsfGen.regenerate_dihedrals
+      ~PsfGen.regenerate_resids
+      ~PsfGen.set_coord
+      ~PsfGen.write_pdb
+      ~PsfGen.write_psf
+   
+   
+
+   
+   
+   

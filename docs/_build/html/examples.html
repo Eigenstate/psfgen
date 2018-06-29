@@ -1,0 +1,360 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Examples &mdash; psfgen 0.0.0a1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="psfgen 0.0.0a1 documentation" href="index.html"/>
+        <link rel="next" title="API documentation" href="api.html"/>
+        <link rel="prev" title="TCL/Python correspondence" href="all_commands.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> psfgen
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="all_commands.html">TCL/Python correspondence</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#combining-separate-pdb-files">Combining separate PDB files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mutating-a-residue">Mutating a residue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-capping-groups">Adding capping groups</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">psfgen</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Examples</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="examples">
+<span id="id1"></span><h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<p>Here are a few examples of using the Python psfgen interface, that should
+cover most typical uses.</p>
+<p>These examples form the basis of the psfgen-Python test suite, so all
+input topology files and protein structures for these examples can be
+found <a class="reference external" href="https://github.com/Eigenstate/psfgen/tree/master/test">here</a>.</p>
+<div class="section" id="combining-separate-pdb-files">
+<h2>Combining separate PDB files<a class="headerlink" href="#combining-separate-pdb-files" title="Permalink to this headline">¶</a></h2>
+<p>This example uses multiple PDB files, containing water, ions, and two protein
+fragments, and composites them into a single PSF file. Several disulfide bonds
+are added with a patch.</p>
+<p>These proteins were prepared with “capping groups” of ACE and NMA on the
+N- and C-termini that are represented as their own residues rather than the
+Charmm style of capping patches. Topology information for these residues is
+found in <cite>top_all36_caps.rtf</cite>, but this is just a convention used in my lab.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">psfgen</span> <span class="kn">import</span> <span class="n">Psfgen</span>
+<span class="n">gen</span> <span class="o">=</span> <span class="n">PsfGen</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;/dev/null&quot;</span><span class="p">)</span>  <span class="c1"># Suppress output since there&#39;s too much</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_topology</span><span class="p">(</span><span class="s2">&quot;top_all36_caps.rtf&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_topology</span><span class="p">(</span><span class="s2">&quot;top_all36_prot.rtf&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_topology</span><span class="p">(</span><span class="s2">&quot;top_water_ions.rtf&quot;</span><span class="p">)</span>
+
+<span class="c1"># Read protein</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;P0&quot;</span><span class="p">,</span> <span class="n">pdbfile</span><span class="o">=</span><span class="s2">&quot;psf_protein_P0.pdb&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_coords</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;P0&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;psf_protein_P0.pdb&quot;</span><span class="p">)</span>
+
+<span class="n">gen</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;P1&quot;</span><span class="p">,</span> <span class="n">pdbfile</span><span class="o">=</span><span class="s2">&quot;psf_protein_P1.pdb&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_coords</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;P1&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;psf_protein_P1.pdb&quot;</span><span class="p">)</span>
+
+<span class="c1"># Read waters, with 10k atoms per file to avoid PDB limitations</span>
+<span class="c1"># (this limitation may be fixed later)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;W0&quot;</span><span class="p">,</span> <span class="n">pdbfile</span><span class="o">=</span><span class="s2">&quot;psf_wat_0.pdb&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_coords</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;W0&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;psf_wat_0.pdb&quot;</span><span class="p">)</span>
+
+<span class="n">gen</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;W1&quot;</span><span class="p">,</span> <span class="n">pdbfile</span><span class="o">=</span><span class="s2">&quot;psf_wat_1.pdb&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_coords</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;W1&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;psf_wat_1.pdb&quot;</span><span class="p">)</span>
+
+<span class="c1"># Read ions</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="n">pdbfile</span><span class="o">=</span><span class="s2">&quot;psf_ions.pdb&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_coords</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;psf_ions.pdb&quot;</span><span class="p">)</span>
+
+<span class="c1"># Add disulfides</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">patchname</span><span class="o">=</span><span class="s2">&quot;DISU&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;P0&quot;</span><span class="p">,</span><span class="s2">&quot;10&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;P0&quot;</span><span class="p">,</span><span class="s2">&quot;15&quot;</span><span class="p">)])</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">patchname</span><span class="o">=</span><span class="s2">&quot;DISU&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;P0&quot;</span><span class="p">,</span><span class="s2">&quot;24&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;P1&quot;</span><span class="p">,</span><span class="s2">&quot;23&quot;</span><span class="p">)])</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">patchname</span><span class="o">=</span><span class="s2">&quot;DISU&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;P0&quot;</span><span class="p">,</span><span class="s2">&quot;11&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;P1&quot;</span><span class="p">,</span><span class="s2">&quot;11&quot;</span><span class="p">)])</span>
+
+<span class="c1"># Regenerate</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">regenerate_angles</span><span class="p">()</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">regenerate_dihedrals</span><span class="p">()</span>
+
+<span class="c1"># Write</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">write_psf</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;relaxin.psf&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">write_pdb</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;relaxin.pdb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="mutating-a-residue">
+<h2>Mutating a residue<a class="headerlink" href="#mutating-a-residue" title="Permalink to this headline">¶</a></h2>
+<p>Using the same proteins as the previous example, we’ll load only the first chain
+to keep the example simple. Then, we’ll mutate Leu:2 to an Alanine and have
+psfgen guess coordinates for new atoms.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">psfgen</span> <span class="kn">import</span> <span class="n">Psfgen</span>
+<span class="n">gen</span> <span class="o">=</span> <span class="n">PsfGen</span><span class="p">()</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_topology</span><span class="p">(</span><span class="s2">&quot;top_all36_caps.rtf&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_topology</span><span class="p">(</span><span class="s2">&quot;top_all36_prot.rtf&quot;</span><span class="p">)</span>
+
+<span class="c1"># Read protein and do the mutation</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="n">pdbfile</span><span class="o">=</span><span class="s2">&quot;psf_protein_P0.pdb&quot;</span><span class="p">,</span>
+                <span class="n">mutate</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;2&quot;</span><span class="p">,</span><span class="s2">&quot;ALA&quot;</span><span class="p">)])</span>
+
+<span class="c1"># Add disulfide bond</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">patchname</span><span class="o">=</span><span class="s2">&quot;DISU&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;P&quot;</span><span class="p">,</span><span class="s2">&quot;10&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">,</span><span class="s2">&quot;15&quot;</span><span class="p">)])</span>
+
+<span class="c1"># Guess coordinates for ALA mutation</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">guess_coords</span><span class="p">()</span>
+
+<span class="c1"># Regenerate angles and dihedrals since we added a patch</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">regenerate_angles</span><span class="p">()</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">regenerate_dihedrals</span><span class="p">()</span>
+
+<span class="c1"># Save output</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">write_psf</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;L2A.psf&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">write_pdb</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;L2A.pdb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We keep the default output from the PsfGen object, so will see it in stdout (the
+terminal window) and will see a few warnings about failing to set coordinates
+for LEU:2 when calling <cite>read_coords</cite>. This is because we’re trying to read in
+coordinates for a residue that doesn’t exist, as we have an alanine at that
+location, and the warning can therefore be safely ignored.</p>
+</div>
+<div class="section" id="adding-capping-groups">
+<h2>Adding capping groups<a class="headerlink" href="#adding-capping-groups" title="Permalink to this headline">¶</a></h2>
+<p>Let’s say you have a protein without explicitly represented capping groups,
+called <cite>protein_nocaps.pdb</cite> (again, this file can be found in the test
+directory).</p>
+<p>This example shows how the <cite>add_segment</cite> function can be used to
+set the patches applied to the N- and C-termini. We’ll apply the neutral NTER
+patch to the N-terminus, and have a positively charged GLUP patch on the
+C-terminus. We’ll use the <cite>residues</cite> argument to add an ALA and a GLU to the
+end of the protein chain (after resid 24) as well, as there isn’t a glutamate
+at the end of the input protein.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">psfgen</span> <span class="kn">import</span> <span class="n">PsfGen</span>
+<span class="n">gen</span> <span class="o">=</span> <span class="n">PsfGen</span><span class="p">()</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_topology</span><span class="p">(</span><span class="s2">&quot;top_all36_prot.rtf&quot;</span><span class="p">)</span>
+
+<span class="c1"># Read protein, set the patches for the ends, and add ALA-GLU to the end</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="n">pdbfile</span><span class="o">=</span><span class="s2">&quot;protein_nocaps.pdb&quot;</span><span class="p">,</span>
+                <span class="n">first</span><span class="o">=</span><span class="s2">&quot;NTER&quot;</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="s2">&quot;GLUP&quot;</span><span class="p">,</span>
+                <span class="n">residues</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;25&quot;</span><span class="p">,</span><span class="s2">&quot;ALA&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;26&quot;</span><span class="p">,</span><span class="s2">&quot;GLU&quot;</span><span class="p">)])</span>
+
+<span class="c1"># Read in the coordinates we have and guess the remainder</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">read_coords</span><span class="p">(</span><span class="n">segid</span><span class="o">=</span><span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;protein_nocaps.pdb&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">guess_coords</span><span class="p">()</span>
+
+<span class="c1"># Save the result</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">write_psf</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;patch_ends.psf&quot;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">write_pdb</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;patch_ends.pdb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You’ll see in the output a lot of warnings about poorly guessed coordinates, but
+this is a contrived example so this is okay.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api.html" class="btn btn-neutral float-right" title="API documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="all_commands.html" class="btn btn-neutral" title="TCL/Python correspondence" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Robin Betz.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.0a1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
