@@ -1,0 +1,271 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>psfgen - python &mdash; psfgen 0.0.0a1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="psfgen 0.0.0a1 documentation" href="#"/>
+        <link rel="next" title="TCL/Python correspondence" href="all_commands.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> psfgen
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="all_commands.html">TCL/Python correspondence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Documentation examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">psfgen</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>psfgen - python</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="psfgen-python">
+<h1>psfgen - python<a class="headerlink" href="#psfgen-python" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://www.ks.uiuc.edu/Research/vmd/plugins/psfgen/">Psfgen</a> is a structure
+building tool with a TCL interface commonly used as a VMD plugin to set up
+simulations using NAMD or other molecular dynamics software. This package
+provides Python bindings for psfgen.</p>
+<div class="section" id="why-a-python-interface">
+<h2>Why a Python interface?<a class="headerlink" href="#why-a-python-interface" title="Permalink to this headline">¶</a></h2>
+<p>The usual way of interfacing with psfgen is through a series of TCL commands.
+The only reason many researchers learn TCL is for using psfgen and VMD, but now
+that VMD can be built with an <a class="reference external" href="http://www.ks.uiuc.edu/Research/vmd/current/ug/node161.html">internal Python interpreter</a> or used as a
+<a class="reference external" href="https://github.com/Eigenstate/vmd-python">standalone Python module</a>, it makes
+sense to also allow psfgen to listen to commands in Python.</p>
+<p>As the internals of psfgen are all written in C, it wasn’t too hard to write
+a Python interface using Python’s C API. I also think this kind of thing is fun
+for some reason. I also have some selfish motivations, as having a Python
+interface greatly simplifies how my system building software <a class="reference external" href="https://dabble.robinbetz.com">Dabble</a> interfaces with psfgen.</p>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>You need a working C compiler. Either Python 2 or 3 will work, but I’d recommend
+switching to Python 3 as soon as possible. Building is easy:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py install
+</pre></div>
+</div>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>All interactions with psfgen are done by creating a PsfGen object that
+represents an individual molecular system. A very truncated example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">psfgen</span> <span class="kn">import</span> <span class="n">PsfGen</span>
+<span class="n">gen</span> <span class="o">=</span> <span class="n">PsfGen</span><span class="p">()</span>
+<span class="c1"># system building commands...</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">write_psf</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;system.psf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You may want to jump to some <a class="reference internal" href="examples.html"><span class="doc">examples</span></a>, or if you’re familiar with the
+TCL interface, view <a class="reference internal" href="all_commands.html"><span class="doc">equivalent function calls in Python</span></a>,
+or read the whole <a class="reference internal" href="api.html"><span class="doc">API spec</span></a>.</p>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="all_commands.html" class="btn btn-neutral float-right" title="TCL/Python correspondence" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Robin Betz.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.0a1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
