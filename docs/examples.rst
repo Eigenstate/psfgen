@@ -24,7 +24,7 @@ found in `top_all36_caps.rtf`, but this is just a convention used in my lab.
 
 .. code-block:: python
 
-    from psfgen import Psfgen
+    from psfgen import PsfGen
     gen = PsfGen(output="/dev/null")  # Suppress output since there's too much
     gen.read_topology("top_all36_caps.rtf")
     gen.read_topology("top_all36_prot.rtf")
@@ -72,7 +72,7 @@ psfgen guess coordinates for new atoms.
 
 .. code-block:: python
 
-    from psfgen import Psfgen
+    from psfgen import PsfGen
     gen = PsfGen()
     gen.read_topology("top_all36_caps.rtf")
     gen.read_topology("top_all36_prot.rtf")
