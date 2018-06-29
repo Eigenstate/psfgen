@@ -22,7 +22,7 @@ struct psfgen_data {
 typedef struct psfgen_data psfgen_data;
 
 // Emit a compile error if int is not 32 bits
-(void)sizeof(char[1 - 2*!!(sizeof(int) != 4)]);
+//(void)sizeof(char[1 - 2*!!(sizeof(int) != 4)]);
 
 // Some utility functions
 char* strtoupper(const char *str, int all_caps) {
