@@ -38,7 +38,7 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="psfgen 0.0.0a1 documentation" href="index.html"/>
-        <link rel="next" title="Documentation examples" href="examples.html"/>
+        <link rel="next" title="Examples" href="examples.html"/>
         <link rel="prev" title="psfgen - python" href="index.html"/> 
 
   
@@ -98,7 +98,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#context-functions">Context functions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Documentation examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API documentation</a></li>
 </ul>
 
@@ -226,7 +226,7 @@ in topology files</td>
 <tbody valign="top">
 <tr class="row-even"><td>List loaded topology files</td>
 <td><code class="docutils literal notranslate"><span class="pre">topology</span> <span class="pre">list</span></code></td>
-<td>&#160;</td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.get_topologies()</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.get_topologies" title="psfgen.PsfGen.get_topologies"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.get_topologies()</span></code></a></td>
 </tr>
 <tr class="row-odd"><td>List current segids</td>
 <td><code class="docutils literal notranslate"><span class="pre">segment</span> <span class="pre">segids</span></code></td>
@@ -242,11 +242,19 @@ in topology files</td>
 </tr>
 <tr class="row-even"><td>List all currently applied patches, including default patches</td>
 <td><code class="docutils literal notranslate"><span class="pre">patch</span> <span class="pre">listall</span></code></td>
-<td>&#160;</td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.get_patches()</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.get_patches" title="psfgen.PsfGen.get_patches"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.get_patches()</span></code></a></td>
 </tr>
 <tr class="row-odd"><td>List all explicitly applied patches</td>
 <td><code class="docutils literal notranslate"><span class="pre">patch</span> <span class="pre">list</span></code></td>
-<td>&#160;</td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.get_patches(list_defaults=False)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.get_patches" title="psfgen.PsfGen.get_patches"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.get_patches()</span></code></a></td>
+</tr>
+<tr class="row-even"><td>List all available residue types</td>
+<td><code class="docutils literal notranslate"><span class="pre">topology</span> <span class="pre">residues</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.get_residue_types()</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.get_residue_types" title="psfgen.PsfGen.get_residue_types"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.get_residue_types()</span></code></a></td>
+</tr>
+<tr class="row-odd"><td>List all available patches</td>
+<td><code class="docutils literal notranslate"><span class="pre">topology</span> <span class="pre">patches</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.get_patches(list_all=True)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.get_patches" title="psfgen.PsfGen.get_patches"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.get_patches()</span></code></a></td>
 </tr>
 <tr class="row-even"><td>Get the name of the patch applied to the beginning of a given segment</td>
 <td><code class="docutils literal notranslate"><span class="pre">segment</span> <span class="pre">first</span> <span class="pre">&lt;segment</span> <span class="pre">ID&gt;</span></code></td>
@@ -258,7 +266,7 @@ in topology files</td>
 </tr>
 <tr class="row-even"><td>Get a list of atoms given a resid and segment</td>
 <td><code class="docutils literal notranslate"><span class="pre">segment</span> <span class="pre">atoms</span> <span class="pre">&lt;segment</span> <span class="pre">ID&gt;</span> <span class="pre">&lt;resid&gt;</span></code></td>
-<td>&#160;</td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.get_atoms(segid,</span> <span class="pre">resid)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.get_atoms" title="psfgen.PsfGen.get_atoms"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.get_atoms()</span></code></a></td>
 </tr>
 <tr class="row-odd"><td>Get x,y,z coordinates for a given atom</td>
 <td><code class="docutils literal notranslate"><span class="pre">segment</span> <span class="pre">coordinates</span> <span class="pre">&lt;segment</span> <span class="pre">ID&gt;</span> <span class="pre">&lt;resid&gt;</span></code></td>
@@ -284,11 +292,11 @@ in topology files</td>
 <tbody valign="top">
 <tr class="row-even"><td>Guess coordinates of atoms that aren’t explicitly set</td>
 <td><code class="docutils literal notranslate"><span class="pre">guesscoord</span></code></td>
-<td>&#160;</td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.guess_coords()</span></code> <code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.guess_coords()</span></code></td>
 </tr>
 <tr class="row-odd"><td>Set coordinates of a given atom</td>
 <td><code class="docutils literal notranslate"><span class="pre">coord</span> <span class="pre">&lt;segment</span> <span class="pre">ID&gt;</span> <span class="pre">&lt;resid&gt;</span> <span class="pre">&lt;atomname&gt;</span> <span class="pre">{x</span> <span class="pre">y</span> <span class="pre">z}</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">set_coord(segid,</span> <span class="pre">resid,</span> <span class="pre">atomname,</span> <span class="pre">position)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.set_coord" title="psfgen.PsfGen.set_coord"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.set_coord()</span></code></a></td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.set_coord(segid,</span> <span class="pre">resid,</span> <span class="pre">atomname,</span> <span class="pre">position)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.set_coord" title="psfgen.PsfGen.set_coord"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.set_coord()</span></code></a></td>
 </tr>
 <tr class="row-even"><td>Delete all atoms in a segment</td>
 <td><code class="docutils literal notranslate"><span class="pre">delatom</span> <span class="pre">&lt;segment</span> <span class="pre">ID&gt;</span></code></td>
@@ -340,12 +348,13 @@ following Python code:</p>
 }
 </pre></div>
 </div>
-<p>All of this block is equivalent to the <code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.Psfgen.add_segment()</span></code>
+<p>All of this block is equivalent to the <a class="reference internal" href="api.html#psfgen.PsfGen.add_segment" title="psfgen.PsfGen.add_segment"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.add_segment()</span></code></a>
 function call in Python, with the <cite>segid</cite> argument being mandatory, and all
 others optional:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gen</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">segid</span><span class="o">=&lt;</span><span class="n">segment</span> <span class="n">ID</span><span class="o">&gt;</span><span class="p">,</span>
                 <span class="n">first</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                 <span class="n">last</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                <span class="n">pdbfile</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                 <span class="n">auto</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                 <span class="n">residue</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                 <span class="n">mutate</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
@@ -467,7 +476,7 @@ done</td>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="examples.html" class="btn btn-neutral float-right" title="Documentation examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral" title="psfgen - python" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

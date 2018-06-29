@@ -50,7 +50,7 @@ Query functions
      - Python class equivalent
    * - List loaded topology files
      - ``topology list``
-     - 
+     - ``gen.get_topologies()`` :meth:`psfgen.PsfGen.get_topologies`
    * - List current segids
      - ``segment segids``
      - ``gen.get_segids()`` :meth:`psfgen.PsfGen.get_segids`
@@ -62,10 +62,16 @@ Query functions
      - ``gen.get_resname(segid, resid)`` :meth:`psfgen.PsfGen.get_resname`
    * - List all currently applied patches, including default patches
      - ``patch listall``
-     - 
+     - ``gen.get_patches()`` :meth:`psfgen.PsfGen.get_patches`
    * - List all explicitly applied patches
      - ``patch list``
-     - 
+     - ``gen.get_patches(list_defaults=False)`` :meth:`psfgen.PsfGen.get_patches` 
+   * - List all available residue types
+     - ``topology residues``
+     - ``gen.get_residue_types()`` :meth:`psfgen.PsfGen.get_residue_types`
+   * - List all available patches
+     - ``topology patches``
+     - ``gen.get_patches(list_all=True)`` :meth:`psfgen.PsfGen.get_patches`
    * - Get the name of the patch applied to the beginning of a given segment
      - ``segment first <segment ID>``
      - ``gen.get_first(segid)`` :meth:`psfgen.PsfGen.get_first`
@@ -74,7 +80,7 @@ Query functions
      - ``gen.get_last(segid)`` :meth:`psfgen.PsfGen.get_last`
    * - Get a list of atoms given a resid and segment
      - ``segment atoms <segment ID> <resid>``
-     - 
+     - ``gen.get_atoms(segid, resid)`` :meth:`psfgen.PsfGen.get_atoms`
    * - Get x,y,z coordinates for a given atom
      - ``segment coordinates <segment ID> <resid>``
      - 
@@ -89,10 +95,10 @@ System building functions
      - Python class equivalent
    * - Guess coordinates of atoms that aren't explicitly set
      - ``guesscoord``
-     -  
+     - ``gen.guess_coords()`` :meth:`psfgen.PsfGen.guess_coords`
    * - Set coordinates of a given atom
      - ``coord <segment ID> <resid> <atomname> {x y z}``
-     - ``set_coord(segid, resid, atomname, position)`` :meth:`psfgen.PsfGen.set_coord`
+     - ``gen.set_coord(segid, resid, atomname, position)`` :meth:`psfgen.PsfGen.set_coord`
    * - Delete all atoms in a segment
      - ``delatom <segment ID>``
      - 
@@ -137,7 +143,7 @@ following Python code:
     }
 
 
-All of this block is equivalent to the :meth:`psfgen.Psfgen.add_segment`
+All of this block is equivalent to the :meth:`psfgen.PsfGen.add_segment`
 function call in Python, with the `segid` argument being mandatory, and all
 others optional:
 
@@ -146,6 +152,7 @@ others optional:
     gen.add_segment(segid=<segment ID>,
                     first=None,
                     last=None,
+                    pdbfile=None,
                     auto=None,
                     residue=None,
                     mutate=None,
