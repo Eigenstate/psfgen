@@ -112,6 +112,29 @@ class PsfGen:
 
     #===========================================================================
 
+    def get_patches(self, list_defaults=True, list_all=False):
+        """
+        Obtain information about available or applied patches in the current
+        system state.
+
+        Args:
+            list_defaults (bool): If True, default patches will be listed too.
+                Otherwise only explicitly applied patches will be shown.
+                Defaults to True
+            list_all (bool): List all available patches, not just applied ones.
+                For psfgen internal reasons, "NONE", "None", and "none" will
+                appear in this list.
+
+        Returns:
+            (list of 3-tuple): (patchname, segid, resid) of all applied patches
+        """
+        if list_all:
+            return _psfgen.query_system(self._data, task="patches")
+
+        return _psfgen.get_patches(self._data, listall=list_defaults)
+
+    #===========================================================================
+
     def get_resname(self, segid, resid):
         """
         Obtains the residue name given a resid and segment
@@ -132,6 +155,23 @@ class PsfGen:
 
     #===========================================================================
 
+    def get_atoms(self, segid, resid):
+        """
+        Obtains atom names in a given residue
+
+        Args:
+            segid (str): Segment ID to query
+            resid (str or int): Residue ID to query
+
+        Returns:
+            (list of str): Atom names in residue
+        """
+        if isinstance(resid, int):
+            resid = str(resid)
+
+        return _psfgen.get_atoms(psfstate=self._data, segid=segid, resid=resid)
+    #===========================================================================
+
     def get_first(self, segid):
         """
         Get the name of the patch applied to the beginning of a given segment
@@ -140,7 +180,7 @@ class PsfGen:
             segid (str): Segment ID to query
 
         Returns:
-            (str): Patch name
+            (str): Patch name, or None
         """
         return _psfgen.query_segment(psfstate=self._data, task="first",
                                      segid=segid)
@@ -155,10 +195,32 @@ class PsfGen:
             segid (str): Segment ID to query
 
         Returns:
-            (str): Patch name
+            (str): Patch name, or None
         """
         return _psfgen.query_segment(psfstate=self._data, task="last",
-                                     segid=segid)
+                                    segid=segid)
+
+    #===========================================================================
+
+    def get_topologies(self):
+        """
+        Get all loaded topology files
+
+        Returns:
+            (list of str): Filenames that have been loaded
+        """
+        return _psfgen.query_system(psfstate=self._data, task="topologies")
+
+    #===========================================================================
+
+    def get_residue_types(self):
+        """
+        Get all defined residues
+
+        Returns:
+            (list of str): Defined residue types from current topologies
+        """
+        return _psfgen.query_system(psfstate=self._data, task="residues")
 
     #===========================================================================
 
@@ -181,10 +243,10 @@ class PsfGen:
             residues (list of 2 or 3-tuple): (resid, residue, [chain]) of
                 residues to append to the end of the segment. Chain can be None
                 or unset in this tuple to use the current chain.
-                mutate (list of 2 tuple): (resid, resname) of residues to alter.
-                    The given residue IDs will be set to the given residue name.
+            mutate (list of 2 tuple): (resid, resname) of residues to alter.
+                The given residue IDs will be set to the given residue name.
         """
-        if segid in self.get_segids():
+        if self.get_segids() and segid in self.get_segids():
             raise ValueError("Duplicate segID '%s'" % segid)
 
         _psfgen.add_segment(psfstate=self._data, segid=segid, pdbfile=pdbfile,
@@ -203,7 +265,7 @@ class PsfGen:
             filename (str): Filename of PDB file to read
             segid (str): Segment ID to assign coordinates to
         """
-        if segid not in self.get_segids():
+        if self.get_segids() and segid not in self.get_segids():
             raise ValueError("Can't read coordinates for segment '%s' as "
                              "it is undefined." % segid)
         _psfgen.read_coords(psfstate=self._data,
@@ -225,14 +287,16 @@ class PsfGen:
         Returns:
             (int): Number of coordinates set
         """
-        return _psfgen.set_coords(mol=self.mol, segid=segid, resid=resid,
-                                  aname=atomname, position=position)
+        return _psfgen.set_coord(psfstate=self._data, segid=segid,
+                                 resid=resid, aname=atomname, position=position)
 
     #===========================================================================
 
-    #def guessCoords(self):
-    #    if topo_mol_guess_xyz(self.mol):
-    #        raise ValueError("failed on guessing coordinates")
+    def guess_coords(self):
+        """
+        Sets unset coordinates using geometric assumptions
+        """
+        _psfgen.guess_coords(self._data)
 
     #===========================================================================
 
