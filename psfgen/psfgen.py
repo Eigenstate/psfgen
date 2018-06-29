@@ -155,7 +155,7 @@ class PsfGen:
 
     #===========================================================================
 
-    def get_atoms(self, segid, resid):
+    def get_atom_names(self, segid, resid):
         """
         Obtains atom names in a given residue
 
@@ -169,7 +169,104 @@ class PsfGen:
         if isinstance(resid, int):
             resid = str(resid)
 
-        return _psfgen.get_atoms(psfstate=self._data, segid=segid, resid=resid)
+        return _psfgen.query_atoms(psfstate=self._data, segid=segid,
+                                   resid=resid, task="name")
+
+    #===========================================================================
+
+    def get_masses(self, segid, resid):
+        """
+        Obtains atom masses in a given residue
+
+        Args:
+            segid (str): Segment ID to query
+            resid (str or int): Residue ID to query
+
+        Returns:
+            (list of float): Atom masses in residue
+        """
+        if isinstance(resid, int):
+            resid = str(resid)
+
+        return _psfgen.query_atoms(psfstate=self._data, segid=segid,
+                                   resid=resid, task="mass")
+
+    #===========================================================================
+
+    def get_charges(self, segid, resid):
+        """
+        Obtains atom charges in a given residue
+
+        Args:
+            segid (str): Segment ID to query
+            resid (str or int): Residue ID to query
+
+        Returns:
+            (list of float): Atom charges in residue
+        """
+        if isinstance(resid, int):
+            resid = str(resid)
+
+        return _psfgen.query_atoms(psfstate=self._data, segid=segid,
+                                   resid=resid, task="charge")
+
+    #===========================================================================
+
+    def get_atom_indices(self, segid, resid):
+        """
+        Obtains atom indices/IDs in a given residue
+
+        Args:
+            segid (str): Segment ID to query
+            resid (str or int): Residue ID to query
+
+        Returns:
+            (list of int): Atom IDs in residue
+        """
+        if isinstance(resid, int):
+            resid = str(resid)
+
+        return _psfgen.query_atoms(psfstate=self._data, segid=segid,
+                                   resid=resid, task="atomid")
+
+    #===========================================================================
+
+    def get_coordinates(self, segid, resid):
+        """
+        Obtains atom coordinates in a given residue
+
+        Args:
+            segid (str): Segment ID to query
+            resid (str or int): Residue ID to query
+
+        Returns:
+            (list of 3-tuple): (x,y,z) position of all atoms in residue
+        """
+        if isinstance(resid, int):
+            resid = str(resid)
+
+        return _psfgen.query_atoms(psfstate=self._data, segid=segid,
+                                   resid=resid, task="coordinates")
+
+    #===========================================================================
+
+    def get_velocities(self, segid, resid):
+        """
+        Obtains atom velocities in a given residue, if set
+
+        Args:
+            segid (str): Segment ID to query
+            resid (str or int): Residue ID to query
+
+        Returns:
+            (list of 3-tuple): (vx,vy,vz) velocities of all atoms in residue
+        """
+        if isinstance(resid, int):
+            resid = str(resid)
+
+        return _psfgen.query_atoms(psfstate=self._data, segid=segid,
+                                   resid=resid, task="velocities")
+
     #===========================================================================
 
     def get_first(self, segid):
@@ -283,12 +380,9 @@ class PsfGen:
             resid (str): Residue ID of atom
             atomname (str): Atom name
             position (3-tuple of double): New x, y, and z coordinates for atom
-
-        Returns:
-            (int): Number of coordinates set
         """
-        return _psfgen.set_coord(psfstate=self._data, segid=segid,
-                                 resid=resid, aname=atomname, position=position)
+        _psfgen.set_coord(psfstate=self._data, segid=segid,
+                          resid=resid, aname=atomname, position=position)
 
     #===========================================================================
 
@@ -333,13 +427,25 @@ class PsfGen:
 
     #===========================================================================
 
-    #def delAtom(self, segid, resid=None, atomName=None):
-    #    ident={"segid": str(segid).encode()}
-    #    if resID is not None:
-    #        ident["resid"] = str(resid).encode()
-    #    if atomName is not None:
-    #        ident["aname"] = str(atomName).encode()
-    #    topo_mol_delete_atom(mol=self.mol, target=ident)
+    def delete_atoms(self, segid, resid=None, atomname=None):
+        """
+        Deletes atoms from the molecule, with options for increasing
+        specificity. As many atoms as match the passed options will be
+        deleted, so for example if only segid is present, an entire segment
+        will be removed.
+
+        Args:
+            segid (str): Segment ID of atom(s) to delete
+            resid (str or int): Residue ID of atom(s) to delete, or None to
+                delete entire matching segment
+            atomname (str): Atom name to delete, or None to delete entire
+                matching segment or residue
+        """
+        if isinstance(resid, int):
+            resid = str(resid)
+
+        _psfgen.delete_atoms(psfstate=self._data, segid=segid, resid=resid,
+                             aname=atomname)
 
     #===========================================================================
 

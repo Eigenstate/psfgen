@@ -2065,7 +2065,11 @@ int tcl_delatom(ClientData data, Tcl_Interp *interp,
   target.resid = argc > 2 ? argv[2] : 0;
   target.aname = argc > 3 ? argv[3] : 0;
 
-  topo_mol_delete_atom(psf->mol, &target);
+  if (topo_mol_delete_atom(psf->mol, &target)) {
+    Tcl_AppendResult(interp, "ERROR: failed to delete atom", NULL);
+    psfgen_kill_mol(interp, psf);
+    return TCL_ERROR;
+  }
  
   return TCL_OK;
 }

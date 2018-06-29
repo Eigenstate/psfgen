@@ -120,6 +120,9 @@ int hash_lookup(hash_t *tptr, const char *key) {
   int h;
   hash_node_t *node;
 
+  /* If key is null return failure */
+  if (!key)
+    return HASH_FAIL;
 
   /* find the entry in the hash table */
   h=hash(tptr, key);

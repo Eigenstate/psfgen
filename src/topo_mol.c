@@ -2090,19 +2090,19 @@ int topo_mol_multiply_atoms(topo_mol *mol, const topo_mol_ident_t *targets,
 }
 
 /* API function */
-void topo_mol_delete_atom(topo_mol *mol, const topo_mol_ident_t *target) {
+int topo_mol_delete_atom(topo_mol *mol, const topo_mol_ident_t *target) {
 
   topo_mol_residue_t *res;
   topo_mol_segment_t *seg;
   int ires, iseg;
-  if (!mol) return;
+  if (!mol) return 1;
 
   iseg = hasharray_index(mol->segment_hash,target->segid);
   if ( iseg == HASHARRAY_FAIL ) {
     char errmsg[50];
     sprintf(errmsg,"no segment %s",target->segid);
     topo_mol_log_error(mol,errmsg);
-    return;
+    return 1;
   }
   seg = mol->segment_array[iseg];
 
@@ -2124,7 +2124,7 @@ void topo_mol_delete_atom(topo_mol *mol, const topo_mol_ident_t *target) {
     if (hasharray_delete(mol->segment_hash, target->segid) < 0) {
       topo_mol_log_error(mol, "Unable to delete segment");
     }
-    return;
+    return 0;
   }
 
   ires = hasharray_index(seg->residue_hash,target->resid);
@@ -2133,7 +2133,7 @@ void topo_mol_delete_atom(topo_mol *mol, const topo_mol_ident_t *target) {
     sprintf(errmsg,"no residue %s of segment %s",
                                         target->resid,target->segid);
     topo_mol_log_error(mol,errmsg);
-    return;
+    return 1;
   }
   res = seg->residue_array+ires;
 
@@ -2148,10 +2148,11 @@ void topo_mol_delete_atom(topo_mol *mol, const topo_mol_ident_t *target) {
     }
     res->atoms = 0;
     hasharray_delete(seg->residue_hash, target->resid);
-    return;
+    return 0;
   }
   /* Just delete one atom */
   topo_mol_destroy_atom(topo_mol_unlink_atom(&(res->atoms),target->aname));
+  return 0;
 }
 
 int topo_mol_set_name(topo_mol *mol, const topo_mol_ident_t *target,

@@ -11,6 +11,7 @@ from vmd import atomsel, molecule
 dir = "." # DEBUG
 
 #==============================================================================
+
 def check_correctness(molid):
     """ Verifies molecule is sane """
 
@@ -85,10 +86,17 @@ def test_query():
     assert gen.get_first(segid="P0") is None
     assert gen.get_last(segid="P1") is None
 
-    # Check atom query
-    assert gen.get_atoms(segid="P0", resid="10") == ['N', 'HN', 'CA', 'HA',
-                                                     'CB', 'HB1', 'HB2', 'SG',
-                                                     'C', 'O']
+    # Check atom queries
+    assert gen.get_atom_names(segid="P0", resid="10") \
+                == ['N', 'HN', 'CA', 'HA', 'CB', 'HB1', 'HB2', 'SG', 'C', 'O']
+    assert set(gen.get_masses(segid="P0", resid=1)) == {1.008, 12.011, 15.999}
+    assert gen.get_atom_indices(segid="P1", resid=0) == list(range(1,7))
+    assert set(gen.get_charges(segid="P0", resid="10")) \
+        == {-0.47, 0.07, 0.09, 0.31, -0.1, -0.08, 0.51, -0.51}
+
+    # Check coordinates and velocities
+    assert len(gen.get_coordinates(segid="P1", resid=25)) == 17
+    assert set(gen.get_velocities(segid="P1", resid=1)) == {(0.,0.,0.)}
 
 #==============================================================================
 
@@ -201,10 +209,47 @@ def test_mutation(tmpdir):
 
     molecule.delete(m)
 
+#===============================================================================
+
+def test_delete(tmpdir):
+    """
+    Tests removing atoms
+    """
+    from psfgen import PsfGen
+    #p = str(tmpdir.mkdir("delete")) DEBUG
+    p = tmpdir
+    os.chdir(dir)
+
+    gen = PsfGen()
+    gen.read_topology("top_all36_caps.rtf")
+    gen.read_topology("top_all36_prot.rtf")
+
+    gen.add_segment(segid="P0", pdbfile="psf_protein_P0.pdb")
+    gen.read_coords(segid="P0", filename="psf_protein_P0.pdb")
+
+    # Delete a specific atom
+    assert "CAY" in gen.get_atom_names(segid="P0", resid=1)
+    gen.delete_atoms(segid="P0", resid=1, atomname="CAY")
+    assert "CAY" not in gen.get_atom_names(segid="P0", resid=1)
+
+    # Try deleting a capping group
+    assert gen.get_resids("P0") == [str(_) for _ in range(1,26)]
+    gen.delete_atoms(segid="P0", resid=1)
+    assert gen.get_resids("P0") == [str(_) for _ in range(2,26)]
+
+    # Add and then delete a segment
+    gen.add_segment(segid="DELETE", pdbfile="psf_protein_P1.pdb")
+    assert gen.get_segids() == ["P0", "DELETE"]
+    gen.delete_atoms(segid="DELETE")
+    assert gen.get_segids() == ["P0"]
+
 
 #===============================================================================
 
 def test_single_chain(tmpdir):
+    """
+    Tests simple realistic system building
+    """
 
     from psfgen import PsfGen
     p = str(tmpdir.mkdir("single_chain"))

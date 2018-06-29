@@ -35,11 +35,38 @@ static char* as_charptr(PyObject *target)
 /* Wrapper function for turning char* into a python string */
 static PyObject* as_pystring(char *target)
 {
+    PyObject *result;
+    if (!target) {
+        PyErr_SetString(PyExc_ValueError, "cannot convert null string");
+        return NULL;
+    }
 #if PY_MAJOR_VERSION >= 3
-    return PyUnicode_FromString(target);
+    result = PyUnicode_FromString(target);
 #else
-    return PyString_FromString(target);
+    result = PyString_FromString(target);
 #endif
+
+    if (!result || PyErr_Occurred()) {
+        PyErr_Format(PyExc_ValueError, "cannot convert char* '%s'", target);
+        return NULL;
+    }
+    return result;
+}
+
+/* Similar wrapper function for turning int into a python int/long */
+static PyObject* as_pyint(int target)
+{
+    PyObject *result;
+#if PY_MAJOR_VERSION >= 3
+    result = PyLong_FromLong((long) target);
+#else
+    result = PyInt_FromLong((long) target);
+#endif
+    if (!result || PyErr_Occurred()) {
+        PyErr_Format(PyExc_ValueError, "cannot convert int %d", target);
+        return NULL;
+    }
+    return result;
 }
 
 /* Initialization / destruction functions */
@@ -495,10 +522,11 @@ static PyObject* py_query_segment(PyObject *self, PyObject *args,
     // Set default arguments
     segid = resid = NULL;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|ss:query", kwnames,
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|ss:query_segment", kwnames,
                                      &stateptr, &task, &segid, &resid)) {
         return NULL;
     }
+
     data = PyCapsule_GetPointer(stateptr, NULL);
     if (!data || PyErr_Occurred())
         return NULL;
@@ -533,11 +561,15 @@ static PyObject* py_query_segment(PyObject *self, PyObject *args,
     if (!strcasecmp(task, "segids")) {
         result = PyList_New(0);
         if (data->mol) {
-            for (int i = 0; i < hasharray_count(data->mol->segment_hash); ++i) {
-                objid = as_pystring(data->mol->segment_array[i]->segid);
+            for (int i = 0; i < hasharray_count(data->mol->segment_hash); i++) {
+                if (hasharray_index(data->mol->segment_hash,
+                                    data->mol->segment_array[i]->segid)
+                  != HASHARRAY_FAIL) {
+                    objid = as_pystring(data->mol->segment_array[i]->segid);
 
-                if (PyList_Append(result, objid))
-                    return NULL;
+                    if (PyList_Append(result, objid))
+                        return NULL;
+               }
            }
         }
 
@@ -560,7 +592,7 @@ static PyObject* py_query_segment(PyObject *self, PyObject *args,
 
     } else if (!strcasecmp(task, "resids")) {
         result = PyList_New(0);
-        for (int i = 0; i < hasharray_count(seg->residue_hash); ++i) {
+        for (int i = 0; i < hasharray_count(seg->residue_hash); i++) {
             if (hasharray_index(seg->residue_hash, seg->residue_array[i].resid)
              != HASHARRAY_FAIL) {
                 objid = as_pystring(seg->residue_array[i].resid);
@@ -795,19 +827,19 @@ static PyObject* py_patch(PyObject *self, PyObject *args, PyObject *kwargs)
     return Py_None;
 }
 
-static PyObject* py_get_atoms(PyObject *self, PyObject *args, PyObject *kwargs)
+static PyObject* py_query_atoms(PyObject *self, PyObject *args, PyObject *kwargs)
 {
     char *kwnames[] = {(char*) "psfstate", (char*) "segid", (char*) "resid",
-                       NULL};
-    PyObject *stateptr, *result;
+                       (char*) "task", NULL};
+    PyObject *stateptr, *result, *atomresult;
+    char *segid, *resid, *task;
     topo_mol_segment_t *seg;
     topo_mol_atom_t *atoms;
-    char *segid, *resid;
     int segidx, residx;
     psfgen_data* data;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oss:get_atoms", kwnames,
-                                     &stateptr, &segid, &resid)) {
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Osss:query_atoms", kwnames,
+                                     &stateptr, &segid, &resid, &task)) {
         return NULL;
     }
 
@@ -835,13 +867,81 @@ static PyObject* py_get_atoms(PyObject *self, PyObject *args, PyObject *kwargs)
     result = PyList_New(0);
     atoms = seg->residue_array[residx].atoms;
     while (atoms) {
-        if (PyList_Append(result, as_pystring(atoms->name))) {
+        if (!strcasecmp(task, "name")) {
+            atomresult = as_pystring(atoms->name);
+
+        } else if (!strcmp(task, "coordinates")) {
+            atomresult = PyTuple_Pack(3, PyFloat_FromDouble(atoms->x),
+                                      PyFloat_FromDouble(atoms->y),
+                                      PyFloat_FromDouble(atoms->z));
+
+        } else if (!strcmp(task, "velocities")) {
+            atomresult = PyTuple_Pack(3, PyFloat_FromDouble(atoms->vx),
+                                      PyFloat_FromDouble(atoms->vy),
+                                      PyFloat_FromDouble(atoms->vz));
+
+        } else if (!strcmp(task, "mass")) {
+            atomresult = PyFloat_FromDouble(atoms->mass);
+
+        } else if (!strcmp(task, "charge")) {
+            atomresult = PyFloat_FromDouble(atoms->charge);
+
+        } else if (!strcmp(task, "atomid")) {
+            atomresult = as_pyint(atoms->atomid);
+
+        } else {
+            PyErr_Format(PyExc_ValueError, "invalid atom task '%s'", task);
+            return NULL;
+        }
+
+        if (PyList_Append(result, atomresult)) {
             PyErr_SetString(PyExc_ValueError, "cannot gather atoms");
             return NULL;
         }
         atoms = atoms->next;
     }
     return result;
+}
+
+static PyObject* py_delete_atoms(PyObject *self, PyObject *args, PyObject *kwargs)
+{
+    char *kwnames[] = {(char*) "psfstate", (char*) "segid", (char*) "resid",
+                       (char*) "aname", NULL};
+    PyObject *resobj = NULL, *atomobj = NULL;
+    char *resid = NULL, *aname = NULL;
+    topo_mol_ident_t target;
+    PyObject *stateptr;
+    psfgen_data *data;
+    char *segid;
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|OO:delete_atoms", kwnames,
+                                     &stateptr, &segid, &resobj, &atomobj)) {
+        return NULL;
+    }
+
+    data = PyCapsule_GetPointer(stateptr, NULL);
+    if (!data || PyErr_Occurred())
+        return NULL;
+
+    // Handle None for resid and atom name fields
+    if (resobj && resobj != Py_None)
+        resid = as_charptr(resobj);
+
+    if (atomobj && atomobj != Py_None)
+        aname = as_charptr(atomobj);
+
+    // Build target object
+    target.segid = segid;
+    target.resid = resid;
+    target.aname = aname;
+
+    if (topo_mol_delete_atom(data->mol, &target)) {
+        PyErr_SetString(PyExc_ValueError, "failed to delete atoms");
+        return NULL;
+    }
+
+    Py_INCREF(Py_None);
+    return Py_None;
 }
 
 static PyObject* py_set_coord(PyObject *self, PyObject *args, PyObject *kwargs)
@@ -851,7 +951,7 @@ static PyObject* py_set_coord(PyObject *self, PyObject *args, PyObject *kwargs)
     PyObject *position, *stateptr;
     char *segid, *aname, *resid;
     topo_mol_ident_t target;
-    psfgen_data* data;
+    psfgen_data *data;
     double x, y, z;
     int rc;
 
@@ -927,7 +1027,8 @@ static PyMethodDef methods[] = {
     {(char *) "add_segment", (PyCFunction)py_add_segment, METH_VARARGS | METH_KEYWORDS},
     {(char *) "guess_coords", (PyCFunction)py_guess_coords, METH_O},
     {(char *) "get_patches", (PyCFunction)py_get_patches, METH_VARARGS | METH_KEYWORDS},
-    {(char *) "get_atoms", (PyCFunction)py_get_atoms, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "query_atoms", (PyCFunction)py_query_atoms, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "delete_atoms", (PyCFunction)py_delete_atoms, METH_VARARGS | METH_KEYWORDS},
     {NULL, NULL, 0, NULL}
 };
 
