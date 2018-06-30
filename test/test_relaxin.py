@@ -4,11 +4,11 @@ Tests a simple protein with many disulfides: disulfides between two identical
 resids on different chains, disulfides on the same chain, and unrelated
 disulfides on different chains.
 """
+import pytest
 import os
 from vmd import atomsel, molecule
 
-#dir = os.path.dirname(__file__)
-dir = "." # DEBUG
+dir = os.path.dirname(__file__)
 
 #==============================================================================
 
@@ -42,7 +42,8 @@ def test_query():
     """
 
     from psfgen import PsfGen
-    gen = PsfGen()
+    gen = PsfGen(output="/dev/null")
+    os.chdir(dir)
 
     gen.read_topology("top_all36_caps.rtf")
     gen.read_topology("top_all36_prot.rtf")
@@ -106,8 +107,7 @@ def test_ends(tmpdir):
     residues in the segment
     """
     from psfgen import PsfGen
-    #p = str(tmpdir.mkdir("mutation"))
-    p = tmpdir # DEBUG
+    p = str(tmpdir.mkdir("mutation"))
     os.chdir(dir)
 
     gen = PsfGen(output="/dev/null")
@@ -211,16 +211,14 @@ def test_mutation(tmpdir):
 
 #===============================================================================
 
-def test_delete(tmpdir):
+def test_delete():
     """
     Tests removing atoms
     """
     from psfgen import PsfGen
-    #p = str(tmpdir.mkdir("delete")) DEBUG
-    p = tmpdir
     os.chdir(dir)
 
-    gen = PsfGen()
+    gen = PsfGen(output="/dev/null")
     gen.read_topology("top_all36_caps.rtf")
     gen.read_topology("top_all36_prot.rtf")
 
@@ -243,6 +241,31 @@ def test_delete(tmpdir):
     gen.delete_atoms(segid="DELETE")
     assert gen.get_segids() == ["P0"]
 
+
+#===============================================================================
+
+def test_case_sensitivity():
+    """
+    Tests setting case sensitivity. Do this with 2 objects because you can't
+    change the setting after reading in topology files.
+    """
+
+    from psfgen import PsfGen
+    os.chdir(dir)
+
+    gen = PsfGen(case_sensitive=True)
+    gen.read_topology("top_casesensitive.rtf")
+    assert gen.get_residue_types() == ["ACE", "Ace"]
+
+    # Can't change case sensitivity after topologies have been read
+    with pytest.raises(ValueError):
+        gen.case_sensitive = False
+    del gen
+
+    gen = PsfGen(case_sensitive=True)
+    gen.case_sensitive = False
+    gen.read_topology("top_casesensitive.rtf")
+    assert gen.get_residue_types() == ["ACE"]
 
 #===============================================================================
 
@@ -298,6 +321,3 @@ def test_single_chain(tmpdir):
     molecule.delete(m)
 
 #==============================================================================
-
-if __name__ == "__main__":
-    test_query()
