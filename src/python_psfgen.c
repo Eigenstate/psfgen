@@ -182,6 +182,28 @@ static PyObject* py_alias(PyObject *self, PyObject *args, PyObject *kwargs)
     return Py_None;
 }
 
+static PyObject* py_set_allcaps(PyObject *self, PyObject *args, PyObject *kwargs)
+{
+    char *kwnames[] = {(char*) "psfstate", (char*) "allcaps", NULL};
+    PyObject *stateptr;
+    psfgen_data *data;
+    int allcaps = 1;
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|p:set_allcaps", kwnames,
+                                     &stateptr, &allcaps)) {
+        return NULL;
+    }
+
+    data = PyCapsule_GetPointer(stateptr, NULL);
+    if (!data || PyErr_Occurred())
+        return NULL;
+
+    data->all_caps = allcaps ? 1 : 0;
+
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
 static PyObject* py_regenerate(PyObject *self, PyObject *args, PyObject *kwargs)
 {
     char *kwnames[] = {(char*) "psfstate", (char*) "task", NULL};
@@ -194,6 +216,7 @@ static PyObject* py_regenerate(PyObject *self, PyObject *args, PyObject *kwargs)
                                      &stateptr, &task)) {
         return NULL;
     }
+
     data = PyCapsule_GetPointer(stateptr, NULL);
     if (!data || PyErr_Occurred())
         return NULL;
@@ -1029,6 +1052,7 @@ static PyMethodDef methods[] = {
     {(char *) "get_patches", (PyCFunction)py_get_patches, METH_VARARGS | METH_KEYWORDS},
     {(char *) "query_atoms", (PyCFunction)py_query_atoms, METH_VARARGS | METH_KEYWORDS},
     {(char *) "delete_atoms", (PyCFunction)py_delete_atoms, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "set_allcaps", (PyCFunction)py_set_allcaps, METH_VARARGS | METH_KEYWORDS},
     {NULL, NULL, 0, NULL}
 };
 

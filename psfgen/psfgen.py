@@ -17,7 +17,7 @@ class PsfGen:
     and coordinates.
     """
 
-    def __init__(self, output=sys.stdout):
+    def __init__(self, output=sys.stdout, case_sensitive=False):
         """
         Creates a PsfGen object.
 
@@ -25,6 +25,8 @@ class PsfGen:
             outstream (str or stream object): Where to write output. Defaults
                 to stdout. Must have fileno() attribute, or if a string, file
                 will be opened.
+            case_sensitive (bool): Whether or not residue names and definitions
+                are considered to be case sensitive
         """
         if isinstance(output, str):
             self.output = open(output, 'wb')
@@ -36,9 +38,45 @@ class PsfGen:
         self._fileno = self.output.fileno()
         self._data = _psfgen.init_mol(outfd=self._fileno)
 
+        self._read_topos = False # Cannot change case sensitivity if true
+        self._allcaps = case_sensitive
+        _psfgen.set_allcaps(psfstate=self._data, allcaps=not case_sensitive)
+
+    #===========================================================================
+
     def __del__(self):
-        self.output.close()
+
+        if not self.output.closed and self.output is not sys.stdout:
+            self.output.close()
+
         _psfgen.del_mol(self._data);
+
+    #===========================================================================
+
+    # This property decorator lets the case sensitivity be a boolean attribute
+    # of the PsfGen instance that calls the C code to update the internal
+    # psfgen_data* object when set.
+
+    @property
+    def case_sensitive(self):
+        """
+        Determines whether or not residue and other names have case sensitivity.
+        Defaults to False. Can only be changed before reading in any topology
+        files.
+        """
+        return self._allcaps
+
+    @case_sensitive.setter
+    def case_sensitive(self, value):
+        if not isinstance(value, bool):
+            raise ValueError("case_sensitive must be a boolean value")
+
+        if self._read_topos:
+            raise ValueError("Cannot change case sensitivity value after "
+                             "reading in topology files")
+
+        _psfgen.set_allcaps(psfstate=self._data, allcaps=not value)
+        self._allcaps = value
 
     #===========================================================================
 
@@ -54,6 +92,7 @@ class PsfGen:
             ValueError: If an error occurs during parsing
         """
         _psfgen.parse_topology(psfstate=self._data, filename=filename)
+        self._read_topos = True
 
     #===========================================================================
 
