@@ -78,12 +78,24 @@ Query functions
    * - Get the name of the patch applied to the end of a given segment
      - ``segment last <segment ID>``
      - ``gen.get_last(segid)`` :meth:`psfgen.PsfGen.get_last`
-   * - Get a list of atoms given a resid and segment
+   * - Get names for atoms in a given residue
      - ``segment atoms <segment ID> <resid>``
-     - ``gen.get_atoms(segid, resid)`` :meth:`psfgen.PsfGen.get_atoms`
-   * - Get x,y,z coordinates for a given atom
+     - ``gen.get_atom_names(segid, resid)`` :meth:`psfgen.PsfGen.get_atom_names`
+   * - Get charges for atoms in a given residue
+     - ``segment charges <segment ID> <resid>``
+     - ``gen.get_charges(segid, resid)`` :meth:`psfgen.PsfGen.get_charges`
+   * - Get masses for atoms in a given residue
+     - ``segment masses <segment ID> <resid>``
+     - ``gen.get_masses(segi, resid)`` :meth:`psfgen.PsfGen.get_masses`
+   * - Get indices/atom IDs for atoms in a given residue
+     - ``segment atomid <segment ID> <resid>``
+     - ``gen.get_atom_indices(segid, resid)`` :meth:`psfgen.PsfGen.get_atom_indices`
+   * - Get x,y,z coordinates for atoms in a given residue
      - ``segment coordinates <segment ID> <resid>``
-     - 
+     - ``gen.get_coordinates(segid, resid)`` :meth:`psfgen.PsfGen.get_coordinates`
+   * - Get vx,vy,vz velocites for atoms in a given residue, if set
+     - ``segment velocities <segment ID> <resid>``
+     - ``gen.get_velocities(segid, resid)`` :meth:`psfgen.PsfGen.get_velocities`
 
 System building functions
 -------------------------
@@ -101,13 +113,13 @@ System building functions
      - ``gen.set_coord(segid, resid, atomname, position)`` :meth:`psfgen.PsfGen.set_coord`
    * - Delete all atoms in a segment
      - ``delatom <segment ID>``
-     - 
+     - ``gen.delete_atoms(segid)`` :meth:`psfgen.PsfGen.delete_atoms`
    * - Delete all atoms in a residue
      - ``delatom <segment ID> <resid>``
-     - 
+     - ``gen.delete_atoms(segid, resid)`` :meth:`psfgen.PsfGen.delete_atoms`
    * - Delete a single atom
      - ``delatom <segment ID> <resid> <atom name>``
-     - 
+     - ``gen.delete_atoms(segid, resid, atomname)`` :meth:`psfgen.PsfGen.delete_atoms` 
    * - Create multiple images of a set of atoms for locally enhanced sampling
      - ``multiply <factor> <segid[:resid[:atomname]]> ...``
      - Not implemented
@@ -153,7 +165,8 @@ others optional:
                     first=None,
                     last=None,
                     pdbfile=None,
-                    auto=None,
+                    auto_angles=True,
+                    auto_dihedrals=True,
                     residue=None,
                     mutate=None,
                    )
@@ -216,10 +229,10 @@ systems in memory is create multiple PsfGen objects. Each one is self-contained.
      - Use multiple PsfGen objects
    * - Make context case sensitive (by default it is not)
      - ``psfcontext mixedcase``
-     - 
+     - ``gen.case_sensitive = True`` :attr:`psfgen.PsfGen.case_sensitive`
    * - Make context case insensitive (default setting)
      - ``psfcontext allcaps``
-     - 
+     - ``gen.case_sensitive = False`` :attr:`psfgen.PsfGen.case_sensitive`
    * - Clear the structure, topology definitions, and aliases
      - ``psfcontext reset``
      - Delete and make a new PsfGen object

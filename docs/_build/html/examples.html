@@ -176,7 +176,7 @@ are added with a patch.</p>
 N- and C-termini that are represented as their own residues rather than the
 Charmm style of capping patches. Topology information for these residues is
 found in <cite>top_all36_caps.rtf</cite>, but this is just a convention used in my lab.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">psfgen</span> <span class="kn">import</span> <span class="n">Psfgen</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">psfgen</span> <span class="kn">import</span> <span class="n">PsfGen</span>
 <span class="n">gen</span> <span class="o">=</span> <span class="n">PsfGen</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;/dev/null&quot;</span><span class="p">)</span>  <span class="c1"># Suppress output since there&#39;s too much</span>
 <span class="n">gen</span><span class="o">.</span><span class="n">read_topology</span><span class="p">(</span><span class="s2">&quot;top_all36_caps.rtf&quot;</span><span class="p">)</span>
 <span class="n">gen</span><span class="o">.</span><span class="n">read_topology</span><span class="p">(</span><span class="s2">&quot;top_all36_prot.rtf&quot;</span><span class="p">)</span>
@@ -221,7 +221,7 @@ found in <cite>top_all36_caps.rtf</cite>, but this is just a convention used in 
 <p>Using the same proteins as the previous example, we’ll load only the first chain
 to keep the example simple. Then, we’ll mutate Leu:2 to an Alanine and have
 psfgen guess coordinates for new atoms.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">psfgen</span> <span class="kn">import</span> <span class="n">Psfgen</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">psfgen</span> <span class="kn">import</span> <span class="n">PsfGen</span>
 <span class="n">gen</span> <span class="o">=</span> <span class="n">PsfGen</span><span class="p">()</span>
 <span class="n">gen</span><span class="o">.</span><span class="n">read_topology</span><span class="p">(</span><span class="s2">&quot;top_all36_caps.rtf&quot;</span><span class="p">)</span>
 <span class="n">gen</span><span class="o">.</span><span class="n">read_topology</span><span class="p">(</span><span class="s2">&quot;top_all36_prot.rtf&quot;</span><span class="p">)</span>
