@@ -264,13 +264,29 @@ in topology files</td>
 <td><code class="docutils literal notranslate"><span class="pre">segment</span> <span class="pre">last</span> <span class="pre">&lt;segment</span> <span class="pre">ID&gt;</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">gen.get_last(segid)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.get_last" title="psfgen.PsfGen.get_last"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.get_last()</span></code></a></td>
 </tr>
-<tr class="row-even"><td>Get a list of atoms given a resid and segment</td>
+<tr class="row-even"><td>Get names for atoms in a given residue</td>
 <td><code class="docutils literal notranslate"><span class="pre">segment</span> <span class="pre">atoms</span> <span class="pre">&lt;segment</span> <span class="pre">ID&gt;</span> <span class="pre">&lt;resid&gt;</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">gen.get_atoms(segid,</span> <span class="pre">resid)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.get_atoms" title="psfgen.PsfGen.get_atoms"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.get_atoms()</span></code></a></td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.get_atom_names(segid,</span> <span class="pre">resid)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.get_atom_names" title="psfgen.PsfGen.get_atom_names"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.get_atom_names()</span></code></a></td>
 </tr>
-<tr class="row-odd"><td>Get x,y,z coordinates for a given atom</td>
+<tr class="row-odd"><td>Get charges for atoms in a given residue</td>
+<td><code class="docutils literal notranslate"><span class="pre">segment</span> <span class="pre">charges</span> <span class="pre">&lt;segment</span> <span class="pre">ID&gt;</span> <span class="pre">&lt;resid&gt;</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.get_charges(segid,</span> <span class="pre">resid)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.get_charges" title="psfgen.PsfGen.get_charges"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.get_charges()</span></code></a></td>
+</tr>
+<tr class="row-even"><td>Get masses for atoms in a given residue</td>
+<td><code class="docutils literal notranslate"><span class="pre">segment</span> <span class="pre">masses</span> <span class="pre">&lt;segment</span> <span class="pre">ID&gt;</span> <span class="pre">&lt;resid&gt;</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.get_masses(segi,</span> <span class="pre">resid)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.get_masses" title="psfgen.PsfGen.get_masses"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.get_masses()</span></code></a></td>
+</tr>
+<tr class="row-odd"><td>Get indices/atom IDs for atoms in a given residue</td>
+<td><code class="docutils literal notranslate"><span class="pre">segment</span> <span class="pre">atomid</span> <span class="pre">&lt;segment</span> <span class="pre">ID&gt;</span> <span class="pre">&lt;resid&gt;</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.get_atom_indices(segid,</span> <span class="pre">resid)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.get_atom_indices" title="psfgen.PsfGen.get_atom_indices"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.get_atom_indices()</span></code></a></td>
+</tr>
+<tr class="row-even"><td>Get x,y,z coordinates for atoms in a given residue</td>
 <td><code class="docutils literal notranslate"><span class="pre">segment</span> <span class="pre">coordinates</span> <span class="pre">&lt;segment</span> <span class="pre">ID&gt;</span> <span class="pre">&lt;resid&gt;</span></code></td>
-<td>&#160;</td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.get_coordinates(segid,</span> <span class="pre">resid)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.get_coordinates" title="psfgen.PsfGen.get_coordinates"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.get_coordinates()</span></code></a></td>
+</tr>
+<tr class="row-odd"><td>Get vx,vy,vz velocites for atoms in a given residue, if set</td>
+<td><code class="docutils literal notranslate"><span class="pre">segment</span> <span class="pre">velocities</span> <span class="pre">&lt;segment</span> <span class="pre">ID&gt;</span> <span class="pre">&lt;resid&gt;</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.get_velocities(segid,</span> <span class="pre">resid)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.get_velocities" title="psfgen.PsfGen.get_velocities"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.get_velocities()</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -292,7 +308,7 @@ in topology files</td>
 <tbody valign="top">
 <tr class="row-even"><td>Guess coordinates of atoms that aren’t explicitly set</td>
 <td><code class="docutils literal notranslate"><span class="pre">guesscoord</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">gen.guess_coords()</span></code> <code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.guess_coords()</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.guess_coords()</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.guess_coords" title="psfgen.PsfGen.guess_coords"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.guess_coords()</span></code></a></td>
 </tr>
 <tr class="row-odd"><td>Set coordinates of a given atom</td>
 <td><code class="docutils literal notranslate"><span class="pre">coord</span> <span class="pre">&lt;segment</span> <span class="pre">ID&gt;</span> <span class="pre">&lt;resid&gt;</span> <span class="pre">&lt;atomname&gt;</span> <span class="pre">{x</span> <span class="pre">y</span> <span class="pre">z}</span></code></td>
@@ -300,15 +316,15 @@ in topology files</td>
 </tr>
 <tr class="row-even"><td>Delete all atoms in a segment</td>
 <td><code class="docutils literal notranslate"><span class="pre">delatom</span> <span class="pre">&lt;segment</span> <span class="pre">ID&gt;</span></code></td>
-<td>&#160;</td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.delete_atoms(segid)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.delete_atoms" title="psfgen.PsfGen.delete_atoms"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.delete_atoms()</span></code></a></td>
 </tr>
 <tr class="row-odd"><td>Delete all atoms in a residue</td>
 <td><code class="docutils literal notranslate"><span class="pre">delatom</span> <span class="pre">&lt;segment</span> <span class="pre">ID&gt;</span> <span class="pre">&lt;resid&gt;</span></code></td>
-<td>&#160;</td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.delete_atoms(segid,</span> <span class="pre">resid)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.delete_atoms" title="psfgen.PsfGen.delete_atoms"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.delete_atoms()</span></code></a></td>
 </tr>
 <tr class="row-even"><td>Delete a single atom</td>
 <td><code class="docutils literal notranslate"><span class="pre">delatom</span> <span class="pre">&lt;segment</span> <span class="pre">ID&gt;</span> <span class="pre">&lt;resid&gt;</span> <span class="pre">&lt;atom</span> <span class="pre">name&gt;</span></code></td>
-<td>&#160;</td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.delete_atoms(segid,</span> <span class="pre">resid,</span> <span class="pre">atomname)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.delete_atoms" title="psfgen.PsfGen.delete_atoms"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.delete_atoms()</span></code></a></td>
 </tr>
 <tr class="row-odd"><td>Create multiple images of a set of atoms for locally enhanced sampling</td>
 <td><code class="docutils literal notranslate"><span class="pre">multiply</span> <span class="pre">&lt;factor&gt;</span> <span class="pre">&lt;segid[:resid[:atomname]]&gt;</span> <span class="pre">...</span></code></td>
@@ -355,7 +371,8 @@ others optional:</p>
                 <span class="n">first</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                 <span class="n">last</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                 <span class="n">pdbfile</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                <span class="n">auto</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                <span class="n">auto_angles</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                <span class="n">auto_dihedrals</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                 <span class="n">residue</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                 <span class="n">mutate</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                <span class="p">)</span>
@@ -442,11 +459,11 @@ and aliases, and set it to active</td>
 </tr>
 <tr class="row-even"><td>Make context case sensitive (by default it is not)</td>
 <td><code class="docutils literal notranslate"><span class="pre">psfcontext</span> <span class="pre">mixedcase</span></code></td>
-<td>&#160;</td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.case_sensitive</span> <span class="pre">=</span> <span class="pre">True</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.case_sensitive" title="psfgen.PsfGen.case_sensitive"><code class="xref py py-attr docutils literal notranslate"><span class="pre">psfgen.PsfGen.case_sensitive</span></code></a></td>
 </tr>
 <tr class="row-odd"><td>Make context case insensitive (default setting)</td>
 <td><code class="docutils literal notranslate"><span class="pre">psfcontext</span> <span class="pre">allcaps</span></code></td>
-<td>&#160;</td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.case_sensitive</span> <span class="pre">=</span> <span class="pre">False</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.case_sensitive" title="psfgen.PsfGen.case_sensitive"><code class="xref py py-attr docutils literal notranslate"><span class="pre">psfgen.PsfGen.case_sensitive</span></code></a></td>
 </tr>
 <tr class="row-even"><td>Clear the structure, topology definitions, and aliases</td>
 <td><code class="docutils literal notranslate"><span class="pre">psfcontext</span> <span class="pre">reset</span></code></td>

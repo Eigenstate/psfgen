@@ -158,7 +158,7 @@
 <h1>API documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="psfgen.PsfGen">
-<em class="property">class </em><code class="descclassname">psfgen.</code><code class="descname">PsfGen</code><span class="sig-paren">(</span><em>output=&lt;_io.TextIOWrapper name='&lt;stdout&gt;' mode='w' encoding='UTF-8'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">psfgen.</code><code class="descname">PsfGen</code><span class="sig-paren">(</span><em>output=&lt;_io.TextIOWrapper name='&lt;stdout&gt;' mode='w' encoding='UTF-8'&gt;</em>, <em>case_sensitive=False</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen" title="Permalink to this definition">¶</a></dt>
 <dd><p>A Psf generator object. Represents the state of a single molecular system,
 with its own set of loaded topologies, residue and/or atom aliases, segments,
 and coordinates.</p>
@@ -231,9 +231,62 @@ to the PDB file.</p>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="psfgen.PsfGen.case_sensitive">
+<code class="descname">case_sensitive</code><a class="headerlink" href="#psfgen.PsfGen.case_sensitive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines whether or not residue and other names have case sensitivity.
+Defaults to False. Can only be changed before reading in any topology
+files.</p>
+</dd></dl>
+
 <dl class="method">
-<dt id="psfgen.PsfGen.get_atoms">
-<code class="descname">get_atoms</code><span class="sig-paren">(</span><em>segid</em>, <em>resid</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.get_atoms" title="Permalink to this definition">¶</a></dt>
+<dt id="psfgen.PsfGen.delete_atoms">
+<code class="descname">delete_atoms</code><span class="sig-paren">(</span><em>segid</em>, <em>resid=None</em>, <em>atomname=None</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.delete_atoms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes atoms from the molecule, with options for increasing
+specificity. As many atoms as match the passed options will be
+deleted, so for example if only segid is present, an entire segment
+will be removed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>segid</strong> (<em>str</em>) – Segment ID of atom(s) to delete</li>
+<li><strong>resid</strong> (<em>str</em><em> or </em><em>int</em>) – Residue ID of atom(s) to delete, or None to
+delete entire matching segment</li>
+<li><strong>atomname</strong> (<em>str</em>) – Atom name to delete, or None to delete entire
+matching segment or residue</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="psfgen.PsfGen.get_atom_indices">
+<code class="descname">get_atom_indices</code><span class="sig-paren">(</span><em>segid</em>, <em>resid</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.get_atom_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtains atom indices/IDs in a given residue</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>segid</strong> (<em>str</em>) – Segment ID to query</li>
+<li><strong>resid</strong> (<em>str</em><em> or </em><em>int</em>) – Residue ID to query</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><em>(list of int)</em> – Atom IDs in residue</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="psfgen.PsfGen.get_atom_names">
+<code class="descname">get_atom_names</code><span class="sig-paren">(</span><em>segid</em>, <em>resid</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.get_atom_names" title="Permalink to this definition">¶</a></dt>
 <dd><p>Obtains atom names in a given residue</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -246,6 +299,48 @@ to the PDB file.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><em>(list of str)</em> – Atom names in residue</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="psfgen.PsfGen.get_charges">
+<code class="descname">get_charges</code><span class="sig-paren">(</span><em>segid</em>, <em>resid</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.get_charges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtains atom charges in a given residue</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>segid</strong> (<em>str</em>) – Segment ID to query</li>
+<li><strong>resid</strong> (<em>str</em><em> or </em><em>int</em>) – Residue ID to query</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><em>(list of float)</em> – Atom charges in residue</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="psfgen.PsfGen.get_coordinates">
+<code class="descname">get_coordinates</code><span class="sig-paren">(</span><em>segid</em>, <em>resid</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.get_coordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtains atom coordinates in a given residue</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>segid</strong> (<em>str</em>) – Segment ID to query</li>
+<li><strong>resid</strong> (<em>str</em><em> or </em><em>int</em>) – Residue ID to query</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><em>(list of 3-tuple)</em> – (x,y,z) position of all atoms in residue</p>
 </td>
 </tr>
 </tbody>
@@ -279,6 +374,27 @@ to the PDB file.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>segid</strong> (<em>str</em>) – Segment ID to query</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><em>(str)</em> – Patch name, or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="psfgen.PsfGen.get_masses">
+<code class="descname">get_masses</code><span class="sig-paren">(</span><em>segid</em>, <em>resid</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.get_masses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtains atom masses in a given residue</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>segid</strong> (<em>str</em>) – Segment ID to query</li>
+<li><strong>resid</strong> (<em>str</em><em> or </em><em>int</em>) – Residue ID to query</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><em>(list of float)</em> – Atom masses in residue</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -384,6 +500,27 @@ appear in this list.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><em>(list of str)</em> – Filenames that have been loaded</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="psfgen.PsfGen.get_velocities">
+<code class="descname">get_velocities</code><span class="sig-paren">(</span><em>segid</em>, <em>resid</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.get_velocities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtains atom velocities in a given residue, if set</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>segid</strong> (<em>str</em>) – Segment ID to query</li>
+<li><strong>resid</strong> (<em>str</em><em> or </em><em>int</em>) – Residue ID to query</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><em>(list of 3-tuple)</em> – (vx,vy,vz) velocities of all atoms in residue</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -505,15 +642,12 @@ modifying them for uniqueness.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>segid</strong> (<em>str</em>) – Segment ID of atom</li>
 <li><strong>resid</strong> (<em>str</em>) – Residue ID of atom</li>
 <li><strong>atomname</strong> (<em>str</em>) – Atom name</li>
 <li><strong>position</strong> (<em>3-tuple of double</em>) – New x, y, and z coordinates for atom</li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><em>(int)</em> – Number of coordinates set</p>
 </td>
 </tr>
 </tbody>
