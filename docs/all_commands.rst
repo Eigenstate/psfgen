@@ -31,7 +31,7 @@ Topology and naming functions
      - ``gen.read_topology(filename)`` :meth:`psfgen.PsfGen.read_topology`
    * - Provide alternate names for residues in topology file
      - ``topology alias <desired residue name> <topology residue name>``
-     - ``gen.alias_residue(top_resname, pdb_resname)`` :meth:`psfgen.PsfGen.alias_residue`
+     - No exact match. Make a PDB alias with :meth:`psfgen.PsfGen.alias_residue`
    * - Provide alternate names for residues in pdb file
      - ``pdbalias residue <PDB residue name> <desired residue name>``
      - ``gen.alias_residue(top_resname, pdb_resname)`` :meth:`psfgen.PsfGen.alias_residue`
@@ -182,17 +182,20 @@ I/O functions
      - Python class equivalent
    * - Write out structure to a PSF file
      - ``writepsf [charmm] [x-plor] [cmap|nocmap] <filename>``
-     - ``gen.write_psf(filename, type)`` :meth:`psfgen.PsfGen.write_psf` 
+     - ``gen.write_psf(filename, type)``
+       :meth:`psfgen.PsfGen.write_psf`
    * - Write out structure to a PDB file
      - ``writepdb <filename>``
      - ``gen.write_pdb(filename)`` :meth:`psfgen.PsfGen.write_pdb`
    * - Write out a NAMD binary input file
      - ``writenamdbin <filename>``
-     - 
+     - ``gen.write_namdbin(filename, velocity_filename)``
+       :meth:`psfgen.PsfGen.write_namdbin`
    * - Read in a PSF file and add it to the current structure. Optionally
        read coordinates from a pdb file or a namdbin file.
-     - ``readpsf <filename> [pdb] <pdbfilename>``
-     - 
+     - ``readpsf <filename> [pdb] <pdbfilename> ...``
+     - ``gen.read_psf(filename, pdbfile, ...)``
+       :meth:`psfgen.PsfGen.read_psf`
    * - Read coordinates in from a PDB file, matching segment, residue, and atom
        names
      - ``coordpdb <filename> [segid]``
