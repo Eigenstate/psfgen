@@ -101,6 +101,30 @@ def test_query():
 
 #==============================================================================
 
+def test_alias():
+    """
+    Tests atom and residue aliases, either at the topology or the PDB level
+    """
+    from psfgen import PsfGen
+    os.chdir(dir)
+
+    gen = PsfGen()
+    gen.read_topology("top_all36_caps.rtf")
+    gen.read_topology("top_all36_prot.rtf")
+
+    gen.alias_residue(top_resname="LEU", pdb_resname="LEX")
+    gen.alias_residue(top_resname="ARG", pdb_resname="AAA")
+    gen.alias_atom(top_atomname="N", pdb_atomname="NOOO", resname="PHE")
+
+    gen.add_segment(segid="P", pdbfile="protein_newnames.pdb")
+    gen.read_coords(segid="P", filename="psf_protein_P0.pdb")
+
+    assert gen.get_resname(segid="P", resid=2) == "LEU"
+    assert gen.get_resname(segid="P", resid=5) == "ALA"
+    assert "N" in gen.get_atom_names(segid="P", resid=23)
+
+#==============================================================================
+
 def test_ends(tmpdir):
     """
     Tests adding patches to the beginning and end, as well as adding
@@ -320,4 +344,44 @@ def test_single_chain(tmpdir):
     check_correctness(m)
     molecule.delete(m)
 
+#===============================================================================
+
+def test_formats(tmpdir):
+    """
+    Tests read/write of psf/namdbin files
+    """
+
+    from psfgen import PsfGen
+    p = str(tmpdir.mkdir("formats"))
+    os.chdir(dir)
+
+    gen = PsfGen()
+    gen.read_topology("top_all36_caps.rtf")
+    gen.read_topology("top_all36_prot.rtf")
+
+    gen.add_segment(segid="P0", pdbfile="psf_protein_P0.pdb")
+    gen.read_coords(segid="P0", filename="psf_protein_P0.pdb")
+    gen.add_segment(segid="P1", pdbfile="psf_protein_P1.pdb")
+    gen.read_coords(segid="P1", filename="psf_protein_P1.pdb")
+
+    # Write a PSF and a NAMD binary file
+    gen.write_psf(filename=os.path.join(p, "pdbin.psf"))
+    gen.write_namdbin(filename=os.path.join(p, "pdbin.bin"))
+    del gen
+
+    # Read in the PSF and NAMD binary file. Topology files should be
+    # automatically loaded, too. Read in coordinates also as velocities
+    # to test the velocity read in as well.
+    gen = PsfGen()
+    os.chdir(p)
+    gen.read_psf(filename=os.path.join(p, "pdbin.psf"),
+                 namdbinfile=os.path.join(p, "pdbin.bin"),
+                 velnamdbinfile=os.path.join(p, "pdbin.bin"))
+    assert gen.get_topologies() == ["top_all36_caps.rtf",
+                                    "top_all36_prot.rtf"]
+    assert gen.get_segids() == ["P0", "P1"]
+    assert gen.get_coordinates(segid="P0", resid=1) \
+        == gen.get_velocities(segid="P0", resid=1)
+
 #==============================================================================
+
