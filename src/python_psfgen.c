@@ -1164,24 +1164,26 @@ static PyObject* py_guess_coords(PyObject *self, PyObject *stateptr)
 
 /* Method definitions */
 static PyMethodDef methods[] = {
-    {(char *) "set_coord", (PyCFunction)py_set_coord, METH_VARARGS | METH_KEYWORDS},
-    {(char *) "init_mol", (PyCFunction)py_init_mol, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "add_segment", (PyCFunction)py_add_segment, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "alias", (PyCFunction)py_alias, METH_VARARGS | METH_KEYWORDS},
     {(char *) "del_mol", (PyCFunction)py_del_mol, METH_O},
-    {(char *) "alias_residue", (PyCFunction)py_alias, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "delete_atoms", (PyCFunction)py_delete_atoms, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "init_mol", (PyCFunction)py_init_mol, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "get_patches", (PyCFunction)py_get_patches, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "guess_coords", (PyCFunction)py_guess_coords, METH_O},
+    {(char *) "parse_topology", (PyCFunction)py_parse_topology, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "patch", (PyCFunction)py_patch, METH_VARARGS | METH_KEYWORDS},
     {(char *) "query_system", (PyCFunction)py_query_system, METH_VARARGS | METH_KEYWORDS},
     {(char *) "query_segment", (PyCFunction)py_query_segment, METH_VARARGS | METH_KEYWORDS},
-    {(char *) "parse_topology", (PyCFunction)py_parse_topology, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "query_atoms", (PyCFunction)py_query_atoms, METH_VARARGS | METH_KEYWORDS},
     {(char *) "read_coords", (PyCFunction)py_read_coords, METH_VARARGS | METH_KEYWORDS},
-    {(char *) "patch", (PyCFunction)py_patch, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "read_psf", (PyCFunction)py_read_psf, METH_VARARGS | METH_KEYWORDS},
     {(char *) "regenerate", (PyCFunction)py_regenerate, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "set_allcaps", (PyCFunction)py_set_allcaps, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "set_coord", (PyCFunction)py_set_coord, METH_VARARGS | METH_KEYWORDS},
     {(char *) "write_psf", (PyCFunction)py_write_psf, METH_VARARGS | METH_KEYWORDS},
     {(char *) "write_pdb", (PyCFunction)py_write_pdb, METH_VARARGS | METH_KEYWORDS},
-    {(char *) "add_segment", (PyCFunction)py_add_segment, METH_VARARGS | METH_KEYWORDS},
-    {(char *) "guess_coords", (PyCFunction)py_guess_coords, METH_O},
-    {(char *) "get_patches", (PyCFunction)py_get_patches, METH_VARARGS | METH_KEYWORDS},
-    {(char *) "query_atoms", (PyCFunction)py_query_atoms, METH_VARARGS | METH_KEYWORDS},
-    {(char *) "delete_atoms", (PyCFunction)py_delete_atoms, METH_VARARGS | METH_KEYWORDS},
-    {(char *) "set_allcaps", (PyCFunction)py_set_allcaps, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "write_namdbin", (PyCFunction)py_write_namdbin, METH_VARARGS | METH_KEYWORDS},
     {NULL, NULL, 0, NULL}
 };
 
