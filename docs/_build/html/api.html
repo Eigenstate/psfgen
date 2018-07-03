@@ -195,8 +195,8 @@ The given residue IDs will be set to the given residue name.</li>
 <dl class="method">
 <dt id="psfgen.PsfGen.alias_atom">
 <code class="descname">alias_atom</code><span class="sig-paren">(</span><em>resname</em>, <em>top_atomname</em>, <em>pdb_atomname</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.alias_atom" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provide an alternate name for a atom in a residue in the topology file
-compared to the PDB file.</p>
+<dd><p>Set a correspondence between an atom name in a specific residue in a
+PDB file and in the defined topologies.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -215,8 +215,9 @@ compared to the PDB file.</p>
 <dl class="method">
 <dt id="psfgen.PsfGen.alias_residue">
 <code class="descname">alias_residue</code><span class="sig-paren">(</span><em>top_resname</em>, <em>pdb_resname</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.alias_residue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provide an alternate name for a residue in the topology file compared
-to the PDB file.</p>
+<dd><p>Set a correspondence between a residue name in a PDB file and in the
+defined topologies. The topology residue names should be treated as the
+canonical set here.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -593,6 +594,38 @@ atom names to the current segment.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="psfgen.PsfGen.read_psf">
+<code class="descname">read_psf</code><span class="sig-paren">(</span><em>filename</em>, <em>pdbfile=None</em>, <em>namdbinfile=None</em>, <em>velnamdbinfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.read_psf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads structure information from a PSF file and adds it to the internal
+molecule state. Can also read insertion codes and coordinates from a
+PDB file, and/or coordinates from a NAMD binary file, if atoms are in
+the same order. Can read velocities from a NAMD binary file as well.</p>
+<p>The PSF file is read in and also kind of interpreted: topology files
+in the REMARKS section are loaded, and a new segment is created with
+the segid specified in the PSF file. Note that if the topology files
+cannot be found, they will still be listed as “loaded” in the internal
+PsfGen state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> (<em>str</em>) – PSF file to read</li>
+<li><strong>pdbfile</strong> (<em>str</em>) – PDB file to obtain coordinates, elements, and
+insertion codes from. Atoms must be in same order as the PSF.</li>
+<li><strong>namdbinfile</strong> (<em>str</em>) – Binary NAMD file to read coordinates from. Will
+take priority over coordinates in pdbfile, if specified. Atoms
+must be in the same order as the PSF.</li>
+<li><strong>velnamdbinfile</strong> (<em>str</em>) – Binary NAMD file to read velocities from.
+Atoms must be in the same order as the PSF.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="psfgen.PsfGen.read_topology">
 <code class="descname">read_topology</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.read_topology" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parses a charmm format topology file into current library.</p>
@@ -647,6 +680,26 @@ modifying them for uniqueness.</p>
 <li><strong>resid</strong> (<em>str</em>) – Residue ID of atom</li>
 <li><strong>atomname</strong> (<em>str</em>) – Atom name</li>
 <li><strong>position</strong> (<em>3-tuple of double</em>) – New x, y, and z coordinates for atom</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="psfgen.PsfGen.write_namdbin">
+<code class="descname">write_namdbin</code><span class="sig-paren">(</span><em>filename</em>, <em>velocity_filename=None</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.write_namdbin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the current molecule state as a NAMD binary file. This file
+format can only contain coordinate information for each atom. Optionally
+write velocities to another NAMD binary file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> (<em>str</em>) – Filename to write to</li>
+<li><strong>velocity_filename</strong> (<em>str</em>) – If present, filename to write velocities to</li>
 </ul>
 </td>
 </tr>

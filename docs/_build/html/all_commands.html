@@ -195,7 +195,7 @@ table refers to this generic PsfGen object I’ve chosen to name <code class="do
 </tr>
 <tr class="row-odd"><td>Provide alternate names for residues in topology file</td>
 <td><code class="docutils literal notranslate"><span class="pre">topology</span> <span class="pre">alias</span> <span class="pre">&lt;desired</span> <span class="pre">residue</span> <span class="pre">name&gt;</span> <span class="pre">&lt;topology</span> <span class="pre">residue</span> <span class="pre">name&gt;</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">gen.alias_residue(top_resname,</span> <span class="pre">pdb_resname)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.alias_residue" title="psfgen.PsfGen.alias_residue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.alias_residue()</span></code></a></td>
+<td>No exact match. Make a PDB alias with <a class="reference internal" href="api.html#psfgen.PsfGen.alias_residue" title="psfgen.PsfGen.alias_residue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.alias_residue()</span></code></a></td>
 </tr>
 <tr class="row-even"><td>Provide alternate names for residues in pdb file</td>
 <td><code class="docutils literal notranslate"><span class="pre">pdbalias</span> <span class="pre">residue</span> <span class="pre">&lt;PDB</span> <span class="pre">residue</span> <span class="pre">name&gt;</span> <span class="pre">&lt;desired</span> <span class="pre">residue</span> <span class="pre">name&gt;</span></code></td>
@@ -396,7 +396,8 @@ others optional:</p>
 <tbody valign="top">
 <tr class="row-even"><td>Write out structure to a PSF file</td>
 <td><code class="docutils literal notranslate"><span class="pre">writepsf</span> <span class="pre">[charmm]</span> <span class="pre">[x-plor]</span> <span class="pre">[cmap|nocmap]</span> <span class="pre">&lt;filename&gt;</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">gen.write_psf(filename,</span> <span class="pre">type)</span></code> <a class="reference internal" href="api.html#psfgen.PsfGen.write_psf" title="psfgen.PsfGen.write_psf"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.write_psf()</span></code></a></td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.write_psf(filename,</span> <span class="pre">type)</span></code>
+<a class="reference internal" href="api.html#psfgen.PsfGen.write_psf" title="psfgen.PsfGen.write_psf"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.write_psf()</span></code></a></td>
 </tr>
 <tr class="row-odd"><td>Write out structure to a PDB file</td>
 <td><code class="docutils literal notranslate"><span class="pre">writepdb</span> <span class="pre">&lt;filename&gt;</span></code></td>
@@ -404,12 +405,14 @@ others optional:</p>
 </tr>
 <tr class="row-even"><td>Write out a NAMD binary input file</td>
 <td><code class="docutils literal notranslate"><span class="pre">writenamdbin</span> <span class="pre">&lt;filename&gt;</span></code></td>
-<td>&#160;</td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.write_namdbin(filename,</span> <span class="pre">velocity_filename)</span></code>
+<a class="reference internal" href="api.html#psfgen.PsfGen.write_namdbin" title="psfgen.PsfGen.write_namdbin"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.write_namdbin()</span></code></a></td>
 </tr>
 <tr class="row-odd"><td>Read in a PSF file and add it to the current structure. Optionally
 read coordinates from a pdb file or a namdbin file.</td>
-<td><code class="docutils literal notranslate"><span class="pre">readpsf</span> <span class="pre">&lt;filename&gt;</span> <span class="pre">[pdb]</span> <span class="pre">&lt;pdbfilename&gt;</span></code></td>
-<td>&#160;</td>
+<td><code class="docutils literal notranslate"><span class="pre">readpsf</span> <span class="pre">&lt;filename&gt;</span> <span class="pre">[pdb]</span> <span class="pre">&lt;pdbfilename&gt;</span> <span class="pre">...</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">gen.read_psf(filename,</span> <span class="pre">pdbfile,</span> <span class="pre">...)</span></code>
+<a class="reference internal" href="api.html#psfgen.PsfGen.read_psf" title="psfgen.PsfGen.read_psf"><code class="xref py py-meth docutils literal notranslate"><span class="pre">psfgen.PsfGen.read_psf()</span></code></a></td>
 </tr>
 <tr class="row-even"><td>Read coordinates in from a PDB file, matching segment, residue, and atom
 names</td>

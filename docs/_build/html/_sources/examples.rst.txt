@@ -22,6 +22,10 @@ N- and C-termini that are represented as their own residues rather than the
 Charmm style of capping patches. Topology information for these residues is
 found in `top_all36_caps.rtf`, but this is just a convention used in my lab.
 
+Although not required to parse the test case files, the common task of aliasing
+different histidine protonation states to the same topology residue definition
+is done.
+
 .. code-block:: python
 
     from psfgen import PsfGen
@@ -29,6 +33,10 @@ found in `top_all36_caps.rtf`, but this is just a convention used in my lab.
     gen.read_topology("top_all36_caps.rtf")
     gen.read_topology("top_all36_prot.rtf")
     gen.read_topology("top_water_ions.rtf")
+
+    # Set up an alias for histidine protonation states
+    gen.alias_residue(top_resname="HIS", pdb_resname="HIE")
+    gen.alias_residue(top_resname="HIS", pdb_resname="HID")
 
     # Read protein
     gen.add_segment(segid="P0", pdbfile="psf_protein_P0.pdb")
@@ -138,3 +146,62 @@ at the end of the input protein.
 
 You'll see in the output a lot of warnings about poorly guessed coordinates, but
 this is a contrived example so this is okay.
+
+
+Working with velocities
+-----------------------
+
+Psfgen can actually read and write NAMD binary files, including velocities.
+Let's pretend we have a pre-equilibrated lipid membrane, and a simulation of
+protein in solution. We'll take the protein and lipid and combine them while
+preserving velocities from simulation, using vmd-python to figure out which
+water molecules to delete to insert the membrane.
+
+This is an extremely contrived example designed to show off how to use
+:meth:`psfgen.PsfGen.read_psf` and :meth:`psfgen.PsfGen.write_namdbin`, and
+isn't an actually recommended way to set up simulations. We'll pretend that
+the coordinates of everything are aligned so the files can be combined, too,
+and that the lipid will be exactly from z=5 to z=15.
+
+.. code-block:: python
+
+    from psfgen import PsfGen
+    from vmd-python import atomsel, molecule
+
+    gen = PsfGen()
+
+    # Psfgen will attempt to load topologies listed in the PSF file, but to be
+    # safe and to avoid problems with absolute vs. relative paths we explicitly
+    # load them here.
+    gen.read_topology("top_all36_prot.rtf")
+    gen.read_topology("top_all3_lipid.rtf")
+
+    # Read the protein segment, including coordinates and velocities.
+    gen.read_psf(filename="protein_equil.psf",
+                 namdbinfile="protein_equil.bin",
+                 velnamdbinfile="protein_equil_vel.bin")
+
+    # Get the segment name that was read in, will use for deleting later
+    pseg = gen.get_segids()[0]
+
+    # Now the lipid segment
+    gen.read_psf(filename="popc_equil.psf",
+                 namdbinfile="popc_equil.bin",
+                 velnamdbinfile="popc_equil_vel.bin")
+
+    # Load files in vmd-python to figure out which waters to delete
+    pid = molecule.load("psf", "protein_equil.psf",
+                        "namdbin", "protein_equil.bin")
+    to_delete = set(atomsel("water and z > 5 and z < 15").get("resid"))
+    delete(pid)
+
+    # Delete overlapping waters in the water segment
+    for resid in to_delete:
+        gen.delete_atoms(segid=pseg, resid=resid)
+
+    # Write the output files, including velocities
+    gen.write_psf(filename="combined.psf")
+    gen.write_namdbin(filename="combined.bin",
+                      velocity_filename="combined_vel.bin")
+
+
