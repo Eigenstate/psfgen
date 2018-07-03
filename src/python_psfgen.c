@@ -243,7 +243,67 @@ static PyObject* py_regenerate(PyObject *self, PyObject *args, PyObject *kwargs)
 }
 
 /* IO functions */
-static PyObject* py_write_pdb(PyObject *self, PyObject *args, PyObject *kwargs) 
+static PyObject* py_write_namdbin(PyObject *self, PyObject *args, PyObject *kwargs)
+{
+    char *kwnames[] = {(char*) "psfstate", (char*) "filename",
+                       (char*) "velocity_filename", NULL};
+    PyObject *velobj = NULL;
+    FILE *velfile = NULL;
+    PyObject *stateptr;
+    psfgen_data *data;
+    char *velfilename;
+    char *filename;
+    FILE *pfile;
+    int rc;
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|O:write_namdbin", kwnames,
+                                     &stateptr, &filename, &velfilename)) {
+        return NULL;
+    }
+
+    data = PyCapsule_GetPointer(stateptr, NULL);
+    if (!data || PyErr_Occurred())
+        return NULL;
+
+    // Handle velocity filename potentially being Py_None
+    velfilename = (velobj && velobj != Py_None) ? as_charptr(velobj) : NULL;
+
+    // Open files for writing, with some error checking
+    pfile = fopen(filename, "wb");
+    if (!pfile) {
+        PyErr_Format(PyExc_ValueError, "Cannot open file '%s' for writing",
+                     filename);
+        return NULL;
+    }
+
+    if (velfilename) {
+        velfile = fopen(velfilename, "wb");
+        if (!velfile) {
+            fclose(pfile);
+            PyErr_Format(PyExc_ValueError, "Cannot open file '%s' for writing",
+                         velfilename);
+            return NULL;
+        }
+    }
+
+    // Write the file, clean up, then errocr check
+    rc = topo_mol_write_namdbin(data->mol, pfile, velfile,
+                                data->outstream, python_msg);
+    fclose(pfile);
+    if (velfile)
+        fclose(velfile);
+
+    if (rc) {
+        PyErr_Format(PyExc_ValueError, "Failed writing namdbin file '%s'",
+                     filename);
+        return NULL;
+    }
+
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
+static PyObject* py_write_pdb(PyObject *self, PyObject *args, PyObject *kwargs)
 {
     char *kwnames[] = {(char*) "psfstate", (char*) "filename", NULL};
     PyObject *stateptr;
@@ -256,6 +316,7 @@ static PyObject* py_write_pdb(PyObject *self, PyObject *args, PyObject *kwargs)
                                      &stateptr, &filename)) {
         return NULL;
     }
+
     data = PyCapsule_GetPointer(stateptr, NULL);
     if (!data || PyErr_Occurred())
         return NULL;
@@ -324,12 +385,85 @@ static PyObject* py_write_psf(PyObject *self, PyObject *args, PyObject *kwargs)
     return Py_None;
 }
 
+static PyObject* py_read_psf(PyObject *self, PyObject *args, PyObject *kwargs)
+{
+    char *kwnames[] = {(char*) "psfstate", (char*) "filename",
+                       (char*) "pdbfile", (char*) "namdbinfile",
+                       (char*) "velnamdbinfile", NULL};
+    PyObject *pdbobj = NULL, *namdobj = NULL, *velobj = NULL;
+    FILE *pdb = NULL, *psf = NULL, *namd = NULL, *vel = NULL;
+    char *pdbfile = NULL, *namdfile = NULL, *velfile = NULL;
+    PyObject *stateptr;
+    psfgen_data *data;
+    char *psffile;
+    int rc;
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|OOO:read_psf", kwnames,
+                                     &stateptr, &psffile, &pdbobj,
+                                     &namdobj, &velobj)) {
+        return NULL;
+    }
+
+    data = PyCapsule_GetPointer(stateptr, NULL);
+    if (!data || PyErr_Occurred())
+        return NULL;
+
+    // Check arguments for pdbfile, namdbinfile, velnamdbinfile aren't Py_None
+    pdbfile = (pdbobj && pdbobj != Py_None) ? as_charptr(pdbobj) : NULL;
+    namdfile = (namdobj && namdobj != Py_None) ? as_charptr(namdobj) : NULL;
+    velfile = (velobj && velobj != Py_None) ? as_charptr(velobj) : NULL;
+
+    // Open files as psf_file_extract takes file pointers
+    psf = fopen(psffile, "rb");
+    if (pdbfile)
+        pdb = fopen(pdbfile, "rb");
+    if (namdfile)
+        namd = fopen(namdfile, "rb");
+    if (velfile)
+        vel = fopen(velfile, "rb");
+
+    // Error check all files at once, nicer code but less specific error msg
+    if (!psf || (!pdb && pdbfile) || (!namd && namdfile) || (!vel && velfile)) {
+        if (psf)
+            fclose(psf);
+        if (pdb)
+            fclose(pdb);
+        if (namd)
+            fclose(namd);
+        if (vel)
+            fclose(vel);
+        PyErr_Format(PyExc_ValueError, "Cannot open files for read psf '%s'",
+                     psffile);
+        return NULL;
+    }
+
+    // Actually do the parsing, and then clean up
+    rc = psf_file_extract(data->mol, psf, pdb, namd, vel,
+                          data->outstream, python_msg);
+    fclose(psf);
+    if (pdb)
+        fclose(pdb);
+    if (namd)
+        fclose(namd);
+    if (vel)
+        fclose(vel);
+
+    if (rc) {
+        PyErr_Format(PyExc_ValueError, "Failed to parse psf file '%s'",
+                     psffile);
+        return NULL;
+    }
+
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
 static PyObject* py_read_coords(PyObject *self, PyObject *args, PyObject *kwargs) 
 {
     char *kwnames[] = {(char*) "psfstate", (char*) "filename",
                        (char*) "segid", NULL};
-    PyObject *stateptr;
     char *filename, *segid;
+    PyObject *stateptr;
     psfgen_data *data;
     FILE *fd;
     int rc;
@@ -370,16 +504,13 @@ static PyObject* py_add_segment(PyObject *self, PyObject *args, PyObject *kwargs
                        (char*) "first", (char*) "last", (char*) "auto_angles",
                        (char*) "auto_dihedrals", (char*) "residues", (char*)
                        "mutate", NULL};
-    char *first, *last, *filename, *segname;
-    PyObject *stateptr, *mutate, *residues;
-    int autoang, autodih;
+    char *first = NULL, *last = NULL, *filename = NULL;
+    PyObject *mutate = NULL, *residues = NULL;
+    int autoang = 1, autodih = 1;
+    PyObject *stateptr;
     psfgen_data *data;
+    char *segname;
     FILE *fd;
-
-    /* Default values */
-    first = last = filename = NULL;
-    mutate = residues = NULL;
-    autoang = autodih = 1;
 
     if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|sssppOO:add_segment",
                                      kwnames, &stateptr, &segname, &filename,
@@ -536,14 +667,12 @@ static PyObject* py_query_segment(PyObject *self, PyObject *args,
 {
     char *kwnames[] = {(char*) "psfstate", (char*) "task", (char*) "segid",
                        (char*) "resid", NULL};
+    char *segid = NULL, *resid = NULL;
     PyObject *stateptr, *objid;
-    char *task, *segid, *resid;
     topo_mol_segment_t *seg;
     PyObject *result = NULL;
     psfgen_data *data;
-
-    // Set default arguments
-    segid = resid = NULL;
+    char *task;
 
     if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|ss:query_segment", kwnames,
                                      &stateptr, &task, &segid, &resid)) {
@@ -676,7 +805,6 @@ static PyObject* py_query_system(PyObject *self, PyObject *args, PyObject *kwarg
         }
 
     } else if (!strcasecmp(task, "patches") || !strcasecmp(task, "residues")) {
-        char *res;
         for (int i = 0; i < hasharray_count(defs->residue_hash); i++) {
             if ((!strcasecmp(task, "patches") && defs->residue_array[i].patch)
             ||  (!strcasecmp(task, "residues") && !defs->residue_array[i].patch)) {
@@ -708,6 +836,7 @@ static PyObject* py_parse_topology(PyObject *self, PyObject *args, PyObject *kwa
                                      &stateptr, &filename)) {
         return NULL;
     }
+
     data = PyCapsule_GetPointer(stateptr, NULL);
     if (!data || PyErr_Occurred())
         return NULL;
@@ -726,6 +855,7 @@ static PyObject* py_parse_topology(PyObject *self, PyObject *args, PyObject *kwa
                     filename);
         return NULL;
     }
+
     topo_defs_add_topofile(data->defs, filename);
 
     Py_INCREF(Py_None);
@@ -976,7 +1106,6 @@ static PyObject* py_set_coord(PyObject *self, PyObject *args, PyObject *kwargs)
     topo_mol_ident_t target;
     psfgen_data *data;
     double x, y, z;
-    int rc;
 
     if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OsssO:set_coords", kwnames,
                                      &stateptr, &segid, &resid, &aname,
@@ -1029,7 +1158,7 @@ static PyObject* py_guess_coords(PyObject *self, PyObject *stateptr)
         return NULL;
     }
 
-    Py_INCREF(Py_None); // Don't mess up reference counts
+    Py_INCREF(Py_None);
     return Py_None;
 }
 

@@ -98,22 +98,23 @@ class PsfGen:
 
     def alias_residue(self, top_resname, pdb_resname):
         """
-        Provide an alternate name for a residue in the topology file compared
-        to the PDB file.
+        Set a correspondence between a residue name in a PDB file and in the
+        defined topologies. The topology residue names should be treated as the
+        canonical set here.
 
         Args:
             top_resname (str): Resname in topology file
             pdb_resname (str): Equivalent resname in PDB files
         """
         _psfgen.alias(psfstate=self._data, type="residue",
-                      name=top_resname, newname=pdb_resname)
+                      newname=top_resname, name=pdb_resname)
 
     #===========================================================================
 
     def alias_atom(self, resname, top_atomname, pdb_atomname):
         """
-        Provide an alternate name for a atom in a residue in the topology file
-        compared to the PDB file.
+        Set a correspondence between an atom name in a specific residue in a
+        PDB file and in the defined topologies.
 
         Args:
             resname (str): Residue name in which to make alias
@@ -121,7 +122,7 @@ class PsfGen:
             pdb_atomname (str): Equivalent atom name in PDB file
         """
         _psfgen.alias(psfstate=self._data, type="atom",
-                      resname=resname, name=top_atomname, newname=pdb_atomname)
+                      resname=resname, newname=top_atomname, name=pdb_atomname)
 
     #===========================================================================
 
@@ -447,25 +448,6 @@ class PsfGen:
 
     #===========================================================================
 
-    #def multiply(self, ncopies, groups):
-    #    identlist = []
-    #    for group in groups:
-    #        if len(group) == 2:
-    #            identlist.append({"segid": str(group[0]),
-    #                              "resid": str(group[1])})
-    #        elif len(group) == 3:
-    #            identlist.append({"segid": str(group[0]),
-    #                              "resid": str(group[1]),
-    #                              "aname":str(group[2])})
-    #        else:
-    #            raise ValueError("groups must contain lists of 2 or 3 elements")
-    #    rc = topo_mol_multiply_atoms(mol=self.mol, targets=identlist,
-    #                                 ncopies=ncopies)
-    #    if rc:
-    #        raise ValueError("failed to multiply atoms (error=%d)" % rc)
-
-    #===========================================================================
-
     def delete_atoms(self, segid, resid=None, atomname=None):
         """
         Deletes atoms from the molecule, with options for increasing
@@ -515,13 +497,33 @@ class PsfGen:
 
     #===========================================================================
 
-    #def readPSF(self, filename):
-    #    fd = fopen(filename, 'r')
-    #    retval = psf_file_extract(self.mol, fd, None, None)
-    #    fclose(fd)
-    #    if retval:
-    #        raise PsfgenFormatError("Error reading psf file '%s'"
-    #                                % filename)
+    def read_psf(self, filename, pdbfile=None, namdbinfile=None,
+                 velnamdbinfile=None):
+        """
+        Reads structure information from a PSF file and adds it to the internal
+        molecule state. Can also read insertion codes and coordinates from a
+        PDB file, and/or coordinates from a NAMD binary file, if atoms are in
+        the same order. Can read velocities from a NAMD binary file as well.
+
+        The PSF file is read in and also kind of interpreted: topology files
+        in the REMARKS section are loaded, and a new segment is created with
+        the segid specified in the PSF file. Note that if the topology files
+        cannot be found, they will still be listed as "loaded" in the internal
+        PsfGen state.
+
+        Args:
+            filename (str): PSF file to read
+            pdbfile (str): PDB file to obtain coordinates, elements, and
+                insertion codes from. Atoms must be in same order as the PSF.
+            namdbinfile (str): Binary NAMD file to read coordinates from. Will
+                take priority over coordinates in pdbfile, if specified. Atoms
+                must be in the same order as the PSF.
+            velnamdbinfile (str): Binary NAMD file to read velocities from.
+                Atoms must be in the same order as the PSF.
+        """
+        _psfgen.read_psf(psfstate=self._data, filename=filename,
+                         pdbfile=pdbfile, namdbinfile=namdbinfile,
+                         velnamdbinfile=velnamdbinfile)
 
     #===========================================================================
 
@@ -545,6 +547,21 @@ class PsfGen:
             filename (str): Filename to write to
         """
         _psfgen.write_pdb(psfstate=self._data, filename=filename)
+
+    #===========================================================================
+
+    def write_namdbin(self, filename, velocity_filename=None):
+        """
+        Writes the current molecule state as a NAMD binary file. This file
+        format can only contain coordinate information for each atom. Optionally
+        write velocities to another NAMD binary file.
+
+        Args:
+            filename (str): Filename to write to
+            velocity_filename (str): If present, filename to write velocities to
+        """
+        _psfgen.write_namdbin(psfstate=self._data, filename=filename,
+                              velocity_filename=velocity_filename)
 
     #===========================================================================
 
