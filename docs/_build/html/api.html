@@ -668,8 +668,88 @@ modifying them for uniqueness.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="psfgen.PsfGen.set_coord">
-<code class="descname">set_coord</code><span class="sig-paren">(</span><em>segid</em>, <em>resid</em>, <em>atomname</em>, <em>position</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.set_coord" title="Permalink to this definition">¶</a></dt>
+<dt id="psfgen.PsfGen.set_atom_name">
+<code class="descname">set_atom_name</code><span class="sig-paren">(</span><em>segid</em>, <em>resid</em>, <em>atomname</em>, <em>new_atomname</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.set_atom_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renames an atom</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>segid</strong> (<em>str</em>) – Segment ID of atom to update</li>
+<li><strong>resid</strong> (<em>str</em><em> or </em><em>int</em>) – Residue ID of atom to update</li>
+<li><strong>atomname</strong> (<em>str</em>) – Name of atom to update</li>
+<li><strong>new_atomname</strong> (<em>str</em>) – New atom name</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="psfgen.PsfGen.set_beta">
+<code class="descname">set_beta</code><span class="sig-paren">(</span><em>segid</em>, <em>resid</em>, <em>atomname</em>, <em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.set_beta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the beta-factor of an atom</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>segid</strong> (<em>str</em>) – Segment ID of atom to update</li>
+<li><strong>resid</strong> (<em>str</em><em> or </em><em>int</em>) – Residue ID of atom to update</li>
+<li><strong>atomname</strong> (<em>str</em>) – Name of atom to update</li>
+<li><strong>beta</strong> (<em>float</em>) – New beta factor</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="psfgen.PsfGen.set_charge">
+<code class="descname">set_charge</code><span class="sig-paren">(</span><em>segid</em>, <em>resid</em>, <em>atomname</em>, <em>charge</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.set_charge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the charge of an atom</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>segid</strong> (<em>str</em>) – Segment ID of atom to update</li>
+<li><strong>resid</strong> (<em>str</em><em> or </em><em>int</em>) – Residue ID of atom to update</li>
+<li><strong>atomname</strong> (<em>str</em>) – Name of atom to update</li>
+<li><strong>charge</strong> (<em>float</em>) – New charge</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="psfgen.PsfGen.set_mass">
+<code class="descname">set_mass</code><span class="sig-paren">(</span><em>segid</em>, <em>resid</em>, <em>atomname</em>, <em>mass</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.set_mass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the mass of an atom</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>segid</strong> (<em>str</em>) – Segment ID of atom to update</li>
+<li><strong>resid</strong> (<em>str</em><em> or </em><em>int</em>) – Residue ID of atom to update</li>
+<li><strong>atomname</strong> (<em>str</em>) – Name of atom to update</li>
+<li><strong>mass</strong> (<em>float</em>) – New mass</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="psfgen.PsfGen.set_position">
+<code class="descname">set_position</code><span class="sig-paren">(</span><em>segid</em>, <em>resid</em>, <em>atomname</em>, <em>position</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.set_position" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the coordinates of a given atom to new values.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -677,9 +757,68 @@ modifying them for uniqueness.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>segid</strong> (<em>str</em>) – Segment ID of atom</li>
-<li><strong>resid</strong> (<em>str</em>) – Residue ID of atom</li>
+<li><strong>resid</strong> (<em>str</em><em> or </em><em>int</em>) – Residue ID of atom</li>
 <li><strong>atomname</strong> (<em>str</em>) – Atom name</li>
-<li><strong>position</strong> (<em>3-tuple of double</em>) – New x, y, and z coordinates for atom</li>
+<li><strong>position</strong> (<em>3-tuple</em><em> or </em><em>3-list of double</em>) – New x, y, and z coordinates
+for atom</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="psfgen.PsfGen.set_resname">
+<code class="descname">set_resname</code><span class="sig-paren">(</span><em>segid</em>, <em>resid</em>, <em>new_resname</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.set_resname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renames a residue</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>segid</strong> (<em>str</em>) – Segment ID of residue to update</li>
+<li><strong>resid</strong> (<em>str</em><em> or </em><em>int</em>) – Residue ID to update</li>
+<li><strong>new_resname</strong> (<em>str</em>) – New residue name</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="psfgen.PsfGen.set_segid">
+<code class="descname">set_segid</code><span class="sig-paren">(</span><em>segid</em>, <em>new_segid</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.set_segid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renames a segment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>segid</strong> (<em>str</em>) – Segment ID to change</li>
+<li><strong>new_segid</strong> (<em>str</em>) – New segment ID</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="psfgen.PsfGen.set_velocity">
+<code class="descname">set_velocity</code><span class="sig-paren">(</span><em>segid</em>, <em>resid</em>, <em>atomname</em>, <em>velocity</em><span class="sig-paren">)</span><a class="headerlink" href="#psfgen.PsfGen.set_velocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the velocity of a given atom to new values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>segid</strong> (<em>str</em>) – Segment ID of atom</li>
+<li><strong>resid</strong> (<em>str</em><em> or </em><em>int</em>) – Residue ID of atom</li>
+<li><strong>atomname</strong> (<em>str</em>) – Atom name</li>
+<li><strong>velocity</strong> (<em>3 membered list</em><em> or </em><em>tuple of double</em>) – New vx, vy, vz
+velocities for atom</li>
 </ul>
 </td>
 </tr>

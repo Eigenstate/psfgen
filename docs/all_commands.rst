@@ -34,11 +34,21 @@ Topology and naming functions
      - No exact match. Make a PDB alias with :meth:`psfgen.PsfGen.alias_residue`
    * - Provide alternate names for residues in pdb file
      - ``pdbalias residue <PDB residue name> <desired residue name>``
-     - ``gen.alias_residue(top_resname, pdb_resname)`` :meth:`psfgen.PsfGen.alias_residue`
+     - ``gen.alias_residue(top_resname, pdb_resname)``
+       :meth:`psfgen.PsfGen.alias_residue`
    * - Provide translations for atom names found in PDB files to those
        in topology files
      - ``pdbalias atom <residue name> <PDB atomname> <topology atomname>``
-     - ``gen.alias_atom(resname, pdb_atomname, top_atomname)`` :meth:`psfgen.PsfGen.alias_atom`
+     - ``gen.alias_atom(resname, pdb_atomname, top_atomname)``
+       :meth:`psfgen.PsfGen.alias_atom`
+   * - Change the name of a single residue
+     - ``psfset resname <segment ID> <resid> <resname>``
+     - ``gen.set_resname(segid, resid, new_resname)``
+       :meth:`psfgen.PsfGen.set_resname`
+   * - Rename a segment
+     - ``psfset segid <segment ID> <new name>``
+     - ``gen.set_segid(segid, new_segid)``
+       :meth:`psfgen.PsfGen.set_segid`
 
 Query functions
 ---------------
@@ -89,10 +99,12 @@ Query functions
      - ``gen.get_masses(segi, resid)`` :meth:`psfgen.PsfGen.get_masses`
    * - Get indices/atom IDs for atoms in a given residue
      - ``segment atomid <segment ID> <resid>``
-     - ``gen.get_atom_indices(segid, resid)`` :meth:`psfgen.PsfGen.get_atom_indices`
+     - ``gen.get_atom_indices(segid, resid)``
+       :meth:`psfgen.PsfGen.get_atom_indices`
    * - Get x,y,z coordinates for atoms in a given residue
      - ``segment coordinates <segment ID> <resid>``
-     - ``gen.get_coordinates(segid, resid)`` :meth:`psfgen.PsfGen.get_coordinates`
+     - ``gen.get_coordinates(segid, resid)``
+       :meth:`psfgen.PsfGen.get_coordinates`
    * - Get vx,vy,vz velocites for atoms in a given residue, if set
      - ``segment velocities <segment ID> <resid>``
      - ``gen.get_velocities(segid, resid)`` :meth:`psfgen.PsfGen.get_velocities`
@@ -108,9 +120,6 @@ System building functions
    * - Guess coordinates of atoms that aren't explicitly set
      - ``guesscoord``
      - ``gen.guess_coords()`` :meth:`psfgen.PsfGen.guess_coords`
-   * - Set coordinates of a given atom
-     - ``coord <segment ID> <resid> <atomname> {x y z}``
-     - ``gen.set_coord(segid, resid, atomname, position)`` :meth:`psfgen.PsfGen.set_coord`
    * - Delete all atoms in a segment
      - ``delatom <segment ID>``
      - ``gen.delete_atoms(segid)`` :meth:`psfgen.PsfGen.delete_atoms`
@@ -119,7 +128,8 @@ System building functions
      - ``gen.delete_atoms(segid, resid)`` :meth:`psfgen.PsfGen.delete_atoms`
    * - Delete a single atom
      - ``delatom <segment ID> <resid> <atom name>``
-     - ``gen.delete_atoms(segid, resid, atomname)`` :meth:`psfgen.PsfGen.delete_atoms` 
+     - ``gen.delete_atoms(segid, resid, atomname)``
+       :meth:`psfgen.PsfGen.delete_atoms`
    * - Create multiple images of a set of atoms for locally enhanced sampling
      - ``multiply <factor> <segid[:resid[:atomname]]> ...``
      - Not implemented
@@ -135,6 +145,44 @@ System building functions
    * - Apply a patch to one or more residues, as determined by the patch
      - ``patch <patchname> <segid:resid> [...]``
      - ``gen.patch(patch_name, targets)`` :meth:`psfgen.PsfGen.patch`
+
+Modifying atom attributes
+-------------------------
+
+You can modify many atom attributes.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Task
+     - TCL command
+     - Python class equivalent
+   * - Change the name of an atom
+     - ``psfset name <segment ID> <resid> <atomname> <new name>``
+     - ``gen.set_atom_name(segid, resid, atomname, new_atomname)``
+       :meth:`psfgen.PsfGen.set_atom_name`
+   * - Change the charge on an atom
+     - ``psfset charge <segment ID> <resid> <atomname> <charge>``
+     - ``gen.set_charge(segid, resid, atomname, charge)``
+       :meth:`psfgen.PsfGen.set_charge`
+   * - Change the beta factor on an atom
+     - ``psfset beta <segment ID> <resid> <atomname> <beta>``
+     - ``gen.set_beta(segid, resid, atomname, beta)``
+       :meth:`psfgen.PsfGen.set_beta`
+   * - Change the mass of an atom
+     - ``psfset mass <segment ID> <resid> <atomname> <mass>``
+     - ``gen.set_mass(segid, resid, atomname, mass)``
+       :meth:`psfgen.PsfGen.set_mass`
+   * - Set coordinates of a given atom
+     - ``coord <segment ID> <resid> <atomname> {x y z}`` or
+       ``psfset coord <segment ID> <resid> <atomname> {x y z}``
+     - ``gen.set_position(segid, resid, atomname, position=(x,y,z))``
+       :meth:`psfgen.PsfGen.set_position`
+   * - Set velocities of a given atom
+     - ``psfset vel <segment ID> <resid> <atomname> {x y z}``
+     - ``gen.set_velocity(segid, resid, atomname, velocity=(x,y,z))``
+       :meth:`psfgen.PsfGen.set_velocity`
+
 
 Adding a new segment
 --------------------
@@ -170,6 +218,10 @@ others optional:
                     residue=None,
                     mutate=None,
                    )
+
+
+You can also create new segments based on those already defined in an existing
+PSF file with the :meth:`psfgen.PsfGen.read_psf` function.
 
 
 I/O functions
