@@ -247,16 +247,15 @@ static PyObject* py_write_namdbin(PyObject *self, PyObject *args, PyObject *kwar
 {
     char *kwnames[] = {(char*) "psfstate", (char*) "filename",
                        (char*) "velocity_filename", NULL};
-    PyObject *velobj = NULL;
+    char *velfilename = NULL;
     FILE *velfile = NULL;
     PyObject *stateptr;
     psfgen_data *data;
-    char *velfilename;
     char *filename;
     FILE *pfile;
     int rc;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|O:write_namdbin", kwnames,
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|z:write_namdbin", kwnames,
                                      &stateptr, &filename, &velfilename)) {
         return NULL;
     }
@@ -264,9 +263,6 @@ static PyObject* py_write_namdbin(PyObject *self, PyObject *args, PyObject *kwar
     data = PyCapsule_GetPointer(stateptr, NULL);
     if (!data || PyErr_Occurred())
         return NULL;
-
-    // Handle velocity filename potentially being Py_None
-    velfilename = (velobj && velobj != Py_None) ? as_charptr(velobj) : NULL;
 
     // Open files for writing, with some error checking
     pfile = fopen(filename, "wb");
@@ -390,7 +386,6 @@ static PyObject* py_read_psf(PyObject *self, PyObject *args, PyObject *kwargs)
     char *kwnames[] = {(char*) "psfstate", (char*) "filename",
                        (char*) "pdbfile", (char*) "namdbinfile",
                        (char*) "velnamdbinfile", NULL};
-    PyObject *pdbobj = NULL, *namdobj = NULL, *velobj = NULL;
     FILE *pdb = NULL, *psf = NULL, *namd = NULL, *vel = NULL;
     char *pdbfile = NULL, *namdfile = NULL, *velfile = NULL;
     PyObject *stateptr;
@@ -398,20 +393,15 @@ static PyObject* py_read_psf(PyObject *self, PyObject *args, PyObject *kwargs)
     char *psffile;
     int rc;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|OOO:read_psf", kwnames,
-                                     &stateptr, &psffile, &pdbobj,
-                                     &namdobj, &velobj)) {
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|zzz:read_psf", kwnames,
+                                     &stateptr, &psffile, &pdbfile,
+                                     &namdfile, &velfile)) {
         return NULL;
     }
 
     data = PyCapsule_GetPointer(stateptr, NULL);
     if (!data || PyErr_Occurred())
         return NULL;
-
-    // Check arguments for pdbfile, namdbinfile, velnamdbinfile aren't Py_None
-    pdbfile = (pdbobj && pdbobj != Py_None) ? as_charptr(pdbobj) : NULL;
-    namdfile = (namdobj && namdobj != Py_None) ? as_charptr(namdobj) : NULL;
-    velfile = (velobj && velobj != Py_None) ? as_charptr(velobj) : NULL;
 
     // Open files as psf_file_extract takes file pointers
     psf = fopen(psffile, "rb");
@@ -1060,28 +1050,20 @@ static PyObject* py_delete_atoms(PyObject *self, PyObject *args, PyObject *kwarg
 {
     char *kwnames[] = {(char*) "psfstate", (char*) "segid", (char*) "resid",
                        (char*) "aname", NULL};
-    PyObject *resobj = NULL, *atomobj = NULL;
     char *resid = NULL, *aname = NULL;
     topo_mol_ident_t target;
     PyObject *stateptr;
     psfgen_data *data;
     char *segid;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|OO:delete_atoms", kwnames,
-                                     &stateptr, &segid, &resobj, &atomobj)) {
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os|zz:delete_atoms", kwnames,
+                                     &stateptr, &segid, &resid, &aname)) {
         return NULL;
     }
 
     data = PyCapsule_GetPointer(stateptr, NULL);
     if (!data || PyErr_Occurred())
         return NULL;
-
-    // Handle None for resid and atom name fields
-    if (resobj && resobj != Py_None)
-        resid = as_charptr(resobj);
-
-    if (atomobj && atomobj != Py_None)
-        aname = as_charptr(atomobj);
 
     // Build target object
     target.segid = segid;
