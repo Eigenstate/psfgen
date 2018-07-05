@@ -42,7 +42,7 @@ def test_query():
     """
 
     from psfgen import PsfGen
-    gen = PsfGen(output="/dev/null")
+    gen = PsfGen(output=os.devnull)
     os.chdir(dir)
 
     gen.read_topology("top_all36_caps.rtf")
@@ -101,6 +101,52 @@ def test_query():
 
 #==============================================================================
 
+def test_set():
+    """
+    Tests that setters work correctly
+    """
+    from psfgen import PsfGen
+    os.chdir(dir)
+
+    gen = PsfGen(output=os.devnull)
+    gen.read_topology("top_all36_caps.rtf")
+    gen.read_topology("top_all36_prot.rtf")
+
+    gen.add_segment(segid="P", pdbfile="psf_protein_P1.pdb")
+    assert gen.get_segids() == ["P"]
+
+    # Set segid
+    gen.set_segid(segid="P", new_segid="P1")
+    assert gen.get_segids() == ["P1"]
+
+    gen.read_coords(segid="P1", filename="psf_protein_P1.pdb")
+
+    # Set resname
+    assert gen.get_resname(segid="P1", resid="1") == "ASP"
+    gen.set_resname(segid="P1", resid="1", new_resname="ASH")
+    assert gen.get_resname(segid="P1", resid="1") == "ASH"
+
+    # Set charge
+    gen.set_charge(segid="P1", resid="1", atomname="O", charge=-1.)
+    assert -1.0 in gen.get_charges(segid="P1", resid="1")
+
+    # Set atom name
+    gen.set_atom_name(segid="P1", resid="1", atomname="N", new_atomname="NO")
+    assert "N" not in gen.get_atom_names(segid="P1", resid="1")
+    assert "NO" in gen.get_atom_names(segid="P1", resid="1")
+
+    # Set coord
+    gen.set_position(segid="P1", resid="1", atomname="HN",
+                  position=(0.,0.,-1.))
+    assert (0., 0., -1.) in gen.get_coordinates(segid="P1", resid="1")
+
+    # Set velocity
+    gen.set_velocity(segid="P1", resid="1", atomname="NO",
+                     velocity=(5., 5., 3.,))
+    assert (5., 5., 3.,) in gen.get_velocities(segid="P1", resid="1")
+
+#==============================================================================
+
 def test_alias():
     """
     Tests atom and residue aliases, either at the topology or the PDB level
@@ -108,7 +154,7 @@ def test_alias():
     from psfgen import PsfGen
     os.chdir(dir)
 
-    gen = PsfGen()
+    gen = PsfGen(output=os.devnull)
     gen.read_topology("top_all36_caps.rtf")
     gen.read_topology("top_all36_prot.rtf")
 
@@ -134,7 +180,7 @@ def test_ends(tmpdir):
     p = str(tmpdir.mkdir("mutation"))
     os.chdir(dir)
 
-    gen = PsfGen(output="/dev/null")
+    gen = PsfGen(output=os.devnull)
     gen.read_topology("top_all36_prot.rtf")
 
     # Add neutral N-terminus
@@ -189,7 +235,7 @@ def test_mutation(tmpdir):
     p = str(tmpdir.mkdir("mutation"))
     os.chdir(dir)
 
-    gen = PsfGen(output="/dev/null")
+    gen = PsfGen(output=os.devnull)
     gen.read_topology("top_all36_caps.rtf")
     gen.read_topology("top_all36_prot.rtf")
 
@@ -202,7 +248,8 @@ def test_mutation(tmpdir):
     gen.guess_coords()
 
     # Set one specific coordinate
-    gen.set_coord(segid="P0", resid="2", atomname="HB1", position=(1.0,2.0,3.0))
+    gen.set_position(segid="P0", resid="2", atomname="HB1",
+                     position=(1.0,2.0,3.0))
 
     # Regenerate
     gen.regenerate_angles()
@@ -242,7 +289,7 @@ def test_delete():
     from psfgen import PsfGen
     os.chdir(dir)
 
-    gen = PsfGen(output="/dev/null")
+    gen = PsfGen(output=os.devnull)
     gen.read_topology("top_all36_caps.rtf")
     gen.read_topology("top_all36_prot.rtf")
 
@@ -277,7 +324,7 @@ def test_case_sensitivity():
     from psfgen import PsfGen
     os.chdir(dir)
 
-    gen = PsfGen(case_sensitive=True)
+    gen = PsfGen(case_sensitive=True, output=os.devnull)
     gen.read_topology("top_casesensitive.rtf")
     assert gen.get_residue_types() == ["ACE", "Ace"]
 
@@ -286,7 +333,7 @@ def test_case_sensitivity():
         gen.case_sensitive = False
     del gen
 
-    gen = PsfGen(case_sensitive=True)
+    gen = PsfGen(case_sensitive=True, output=os.devnull)
     gen.case_sensitive = False
     gen.read_topology("top_casesensitive.rtf")
     assert gen.get_residue_types() == ["ACE"]
@@ -302,7 +349,7 @@ def test_single_chain(tmpdir):
     p = str(tmpdir.mkdir("single_chain"))
     os.chdir(dir)
 
-    gen = PsfGen(output="/dev/null")
+    gen = PsfGen(output=os.devnull)
     gen.read_topology("top_all36_caps.rtf")
     gen.read_topology("top_all36_prot.rtf")
     gen.read_topology("top_water_ions.rtf")
@@ -355,7 +402,7 @@ def test_formats(tmpdir):
     p = str(tmpdir.mkdir("formats"))
     os.chdir(dir)
 
-    gen = PsfGen()
+    gen = PsfGen(output=os.devnull)
     gen.read_topology("top_all36_caps.rtf")
     gen.read_topology("top_all36_prot.rtf")
 
@@ -372,7 +419,7 @@ def test_formats(tmpdir):
     # Read in the PSF and NAMD binary file. Topology files should be
     # automatically loaded, too. Read in coordinates also as velocities
     # to test the velocity read in as well.
-    gen = PsfGen()
+    gen = PsfGen(output=os.devnull)
     os.chdir(p)
     gen.read_psf(filename=os.path.join(p, "pdbin.psf"),
                  namdbinfile=os.path.join(p, "pdbin.bin"),
@@ -384,4 +431,3 @@ def test_formats(tmpdir):
         == gen.get_velocities(segid="P0", resid=1)
 
 #==============================================================================
-

@@ -1097,6 +1097,98 @@ static PyObject* py_delete_atoms(PyObject *self, PyObject *args, PyObject *kwarg
     return Py_None;
 }
 
+static PyObject* py_set_atom_attr(PyObject *self, PyObject *args, PyObject *kwargs)
+{
+    char *kwnames[] = {(char*) "psfstate", (char*) "attribute", (char*)
+                       "segid", (char*) "value", (char*) "resid", (char*)
+                       "aname", NULL};
+    char *aname = NULL, *resid = NULL;
+    PyObject *stateptr, *valueobj;
+    topo_mol_ident_t target;
+    char *segid, *attr;
+    psfgen_data *data;
+    int rc = 0;
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OssO|zz:set_atom_attr",
+                                     kwnames, &stateptr, &attr, &segid,
+                                     &valueobj, &resid, &aname)) {
+        return NULL;
+    }
+
+    data = PyCapsule_GetPointer(stateptr, NULL);
+    if (!data || PyErr_Occurred())
+        return NULL;
+
+    // Build target object with correct case sensitivity
+    target.segid = strtoupper(segid, data->all_caps);
+    target.resid = resid ? strtoupper(resid, data->all_caps) : NULL;
+    target.aname = aname ? strtoupper(aname, data->all_caps) : NULL;
+
+    // Sanity check for atom arguments.
+    // Makes the next big if/else need much less error checking
+    if (strcasecmp(attr, "segid") && strcasecmp(attr, "resname")
+        && (!aname || !resid)) {
+        PyErr_SetString(PyExc_ValueError,
+                        "Need resid and atom name for set_atom_attr");
+        return NULL;
+    }
+
+    if (!strcasecmp(attr, "segid")) {
+        if (resid || aname) {
+            PyErr_SetString(PyExc_ValueError,
+                            "resid/atom name will be ignored for set_segid");
+            rc = 1;
+        } else
+            rc = topo_mol_set_segid(data->mol, &target, as_charptr(valueobj));
+
+    } else if (!strcasecmp(attr, "resname")) {
+        if (aname) {
+            PyErr_SetString(PyExc_ValueError,
+                            "atom name ignored for set_resname");
+            rc = 1;
+        } else
+            rc = topo_mol_set_resname(data->mol, &target, as_charptr(valueobj));
+
+    } else if (!strcasecmp(attr, "name")) {
+        rc = topo_mol_set_name(data->mol, &target, as_charptr(valueobj));
+
+    } else if (!strcasecmp(attr, "mass")) {
+        rc = topo_mol_set_mass(data->mol, &target, PyFloat_AsDouble(valueobj));
+
+    } else if (!strcasecmp(attr, "charge")) {
+        rc = topo_mol_set_charge(data->mol, &target, PyFloat_AsDouble(valueobj));
+
+    } else if (!strcasecmp(attr, "beta")) {
+        rc = topo_mol_set_bfactor(data->mol, &target, PyFloat_AsDouble(valueobj));
+
+    } else if (!strcasecmp(attr, "vel")) {
+        // Unpack tuple to x, y, z
+        double x, y, z;
+        if (!PyTuple_Check(valueobj) || PyTuple_Size(valueobj) != 3) {
+            PyErr_SetString(PyExc_ValueError, "position must be a 3-tuple");
+            return NULL;
+        }
+        x = PyFloat_AsDouble(PyTuple_GetItem(valueobj, 0));
+        y = PyFloat_AsDouble(PyTuple_GetItem(valueobj, 1));
+        z = PyFloat_AsDouble(PyTuple_GetItem(valueobj, 2));
+        if (PyErr_Occurred())
+            return NULL;
+
+        rc = topo_mol_set_vel(data->mol, &target, x, y, z);
+
+    } else {
+        rc = 1;
+    }
+
+    if (rc) {
+        PyErr_Format(PyExc_ValueError, "Cannot set atom attribute '%s'", attr);
+        return NULL;
+    }
+
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
 static PyObject* py_set_coord(PyObject *self, PyObject *args, PyObject *kwargs)
 {
     char *kwnames[] = {(char*) "psfstate", (char*) "segid", (char*) "resid",
@@ -1107,7 +1199,7 @@ static PyObject* py_set_coord(PyObject *self, PyObject *args, PyObject *kwargs)
     psfgen_data *data;
     double x, y, z;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OsssO:set_coords", kwnames,
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OsssO:set_coord", kwnames,
                                      &stateptr, &segid, &resid, &aname,
                                      &position)) {
         return NULL;
@@ -1181,6 +1273,7 @@ static PyMethodDef methods[] = {
     {(char *) "regenerate", (PyCFunction)py_regenerate, METH_VARARGS | METH_KEYWORDS},
     {(char *) "set_allcaps", (PyCFunction)py_set_allcaps, METH_VARARGS | METH_KEYWORDS},
     {(char *) "set_coord", (PyCFunction)py_set_coord, METH_VARARGS | METH_KEYWORDS},
+    {(char *) "set_atom_attr", (PyCFunction)py_set_atom_attr, METH_VARARGS | METH_KEYWORDS},
     {(char *) "write_psf", (PyCFunction)py_write_psf, METH_VARARGS | METH_KEYWORDS},
     {(char *) "write_pdb", (PyCFunction)py_write_pdb, METH_VARARGS | METH_KEYWORDS},
     {(char *) "write_namdbin", (PyCFunction)py_write_namdbin, METH_VARARGS | METH_KEYWORDS},

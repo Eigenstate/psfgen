@@ -411,18 +411,152 @@ class PsfGen:
 
     #===========================================================================
 
-    def set_coord(self, segid, resid, atomname, position):
+    def set_position(self, segid, resid, atomname, position):
         """
         Sets the coordinates of a given atom to new values.
 
         Args:
             segid (str): Segment ID of atom
-            resid (str): Residue ID of atom
+            resid (str or int): Residue ID of atom
             atomname (str): Atom name
-            position (3-tuple of double): New x, y, and z coordinates for atom
+            position (3-tuple or 3-list of double): New x, y, and z coordinates
+                for atom
         """
+        if isinstance(resid, int):
+            resid = str(resid)
+
+        if isinstance(position, list):
+            position = tuple(position)
+
         _psfgen.set_coord(psfstate=self._data, segid=segid,
                           resid=resid, aname=atomname, position=position)
+
+    #===========================================================================
+
+    def set_velocity(self, segid, resid, atomname, velocity):
+        """
+        Sets the velocity of a given atom to new values
+
+        Args:
+            segid (str): Segment ID of atom
+            resid (str or int): Residue ID of atom
+            atomname (str): Atom name
+            velocity (3 membered list or tuple of double): New vx, vy, vz
+                velocities for atom
+        """
+        if isinstance(resid, int):
+            resid = str(resid)
+
+        if isinstance(velocity, list):
+            velocity = tuple(velocity)
+
+        _psfgen.set_atom_attr(psfstate=self._data, segid=segid,
+                              resid=resid, aname=atomname,
+                              attribute="vel", value=velocity)
+
+    #===========================================================================
+
+
+    def set_segid(self, segid, new_segid):
+        """
+        Renames a segment.
+
+        Args:
+            segid (str): Segment ID to change
+            new_segid (str): New segment ID
+        """
+        _psfgen.set_atom_attr(psfstate=self._data, segid=segid,
+                              attribute="segid", value=new_segid)
+
+    #===========================================================================
+
+    def set_resname(self, segid, resid, new_resname):
+        """
+        Renames a residue
+
+        Args:
+            segid (str): Segment ID of residue to update
+            resid (str or int): Residue ID to update
+            new_resname (str): New residue name
+        """
+        if isinstance(resid, int):
+            resid = str(resid)
+
+        _psfgen.set_atom_attr(psfstate=self._data, segid=segid, resid=resid,
+                              attribute="resname", value=new_resname)
+
+    #===========================================================================
+
+    def set_atom_name(self, segid, resid, atomname, new_atomname):
+        """
+        Renames an atom
+
+        Args:
+            segid (str): Segment ID of atom to update
+            resid (str or int): Residue ID of atom to update
+            atomname (str): Name of atom to update
+            new_atomname (str): New atom name
+        """
+        if isinstance(resid, int):
+            resid = str(resid)
+
+        _psfgen.set_atom_attr(psfstate=self._data, segid=segid, resid=resid,
+                              aname=atomname, attribute="name",
+                              value=new_atomname)
+
+    #===========================================================================
+
+    def set_mass(self, segid, resid, atomname, mass):
+        """
+        Updates the mass of an atom
+
+        Args:
+            segid (str): Segment ID of atom to update
+            resid (str or int): Residue ID of atom to update
+            atomname (str): Name of atom to update
+            mass (float): New mass
+        """
+        if isinstance(resid, int):
+            resid = str(resid)
+
+        _psfgen.set_atom_attr(psfstate=self._data, segid=segid, resid=resid,
+                              aname=atomname, attribute="mass", value=mass)
+
+    #===========================================================================
+
+    def set_charge(self, segid, resid, atomname, charge):
+        """
+        Updates the charge of an atom
+
+        Args:
+            segid (str): Segment ID of atom to update
+            resid (str or int): Residue ID of atom to update
+            atomname (str): Name of atom to update
+            charge (float): New charge
+        """
+        if isinstance(resid, int):
+            resid = str(resid)
+
+        _psfgen.set_atom_attr(psfstate=self._data, segid=segid, resid=resid,
+                              aname=atomname, attribute="charge", value=charge)
+
+    #===========================================================================
+
+    def set_beta(self, segid, resid, atomname, beta):
+        """
+        Updates the beta-factor of an atom
+
+        Args:
+            segid (str): Segment ID of atom to update
+            resid (str or int): Residue ID of atom to update
+            atomname (str): Name of atom to update
+            beta (float): New beta factor
+        """
+        if isinstance(resid, int):
+            resid = str(resid)
+
+        _psfgen.set_atom_attr(psfstate=self._data, segid=segid, resid=resid,
+                              aname=atomname, attribute="beta", value=beta)
 
     #===========================================================================
 
