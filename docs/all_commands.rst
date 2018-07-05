@@ -215,7 +215,7 @@ others optional:
                     pdbfile=None,
                     auto_angles=True,
                     auto_dihedrals=True,
-                    residue=None,
+                    residues=None,
                     mutate=None,
                    )
 

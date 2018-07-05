@@ -1,0 +1,28 @@
+package:
+    name: psfgen
+    version: 0.0.1
+
+source:
+    git_url: https://github.com/Eigenstate/psfgen.git
+    git_tag: master
+
+build:
+    number: 1
+
+requirements:
+    build:
+        - python
+    run:
+        - python
+
+test:
+    requires:
+        - pytest
+        - vmd-python >=2.0.4
+    commands:
+        - py.test
+
+about:
+    home: https://psfgen.robinbetz.com
+    license: VMD
+    summary: Protein Structure builder, with Python bindings
