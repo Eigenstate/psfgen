@@ -34,6 +34,8 @@ psfgenfiles=[
 psfext = Extension('_psfgen',
                    define_macros=[('PSFGENTCLDLL_EXPORTS', '1')],
                    include_dirs=["./src"],
+                   libraries=[],
+                   library_dirs=[],
                    sources=psfgenfiles
                   )
 
