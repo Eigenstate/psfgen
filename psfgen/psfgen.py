@@ -9,7 +9,7 @@ XPLOR="x-plor"
 # Definitions for auto arguments
 AUTO_ANGLES, AUTO_DIHEDRALS, AUTO_NONE = "angles", "dihedrals", "none"
 
-class PsfGen:
+class PsfGen(object):
 
     """
     A Psf generator object. Represents the state of a single molecular system,
@@ -39,7 +39,7 @@ class PsfGen:
         self._data = _psfgen.init_mol(outfd=self._fileno)
 
         self._read_topos = False # Cannot change case sensitivity if true
-        self._allcaps = case_sensitive
+        self._allcaps = not case_sensitive
         _psfgen.set_allcaps(psfstate=self._data, allcaps=not case_sensitive)
 
     #===========================================================================
@@ -64,7 +64,7 @@ class PsfGen:
         Defaults to False. Can only be changed before reading in any topology
         files.
         """
-        return self._allcaps
+        return not self._allcaps
 
     @case_sensitive.setter
     def case_sensitive(self, value):
@@ -77,6 +77,10 @@ class PsfGen:
 
         _psfgen.set_allcaps(psfstate=self._data, allcaps=not value)
         self._allcaps = value
+
+    @case_sensitive.deleter
+    def case_sensitive(self):
+        del self._allcaps
 
     #===========================================================================
 
