@@ -19,19 +19,19 @@ def check_correctness(molid):
 
     # Check the protein is there with the correct capping groups
     assert len(atomsel("protein or resname ACE NMA NME")) == 828
-    assert len(set(atomsel("protein").get("fragment"))) == 2
-    assert len(set(atomsel("resname ACE NMA NME").get("residue"))) == 4
+    assert len(set(atomsel("protein").fragment)) == 2
+    assert len(set(atomsel("resname ACE NMA NME").residue)) == 4
 
     # Check for 6 cysteines, 2 with same resid
-    assert len(set(atomsel("resname CYS CYX").get("residue"))) == 6
+    assert len(set(atomsel("resname CYS CYX").residue)) == 6
 
     # Check connectivity between cysteines is correct
-    for res in set(atomsel("resname CYS CYX").get("residue")):
+    for res in set(atomsel("resname CYS CYX").residue):
         assert len(atomsel("residue %d" % res)) == 10
         assert len(atomsel("residue %d and name SG" % res)) == 1
         idxs = atomsel("residue %d and name SG" % res).bonds[0]
         assert set(atomsel("index %s"
-                           % " ".join(str(i) for i in idxs)).get("name")) \
+                           % " ".join(str(i) for i in idxs)).name) \
             == set(["CB", "SG"])
 
 #==============================================================================
@@ -208,19 +208,19 @@ def test_ends(tmpdir):
 
     # Check all resids are present and that 2 extra ones were added
     m = molecule.load("psf", "output.psf", "pdb", "output.pdb")
-    assert list(set(atomsel("all").get("resid"))) == list(range(2, 27))
+    assert list(set(atomsel("all").resid)) == list(range(2, 27))
     assert len(atomsel("all")) == 382
-    assert set(atomsel("resid 25").get("resname")) == set(["ALA"])
+    assert set(atomsel("resid 25").resname) == set(["ALA"])
 
     # Check patches were applied correctly
-    assert "HT1" in atomsel("resid 2").get("name")
-    assert "HN" not in atomsel("resid 2").get("name")
-    assert "HE2" in atomsel("resid 26").get("name")
+    assert "HT1" in atomsel("resid 2").name
+    assert "HN" not in atomsel("resid 2").name
+    assert "HE2" in atomsel("resid 26").name
 
     # Check all coordinates are set
-    assert 0.0 not in atomsel("all").get("x")
-    assert 0.0 not in atomsel("all").get("y")
-    assert 0.0 not in atomsel("all").get("z")
+    assert 0.0 not in atomsel("all").x
+    assert 0.0 not in atomsel("all").y
+    assert 0.0 not in atomsel("all").z
 
     molecule.delete(m)
 
@@ -262,21 +262,21 @@ def test_mutation(tmpdir):
 
     # Check results with vmd-python
     m = molecule.load("psf", "output.psf", "pdb", "output.pdb")
-    assert len(set(atomsel("protein").get("fragment"))) == 1
-    assert len(set(atomsel("resname ACE NMA NME").get("residue"))) == 2
+    assert len(set(atomsel("protein").fragment)) == 1
+    assert len(set(atomsel("resname ACE NMA NME").residue)) == 2
 
     # Test mutation happened and resid 2 is ALA not LEU
-    assert set(atomsel("resid 2").get("resname")) == set(["ALA"])
+    assert set(atomsel("resid 2").resname) == set(["ALA"])
 
     # Check coordinate guessing happened and HB3 has a nonzero position
-    assert atomsel("resid 2 and name HB3").get("x") != [0.0]
-    assert atomsel("resid 2 and name HB3").get("y") != [0.0]
-    assert atomsel("resid 2 and name HB3").get("z") != [0.0]
+    assert atomsel("resid 2 and name HB3").x != [0.0]
+    assert atomsel("resid 2 and name HB3").y != [0.0]
+    assert atomsel("resid 2 and name HB3").z != [0.0]
 
     # Check manual coordinate setting happened
-    assert atomsel("resid 2 and name HB1").get("x") == [1.0]
-    assert atomsel("resid 2 and name HB1").get("y") == [2.0]
-    assert atomsel("resid 2 and name HB1").get("z") == [3.0]
+    assert atomsel("resid 2 and name HB1").x == [1.0]
+    assert atomsel("resid 2 and name HB1").y == [2.0]
+    assert atomsel("resid 2 and name HB1").z == [3.0]
 
     molecule.delete(m)
 

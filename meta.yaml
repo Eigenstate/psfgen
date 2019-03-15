@@ -7,22 +7,30 @@ source:
     git_tag: master
 
 build:
-    number: 1
+    number: 0
 
 requirements:
     build:
         - python
+        - toolchain
     run:
         - python
 
 test:
     requires:
         - pytest
-        - vmd-python >=2.0.4
+        - vmd-python >=3.0.0
     commands:
-        - py.test
+        - py.test --pyargs psfgen
 
 about:
-    home: https://psfgen.robinbetz.com
+    home: https://github.com/Eigenstate/psfgen
     license: VMD
+    license_file: LICENSE
     summary: Protein Structure builder, with Python bindings
+    doc_url: https://psfgen.robinbetz.com
+    dev_url: https://github.com/Eigenstate/psfgen
+
+extra:
+    recipe-maintainers:
+        - Eigenstate
