@@ -1,18 +1,20 @@
-#!/usr/bin/env python
 
-import sys
-from setuptools import setup
+from setuptools import setup, find_packages
 from setuptools.extension import Extension
 from setuptools.command.test import test as TestCommand
 
 class PyTest(TestCommand):
+    user_options = [("pytest-args=", "a", "Arguments to pass to pytest")]
+
     def initialize_options(self):
         TestCommand.initialize_options(self)
-        self.pytest_args = []
+        self.pytest_args = ""
+
     def run(self):
+        import shlex
         import pytest
-        errno = pytest.main()
-        sys.exit(errno)
+        errno = pytest.main(shlex.split(self.pytest_args))
+        raise SystemExit(errno)
 
 psfgenfiles=[
    "./src/charmm_file.c",
@@ -45,8 +47,9 @@ setup(name="psfgen",
       author="Robin Betz, Justin Gullingsrud and Jim Phillips",
       author_email="robin@robinbetz.com",
       url="https://psfgen.robinbetz.com",
-      packages=['psfgen'],
+      packages=find_packages(),
       ext_modules=[psfext],
+      include_package_data=True,
       tests_require=["pytest", "vmd-python"],
       cmdclass = {'test': PyTest}
      )
