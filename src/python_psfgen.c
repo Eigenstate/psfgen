@@ -18,8 +18,7 @@
 void python_msg(void *v, const char *msg)
 {
     v = (FILE*)v; // print to this file
-    fprintf(v, msg);
-    fprintf(v, "\n");
+    fprintf(v, "%s\n", msg);
 }
 
 /* Wrapper function for getting char* from a python string */
