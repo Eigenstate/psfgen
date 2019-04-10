@@ -366,12 +366,6 @@ static PyObject* py_write_psf(PyObject *self, PyObject *args, PyObject *kwargs)
     if (!data || PyErr_Occurred())
         return NULL;
 
-    fd = fopen(filename, "w");
-    if (!fd) {
-        PyErr_Format(PyExc_OSError, "cannot open psf file '%s' for writing",
-                     filename);
-        return NULL;
-    }
     if (!strcasecmp(type, "charmm")) {
         charmmfmt = 1;
     } else if (!strcasecmp(type, "x-plor")) {
@@ -379,6 +373,13 @@ static PyObject* py_write_psf(PyObject *self, PyObject *args, PyObject *kwargs)
     } else {
         PyErr_Format(PyExc_ValueError, "psf format '%s' not in [charmm,x-plor]",
                      type);
+        return NULL;
+    }
+
+    fd = fopen(filename, "w");
+    if (!fd) {
+        PyErr_Format(PyExc_OSError, "cannot open psf file '%s' for writing",
+                     filename);
         return NULL;
     }
 
