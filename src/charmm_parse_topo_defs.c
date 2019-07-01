@@ -418,8 +418,7 @@ int charmm_parse_topo_defs(topo_defs *defs, FILE *file, int all_caps, void *v,
       }
     }
     else {
-      sprintf(msgbuf,"ERROR!  FAILED TO RECOGNIZE %s.  Line %d: %s", tok[0], lineno, lbuf);
-      print_msg(v,msgbuf);
+      debug_msg("Ignoring lonepair statement");
     }
 
   }

@@ -68,10 +68,6 @@ int psf_get_atom(FILE *f, char *name, char *atype, char *resname,
     fprintf(stderr,"BAD ATOM LINE IN PSF FILE:\n: %s\n", inbuf);
     return -1;
   }
-  if (sscanf(atype, "%d", &i) > 0) {
-    fprintf(stderr, "PSF file is in CHARMM format; XPLOR format required.\n");
-    return -1;
-  }
   return num;
 }
  
