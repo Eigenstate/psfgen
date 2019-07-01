@@ -42,7 +42,7 @@ psfext = Extension('_psfgen',
                   )
 
 setup(name="psfgen",
-      version="1.0.1",
+      version="1.0.2",
       description="Protein structure file generator",
       author="Robin Betz, Justin Gullingsrud and Jim Phillips",
       author_email="robin@robinbetz.com",
