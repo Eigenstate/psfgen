@@ -176,7 +176,7 @@ static PyObject* py_alias(PyObject *self, PyObject *args, PyObject *kwargs)
                             "resname must be provided when aliasing atoms");
             return NULL;
         }
-        resname = strtoupper(name, data->all_caps);
+        resname = strtoupper(resname, data->all_caps);
         fprintf(data->outstream, "Aliasing residue %s atom %s to %s\n",
                 resname, name, newname);
         if(extract_alias_atom_define(data->aliases, resname, name, newname)) {
