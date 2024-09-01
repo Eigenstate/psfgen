@@ -1,0 +1,20 @@
+[project]
+name="psfgen"
+dynamic=["version"]
+authors = [
+  {name = "Robin Betz", email = "robin@robinbetz.com"},
+  {name = "Justin Gullingsrud"},
+  {name = "Jim Phillips"},
+]
+maintainers = [
+  {name = "Robin Betz", email = "robin@robinbetz.com"},
+]
+readme = "README.md"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+
+[tool.setuptools.dynamic]
+version = {attr = "psfgen.__version__"}
